@@ -616,7 +616,7 @@ export default {
 .high-level-search-area {
   padding-left: vw(30);
   width: vw(820);
-  height: vh(240);
+  height: vh(230);
   padding-top: vh(20);
   padding-bottom: vh(0);
   overflow-y: scroll;
