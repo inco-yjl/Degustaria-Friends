@@ -647,19 +647,19 @@ export default {
 }
 </style>
 <style lang="scss">
-div::-webkit-scrollbar {
+div.high-level-search-area::-webkit-scrollbar {
   /*滚动条整体样式*/
   width: vw(12); /*高宽分别对应横竖滚动条的尺寸*/
   height: 4px;
 }
-div::-webkit-scrollbar-thumb {
+div.high-level-search-area.high-level-search-area::-webkit-scrollbar-thumb {
   /*滚动条里面小方块*/
   border-radius: 5px;
-  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.684);
   scrollbar-arrow-color: red;
 }
-div::-webkit-scrollbar-track {
+div.high-level-search-area::-webkit-scrollbar-track {
   /*滚动条里面轨道*/
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 0;
