@@ -33,7 +33,7 @@
             width="42"
             text
           >
-            <span class="white--text headline">Yu</span>
+            <span class="user-name-icon">Yu</span>
           </v-btn>
         </v-avatar>
       </v-system-bar>
@@ -71,5 +71,10 @@ export default {
 <style scoped lang="scss">
 .border-white {
   border: 3px solid white;
+  margin-right: 10px;
+}
+.user-name-icon{
+  font-family:'Times New Roman', Times, serif;
+  font-size: 16px;
 }
 </style>
