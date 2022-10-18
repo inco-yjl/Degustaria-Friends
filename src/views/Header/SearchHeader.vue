@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-row justify="center" align="center">
       <v-app-bar
         app
@@ -289,8 +289,8 @@
         <v-spacer></v-spacer>
       </v-app-bar>
     </v-row>
-    <v-container style="height: 1000px"> <router-view /></v-container>
-  </v-container>
+    <div class="main-container"> <router-view /></div>
+  </div>
 </template>
   
 <script>
@@ -644,6 +644,10 @@ export default {
 }
 .search-header {
   overflow-y: hidden;
+}
+.main-container{
+  height:1000px;
+  width:vw(1920);
 }
 </style>
 <style lang="scss">

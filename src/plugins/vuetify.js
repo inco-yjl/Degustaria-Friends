@@ -12,9 +12,9 @@ import colors from 'vuetify/lib/util/colors'
 export default new Vuetify({
     theme: {
       themes: {
-        //  这里除了dark的primary都是瞎写的
+        //  这里除了light的primary都是瞎写的
         dark: {
-          primary: '#1A237E',
+          primary: '#232f3d',
           secondary: '#b0bec5',
           accent: '#8c9eff',
           error: '#b71c1c',

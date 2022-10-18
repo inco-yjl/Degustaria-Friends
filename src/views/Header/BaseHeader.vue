@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-row justify="center" align="center" class="base-header">
       <v-system-bar app color="primary" dark height="70">
         <div class="d-flex align-center">
@@ -38,10 +38,8 @@
         </v-avatar>
       </v-system-bar>
     </v-row>
-    <v-row>
     <router-view />
-  </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
