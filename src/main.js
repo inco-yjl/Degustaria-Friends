@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import '../node_modules/echarts-map/js/world.js' 
+import './styles/font.less'
 
 Vue.config.productionTip = false
 

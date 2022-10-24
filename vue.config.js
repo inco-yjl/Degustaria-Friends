@@ -47,6 +47,16 @@ module.exports = defineConfig({
     loaderOptions: {
       sass: {
         prependData: '@import "@/sass/variable.scss"'
+      },
+      less: {
+        lessOptions: {
+          modifyVars: {
+            'primary-color': '#0097A7',
+            'link-color': '#0097A7',
+            'border-radius-base': '4px'
+          },
+          javascriptEnabled: true
+        }
       }
     }
   },
@@ -56,7 +66,7 @@ module.exports = defineConfig({
   chainWebpack: config => {
     ["vue-modules", "vue", "normal-modules", "normal"].forEach((match) => {
       config.module.rule('scss').oneOf(match).use('sass-loader')
-        .tap(opt => Object.assign(opt, {  prependData: `@import "@/sass/variable.scss";` }))
+        .tap(opt => Object.assign(opt, { prependData: `@import "@/sass/variable.scss";` }))
     });
     config.resolve.alias
       .set('@', resolve('src'))

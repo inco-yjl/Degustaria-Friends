@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row justify="center" align="center" class="base-header">
+    <v-row justify="center" align="center" class="base-header" >
       <v-system-bar app color="primary" dark height="70">
         <div class="d-flex align-center">
           <v-img
