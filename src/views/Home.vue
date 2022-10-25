@@ -1,15 +1,230 @@
 <template>
   <div class="home-page">
-    <div>111</div>
-    <div>1111</div>
+    <div>
+      <div class="home_left_zone">
+        <div class="card_1">
+          <v-card
+          >
+            <v-card-text>
+              <p class="card_title_1">
+                自然指数TOP 机构
+              </p>
+              <div class="card_content_1" v-for="(item, index) in hot_istt" v-bind:key="index">
+                {{hot_istt[index].name}}
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                text
+                color="indigo darken-4"
+              >
+                Learn More
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </div>
+        <div>
+          <v-card
+            class="card_2"
+          >
+            <v-card-text>
+              <p class="card_title_1">
+                H5指数TOP 会议
+              </p>
+              <div class="card_content_1" v-for="(item, index) in hot_istt" v-bind:key="index">
+                {{hot_istt[index].name}}
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                text
+                color="indigo darken-4"
+              >
+                Learn More
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </div>
+        <div>
+          <v-card
+            class="card_3"
+          >
+            <v-card-text>
+              <p class="card_title_1">
+                H5指数TOP 期刊
+              </p>
+              <div class="card_content_1" v-for="(item, index) in hot_istt" v-bind:key="index">
+                {{hot_istt[index].name}}
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                text
+                color="indigo darken-4"
+              >
+                Learn More
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </div>
+      </div>
+      <div class="main_container_2"><router-view /></div>
+    </div>
+    <div class="home_right_zone">
+      <div>
+        <v-card
+          class="card_home_right"
+        >
+          <v-list-item>
+            <v-list-item-icon>
+              <img src="../../src/assets/home_user.png" class="home_icon_1" />
+            </v-list-item-icon>
+            <div>
+              <v-list-item-subtitle class="home_all_1">84,387,047</v-list-item-subtitle>
+              <v-list-item-title class="home_all_2">科研人员</v-list-item-title>
+            </div>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <img src="../../src/assets/home_search.png" class="home_icon_1" />
+            </v-list-item-icon>
+            <div>
+              <v-list-item-subtitle class="home_all_1">329,431,326</v-list-item-subtitle>
+              <v-list-item-title class="home_all_2">学术成果</v-list-item-title>
+            </div>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <img src="../../src/assets/home_yy.png" class="home_icon_1" />
+            </v-list-item-icon>
+            <div>
+              <v-list-item-subtitle class="home_all_1">1,128,966,992</v-list-item-subtitle>
+              <v-list-item-title class="home_all_2">引用关系</v-list-item-title>
+            </div>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <img src="../../src/assets/home_org.png" class="home_icon_1" />
+            </v-list-item-icon>
+            <div>
+              <v-list-item-subtitle class="home_all_1">1,123,897</v-list-item-subtitle>
+              <v-list-item-title class="home_all_2">科研机构</v-list-item-title>
+            </div>
+          </v-list-item>
+
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title class="headline" style="font-weight:bold; color: #232f3d; margin-top: 30px;">热门领域：</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list rounded>
+            <v-list-item-group v-model="item" color="primary">
+              <v-list-item
+                v-for="(item, i) in hot_field"
+                :key="i"
+              >
+                <div class="home_hot_field">{{i+1}}.</div>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.name"></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </div>
+    </div>
   </div>
-  </template>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      hot_istt: [{ name: "name1"}, { name: "name2"}, { name: "name3"}, { name: "name4"}, { name: "name5"}],
+      hot_field:[{name: "软件工程"}, {name: "基础科学"}, {name: "信息电子"}, {name: "化学与化学工程"}, {name: "机械运输"}, {name: "冶金材料"}, {name: "生物和生物工程"}, {name: "土木建筑"}, {name: "环境与水利"}, {name: "经济"}]
+    };
+  }
+}
+</script>
+
 <style scoped lang="scss">
   .home-page{
-    background-color:yellow;
-    height:200px;//改成自适应的
+    background-color: white;
     padding-top:40px;
     //绝对，为了使顶部内容正常显示，不被search-bar遮挡
     width:vw(1920);
+    display: flex;
+  }
+  .main_container_2 {
+    width: vw(1200);
+    margin-top: vh(20);
+  }
+  .home_left_zone {
+    width: vw(1300);
+    display: flex;
+  }
+  .card_1 {
+    width: vw(350);
+    margin-left: vw(110);
+    margin-top: vw(50);
+  }
+  .card_2 {
+    width: vw(350);
+    margin-left: vw(80);
+    margin-top: vw(50);
+  }
+  .card_3 {
+    width: vw(350);
+    margin-left: vw(80);
+    margin-top: vw(50);
+  }
+  .card_title_1 {
+    font-size: vw(30);
+    font-weight: bold;
+    font-family: Roboto;
+    color: #232f3d;
+    margin-bottom: vw(20);
+  }
+  .card_content_1 {
+    font-size: 1.1rem;
+    color: rgba(0,0,0,0.8);
+    text-justify: auto;
+    font-family: Roboto;
+    font-weight: 400;
+    letter-spacing: 0.009375rem;
+    line-height: 28px;
+  }
+
+  .card_home_right {
+    margin-top: vw(50);
+    width: vw(400);
+    margin-left: vw(90);
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+
+  .home_icon_1 {
+    width: vw(30);
+    height: vw(30);
+  }
+  .home_all_1 {
+    font-size: vw(20);
+  }
+  .home_all_2 {
+    font-size: vw(22);
+    font-weight: vw(400);
+    color: #232f3d;
+    margin-top: 3px;
+  }
+  .home_hot_field {
+    margin-right:5px; 
+    font-weight: 600;
+    font-family: Roboto;
+    font-size: 0.875rem;
+    letter-spacing: 0.078125rem;
   }
   </style>

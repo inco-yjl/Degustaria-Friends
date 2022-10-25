@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/home/focus'
   },
   {
     path: '/',
@@ -27,8 +27,34 @@ const routes = [
             // route level code-splitting
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
-          }
+            component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
+            children: [
+              {
+                path: '/home/focus',
+                name: 'home_focus',
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: () => import(/* webpackChunkName: "about" */ '../views/Home_son/HomeSon1.vue')
+              },
+              {
+                path: '/home/recommend',
+                name: 'home_recommend',
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: () => import(/* webpackChunkName: "about" */ '../views/Home_son/HomeSon2.vue')
+              },
+              {
+                path: '/home/collection',
+                name: 'home_collection',
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: () => import(/* webpackChunkName: "about" */ '../views/Home_son/HomeSon3.vue')
+              },
+            ]
+          },
         ]
       },
     ]
