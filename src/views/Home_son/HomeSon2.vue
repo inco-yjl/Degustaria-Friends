@@ -10,6 +10,58 @@
       <div class="focus_3">
         <v-btn depressed large @click="into_another_son(3)">收藏</v-btn>
       </div>
+      <v-btn
+        color="blue-grey darken-3"
+        class="add_keyword_class"
+        @click="overlay = !overlay"
+      >
+        管理订阅关键词
+      </v-btn>
+
+      <div style="text-align: center;">
+        <v-overlay
+          :absolute="absolute"
+          :opacity="opacity"
+          :value="overlay"
+        >
+          <div class="display_box_1">
+            <div style="display: flex;">
+              <div class="headline_display_1">我关注的领域：</div>
+              <div class="headline_display_2">*点击进入该领域</div>
+            </div>
+            <div class="display_item_1">
+              <div 
+                v-for="item in concern_field"
+                :key="item.id"
+              >
+                <div class="display_item_2">{{item.name}}</div>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div class="headline_display_3">添加订阅关键词：</div>
+              <div class="headline_display_4">*点击即可添加</div>
+            </div>
+            <v-text-field
+              solo
+              label="Append"
+              append-icon="mdi-plus"
+              class="add_key_focus_1"
+            >
+            </v-text-field>
+            <div class="display_item_3">
+              <div 
+                v-for="item in rcmd_field"
+                :key="item.id"
+              >
+                <div class="display_item_4">{{item.name}}</div>
+              </div>
+            </div>
+          </div>
+          <v-btn class="display_botton_1" fab dark color="blue-grey darken-2" @click="overlay = false">
+            <v-icon dark>mdi-close</v-icon>
+          </v-btn>
+        </v-overlay>
+      </div>
     </div>
     <div>
       <v-card
@@ -56,7 +108,14 @@ export default {
           quote_num: 0,
           page_view: 0
         }
-      ]
+      ],
+      concern_field: [
+        {name: "Computer Neural Network"},{name: "Computer Perception"},{name: "Intelligent Robotics"}
+      ],
+      rcmd_field: [
+        {name: "知识工程"},{name: "进化计算"},{name: "进化计算"},{name: "智能机器人"}
+      ],
+      overlay: 0
     }
   },
   mounted() {
@@ -136,5 +195,100 @@ export default {
     width: vw(30);
     margin-left: vw(25);
     margin-bottom: vh(30);
+  }
+  .add_keyword_class {
+    color: white;
+    margin-left: vw(30);
+    margin-top: vh(25);
+  }
+  .display_box_1 {
+    background-color: rgba(255,255,255,0.97);
+    margin-bottom: vh(30);
+    width: vw(1250);
+    border-radius: vw(10);
+    padding: vw(20);
+  }
+  .display_botton_1 {
+    text-align: center;
+  }
+  .headline_display_1 {
+    font-family: Roboto;
+    font-weight: 550;
+    font-size: 1rem;
+    letter-spacing: 0.009375rem;
+    color: #232f3d;
+    margin-top: vh(10);
+  }
+  .headline_display_2 {
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.008375rem;
+    color: #90A4AE;
+    margin-left: vw(10);
+    margin-top: vh(10);
+  }
+  .headline_display_3 {
+    font-family: Roboto;
+    font-weight: 550;
+    font-size: 1rem;
+    letter-spacing: 0.009375rem;
+    color: #232f3d;
+    margin-top: vh(70);
+  }
+  .headline_display_4 {
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.008375rem;
+    color: #90A4AE;
+    margin-left: vw(10);
+    margin-top: vh(70);
+  }
+  .display_item_1 {
+    color: #232f3d;
+    display: flex;
+    margin-top: vh(20);
+  }
+  .display_item_2 {
+    background-color: #CFD8DC;
+    margin-right: vw(20);
+    padding: vw(10);
+    border-radius: vw(10);
+    box-shadow: 0 0 5px 1px #CFD8DC;
+  }
+  .display_item_3 {
+    color: #232f3d;
+    display: flex;
+  }
+  .display_item_4 {
+    background-color: #CFD8DC;
+    margin-right: vw(20);
+    padding: vw(10);
+    border-radius: vw(10);
+    box-shadow: 0 0 5px 1px #CFD8DC;
+    margin-bottom: vh(20);
+  }
+  .display_item_2:hover {
+    background-color: #37474F;
+    margin-right: vw(20);
+    color: white;
+    padding: vw(10);
+    border-radius: vw(10);
+    box-shadow: 0 0 5px 1px #37474F;
+  }
+  .display_item_4:hover {
+    background-color: #37474F;
+    margin-right: vw(20);
+    color: white;
+    padding: vw(10);
+    border-radius: vw(10);
+    box-shadow: 0 0 5px 1px #37474F;
+    margin-bottom: vh(20);
+  }
+  .add_key_focus_1 {
+    margin-top: vh(30);
+  }
+  .home_icon_5 {
+    width: vw(25);
+    height: vw(25);
   }
 </style>
