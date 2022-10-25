@@ -167,7 +167,7 @@ export default {
     drawCategoryDistribution() {
       const colorPalette = [
         "#0064d0",
-        "#c3e0ff",
+        "#5470c6",
         "#278cdc",
         "#0f8aea",
         "#62aef0",
@@ -526,7 +526,7 @@ export default {
         visualMap: {
           min: 0,
           max: 100000,
-          text: ["max", "min"],
+          text: ["最多", "最少"],
           realtime: false,
           calculable: true,
           color: ["#0064d0", "#c3e0ff"],
@@ -1009,8 +1009,8 @@ export default {
         { name: "青蒿素", value: 3.65 },
       ];
       const colorPalette = [
+        "#5470c6",
         "#0064d0",
-        "#c3e0ff",
         "#278cdc",
         "#0f8aea",
         "#62aef0",
@@ -1061,6 +1061,7 @@ export default {
 </script>
 <style scoped lang="scss">
 .illustration-content {
+    font-weight: bold;
   width: vw(1300);
   margin-left: vw(310);
   display: grid;
@@ -1095,14 +1096,14 @@ export default {
   position: absolute;
   background-color: white;
   width: 100%;
-  height: vh(120);
+  height: vh(112);
   padding: vh(10) vw(10);
 }
 .distribution-title-text {
-  font-family: "庞门正道标题体", sans-serif;
+  font-family: "汉仪晓波花月圆", sans-serif;
   color: #333333;
   text-align: center;
-  font-size: vw(36);
+  font-size: vw(30);
   text-align: left;
   padding-left: vw(10);
   align-items: center;
@@ -1138,8 +1139,8 @@ export default {
   line-height: vh(84);
   background-color: #ffffff;
   box-sizing: border-box;
-  font-family: "庞门正道标题体", sans-serif;
-  color: #333333;
+  font-family: "汉仪晓波花月圆", sans-serif;
+  color: #222222;
   text-align: center;
   font-size: vw(24);
   align-items: center;
@@ -1198,9 +1199,9 @@ export default {
   margin-left: vw(40);
   background-color: #ffffff;
   box-sizing: border-box;
-  font-family: "庞门正道标题体", sans-serif;
+  font-family: "汉仪晓波花月圆", sans-serif;
   color: #333333;
-  font-size: vw(36);
+  font-size: vw(30);
   text-align: left;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -1233,12 +1234,12 @@ export default {
 .search-word-title {
   position: relative;
   width: vw(420);
-  margin-left: vw(40);
+  margin-left: vw(10);
   background-color: #ffffff;
   box-sizing: border-box;
-  font-family: "庞门正道标题体", sans-serif;
+  font-family: "汉仪晓波花月圆", sans-serif;
   color: #333333;
-  font-size: vw(36);
+  font-size: vw(30);
   text-align: left;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -1301,10 +1302,10 @@ export default {
   box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.35);
 }
 .achievement-time-summary-title {
-  font-family: "庞门正道标题体", sans-serif;
+  font-family: "汉仪晓波花月圆", sans-serif;
   color: #333333;
   text-align: center;
-  font-size: vw(36);
+  font-size: vw(30);
   text-align: left;
   padding-left: vw(10);
   align-items: center;

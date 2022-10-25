@@ -4,7 +4,8 @@
       <v-app-bar
         color="primary"
         dark
-        min-height="100"
+        fixed
+        min-height="60"
         class="statistics-header"
       >
         <div class="statistics-routers">
@@ -57,10 +58,11 @@ export default {
 <style scoped lang="scss">
 //  app-bar高度不变，所以对于导航卡片的高度/行高用固定长度表示
 .statistics-header {
+  top: 68px;
   overflow-y: hidden;
 }
 .statistics-routers {
-  padding-top: 150px;
+  padding-top: 70px;
   margin-left: vw(200);
   display: flex;
   gap: vw(40);
@@ -110,6 +112,6 @@ export default {
 }
 .statistic-content {
   width: 100%;
-  padding-top: vh(100)
+  padding-top: 150px;
 }
 </style>
