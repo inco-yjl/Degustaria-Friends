@@ -117,7 +117,7 @@
 
           <v-list-item two-line>
             <v-list-item-content>
-              <v-list-item-title class="headline" style="font-weight:bold; color: #232f3d; margin-top: 30px;">热门领域：</v-list-item-title>
+              <v-list-item-title class="hot_field_title">热门领域：</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -185,7 +185,7 @@ export default {
   .card_title_1 {
     font-size: vw(30);
     font-weight: bold;
-    font-family: Roboto;
+    font-family: "Source Han Sans CN Normal", sans-serif;
     color: #232f3d;
     margin-bottom: vw(20);
   }
@@ -193,7 +193,7 @@ export default {
     font-size: 1.1rem;
     color: rgba(0,0,0,0.8);
     text-justify: auto;
-    font-family: Roboto;
+    font-family: "Source Han Sans CN Normal", sans-serif;
     font-weight: 400;
     letter-spacing: 0.009375rem;
     line-height: 28px;
@@ -219,12 +219,20 @@ export default {
     font-weight: vw(400);
     color: #232f3d;
     margin-top: 3px;
+    font-family: "Source Han Sans CN Normal", sans-serif;;
   }
   .home_hot_field {
     margin-right:5px; 
     font-weight: 600;
-    font-family: Roboto;
     font-size: 0.875rem;
     letter-spacing: 0.078125rem;
+    font-family: "Source Han Sans CN Normal", sans-serif;;
+  }
+  .hot_field_title {
+    font-weight:bold; 
+    color: #232f3d; 
+    margin-top: 30px; 
+    font-family: "Source Han Sans CN Normal", sans-serif;
+    font-size: 1.6rem;
   }
   </style>

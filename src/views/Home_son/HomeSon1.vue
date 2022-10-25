@@ -24,7 +24,7 @@
             >
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title class="headline">{{item.author_name}}</v-list-item-title>
+            <v-list-item-title class="headline_fa">{{item.author_name}}</v-list-item-title>
             <div style="display:flex;">
               <v-list-item-subtitle class="headline_focus_1">H-index：{{item.h_index}}</v-list-item-subtitle>
               <v-list-item-subtitle class="headline_focus_1">论文数：{{item.article_num}}</v-list-item-subtitle>
@@ -113,20 +113,27 @@ export default {
     width: vw(1190);
     padding-bottom: vh(20);
   }
+  .headline_fa {
+    font-family: "Source Han Sans CN Normal", sans-serif;
+    font-size: vw(30);
+  }
   .headline_focus_1 {
     margin-top: vh(5);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .headline_focus_2 {
     margin-top: vh(5);
     margin-left: vw(10);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .headline_focus_3 {
     margin-bottom: vh(5);
     color: #263238;
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .focus_research_area {
     margin-left: vw(20);
-    font-family: Roboto;
+    font-family: "Source Han Sans CN Normal", sans-serif;
     font-weight: 500;
     font-size: vw(18);
     margin-top: vh(20);
@@ -135,11 +142,15 @@ export default {
     background-color: #E8EAF6;
     margin-right: vw(10);
     margin-left: vw(5);
+    font-family: "Source Han Sans CN Normal", sans-serif;
+    padding: vw(5);
   }
   .focus_research_area_item:hover{
     background-color: #C5CAE9;
     margin-right: vw(10);
     margin-left: vw(5);
+    font-family: "Source Han Sans CN Normal", sans-serif;
+    padding: vw(5);
   }
   .fucous_timeline {
     border-top: solid 1px #CFD8DC;

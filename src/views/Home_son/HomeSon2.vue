@@ -169,19 +169,23 @@ export default {
   .headline_2 {
     margin-left: vw(20);
     font-size: vw(25);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .subtitle_recommand_1 {
     margin-left: vw(20);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .recommand_book {
     color: #455A64;
     margin-left: vw(20);
     margin-top: vh(10);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .quote_recommand {
     margin-left: vw(20);
     margin-top: vh(15);
     display: flex;
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .recommand_icon_fa {
     display: flex;
@@ -207,17 +211,18 @@ export default {
     width: vw(1250);
     border-radius: vw(10);
     padding: vw(20);
+    box-shadow: 0 0 5px 2px white;
   }
   .display_botton_1 {
     text-align: center;
   }
   .headline_display_1 {
-    font-family: Roboto;
     font-weight: 550;
     font-size: 1rem;
     letter-spacing: 0.009375rem;
     color: #232f3d;
     margin-top: vh(10);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .headline_display_2 {
     font-weight: 500;
@@ -226,14 +231,15 @@ export default {
     color: #90A4AE;
     margin-left: vw(10);
     margin-top: vh(10);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .headline_display_3 {
-    font-family: Roboto;
     font-weight: 550;
     font-size: 1rem;
     letter-spacing: 0.009375rem;
     color: #232f3d;
     margin-top: vh(70);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .headline_display_4 {
     font-weight: 500;
@@ -242,6 +248,7 @@ export default {
     color: #90A4AE;
     margin-left: vw(10);
     margin-top: vh(70);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .display_item_1 {
     color: #232f3d;
@@ -254,6 +261,7 @@ export default {
     padding: vw(10);
     border-radius: vw(10);
     box-shadow: 0 0 5px 1px #CFD8DC;
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .display_item_3 {
     color: #232f3d;
@@ -266,6 +274,7 @@ export default {
     border-radius: vw(10);
     box-shadow: 0 0 5px 1px #CFD8DC;
     margin-bottom: vh(20);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .display_item_2:hover {
     background-color: #37474F;
@@ -274,6 +283,7 @@ export default {
     padding: vw(10);
     border-radius: vw(10);
     box-shadow: 0 0 5px 1px #37474F;
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .display_item_4:hover {
     background-color: #37474F;
@@ -283,6 +293,7 @@ export default {
     border-radius: vw(10);
     box-shadow: 0 0 5px 1px #37474F;
     margin-bottom: vh(20);
+    font-family: "Source Han Sans CN Normal", sans-serif;
   }
   .add_key_focus_1 {
     margin-top: vh(30);
