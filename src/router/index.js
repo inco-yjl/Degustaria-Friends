@@ -57,6 +57,23 @@ const routes = [
           },
         ]
       },
+      {
+        path: '/statistics',
+        name: 'statistics',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Statistics.vue'),
+        children: [
+          {
+            path: '/statistics/illustration',
+            name: 'statisticsIllustration',
+            component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Illustration.vue')
+          },
+          {
+            path: '/statistics/rank',
+            name: 'statisticsRank',
+            component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Rank.vue')
+          }
+        ]
+      }
     ]
   },
 
