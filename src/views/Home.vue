@@ -145,10 +145,11 @@ export default {
   data() {
     return {
       hot_istt: [{ name: "name1"}, { name: "name2"}, { name: "name3"}, { name: "name4"}, { name: "name5"}],
-      hot_field:[{name: "软件工程"}, {name: "基础科学"}, {name: "信息电子"}, {name: "化学与化学工程"}, {name: "机械运输"}, {name: "冶金材料"}, {name: "生物和生物工程"}, {name: "土木建筑"}, {name: "环境与水利"}, {name: "经济"}]
+      hot_field:[{name: "CLINICAL MEDICINE"}, {name: "CHEMISTRY"}, {name: "MATERIALS SCIENCE"}, {name: "ENGINEERING"}, {name: "BIOLOGY & BIOCHEMISTR"}, {name: "PHYSICS"}, {name: "MOLECULAR BIOLOGY & GENETICS"}, {name: "ENVIRONMENT/ECOLOGY"}, {name: "NEUROSCIENCE & BEHAVIOR"}, {name: "SOCIAL SCIENCES, GENERAL"}]
     };
   }
 }
+//hot_field来源于"https://esi.clarivate.com/IndicatorsAction.action"
 </script>
 
 <style scoped lang="scss">
