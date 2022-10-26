@@ -10,23 +10,24 @@
       <v-tab key="2">机构</v-tab>
       <v-tab key="3">期刊会议</v-tab>
     </v-tabs>
-    <div class="rank-content">
-      <div class="field-filter">
-        <v-card class="d-block mx-auto rounded-lg" flat>
-          <div class="tree-filter">
-            <v-treeview
-              :open="[1]"
-              selectable
-              dense
-              selected-color="indigo"
-              :items="fieldOptions"
-            ></v-treeview>
+
+    <v-tabs-items v-model="tab">
+      <v-tab-item key="1">
+        <div class="rank-content">
+          <div class="field-filter">
+            <v-card class="d-block mx-auto rounded-lg" flat>
+              <div class="tree-filter">
+                <v-treeview
+                  :open="[1]"
+                  selectable
+                  dense
+                  selected-color="indigo"
+                  :items="fieldOptions"
+                ></v-treeview>
+              </div>
+            </v-card>
           </div>
-        </v-card>
-      </div>
-      <div class="rank-main-content">
-        <v-tabs-items v-model="tab">
-          <v-tab-item key="1">
+          <div class="rank-main-content">
             <div class="table-filters">
               <v-text-field
                 v-model="scholarSearch"
@@ -51,11 +52,11 @@
                   <template v-slot:item.name="{ item }">
                     <div>{{ item.name }}</div>
                     <div>{{ item.org }}</div>
-                    <div>{{ item.area}}</div>
+                    <div>{{ item.area }}</div>
                   </template>
                 </v-data-table>
                 <v-pagination
-                class="pagination"
+                  class="pagination"
                   v-model="scholarpage"
                   :length="scholarpageCount"
                 ></v-pagination>
@@ -67,12 +68,65 @@
               </div>
               -->
             </div>
-          </v-tab-item>
-          <v-tab-item key="2"> 2 </v-tab-item>
-          <v-tab-item key="3"> 3 </v-tab-item>
-        </v-tabs-items>
-      </div>
-    </div>
+          </div>
+        </div>
+      </v-tab-item>
+
+      <v-tab-item key="2">
+        <div class="rank-content">
+        <div class="field-filter">
+          <v-card class="d-block mx-auto rounded-lg" flat>
+            <div class="tree-filter">
+              <v-treeview
+                :open="[1]"
+                selectable
+                dense
+                selected-color="indigo"
+                :items="fieldOptions"
+              ></v-treeview>
+            </div>
+          </v-card>
+        </div>
+        <div class="rank-main-content">
+        <div class="table-filters">
+          <v-text-field
+            v-model="orgSearch"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </div>
+        <div class="table">
+          <div class="main-table">
+            <v-data-table
+              :search="orgSearch"
+              :headers="orgHeader"
+              :items="orgDesserts"
+              @page-count="orgpageCount = $event"
+              :page.sync="orgpage"
+              :items-per-page="15"
+              hide-default-footer
+              class="elevation-1"
+            >
+              <template v-slot:item.name="{ item }">
+                <div>{{ item.name }}</div>
+                <div>{{ item.org }}</div>
+                <div>{{ item.area }}</div>
+              </template>
+            </v-data-table>
+            <v-pagination
+              class="pagination"
+              v-model="orgpage"
+              :length="orgpageCount"
+            ></v-pagination>
+          </div>
+        </div>
+        </div>
+        </div>
+      </v-tab-item>
+      <v-tab-item key="3"> 3 </v-tab-item>
+    </v-tabs-items>
   </div>
 </template>
 
@@ -174,7 +228,7 @@ export default {
         paperNum: 6.0,
         citationNum: 24,
         org: "北京航空航天大学",
-        area: "人工智能"
+        area: "人工智能",
       },
       {
         name: "Ice cream sandwich",
@@ -182,7 +236,7 @@ export default {
         paperNum: 9.0,
         citationNum: 37,
         org: "北京航空航天大学",
-        area: "计算机 软件工程"
+        area: "计算机 软件工程",
       },
       {
         name: "Eclair",
@@ -190,7 +244,7 @@ export default {
         paperNum: 16.0,
         citationNum: 23,
         org: "北京航空航天大学",
-        area: "生物医学 化学合成 基因技术"
+        area: "生物医学 化学合成 基因技术",
       },
       {
         name: "Cupcake",
@@ -198,7 +252,7 @@ export default {
         paperNum: 3.7,
         citationNum: 67,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Gingerbread",
@@ -206,7 +260,7 @@ export default {
         paperNum: 16.0,
         citationNum: 49,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Jelly bean",
@@ -214,7 +268,7 @@ export default {
         paperNum: 0.0,
         citationNum: 94,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Lollipop",
@@ -222,7 +276,7 @@ export default {
         paperNum: 0.2,
         citationNum: 98,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Honeycomb",
@@ -230,7 +284,7 @@ export default {
         paperNum: 3.2,
         citationNum: 87,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Donut",
@@ -238,7 +292,7 @@ export default {
         paperNum: 25.0,
         citationNum: 51,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "KitKat",
@@ -246,7 +300,7 @@ export default {
         paperNum: 26.0,
         citationNum: 65,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Ice cream sandwich",
@@ -254,7 +308,7 @@ export default {
         paperNum: 9.0,
         citationNum: 37,
         org: "北京航空航天大学",
-        area: "计算机 软件工程"
+        area: "计算机 软件工程",
       },
       {
         name: "Eclair",
@@ -262,7 +316,7 @@ export default {
         paperNum: 16.0,
         citationNum: 23,
         org: "北京航空航天大学",
-        area: "生物医学 化学合成 基因技术"
+        area: "生物医学 化学合成 基因技术",
       },
       {
         name: "Cupcake",
@@ -270,7 +324,7 @@ export default {
         paperNum: 3.7,
         citationNum: 67,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Gingerbread",
@@ -278,7 +332,7 @@ export default {
         paperNum: 16.0,
         citationNum: 49,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Jelly bean",
@@ -286,7 +340,7 @@ export default {
         paperNum: 0.0,
         citationNum: 94,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Lollipop",
@@ -294,7 +348,7 @@ export default {
         paperNum: 0.2,
         citationNum: 98,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Honeycomb",
@@ -302,7 +356,7 @@ export default {
         paperNum: 3.2,
         citationNum: 87,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "Donut",
@@ -310,7 +364,7 @@ export default {
         paperNum: 25.0,
         citationNum: 51,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
       {
         name: "KitKat",
@@ -318,12 +372,96 @@ export default {
         paperNum: 26.0,
         citationNum: 65,
         org: "北京航空航天大学",
-        area: "AI"
+        area: "AI",
       },
+    ];
+    const orgHeader = [
+        {
+        text: "姓名",
+        align: "start",
+        sortable: false,
+        value: "name",
+        },
+        { text: "国家", value: "country", filterable: false, sortable: false, },
+        { text: "2022自然指数", value: "index2022", filterable: false },
+        { text: "2022论文数", value: "count2022", filterable: false },
+    ];
+    const orgDesserts = [
+        {
+            name: 'Max Planck Society',
+            country: 'Germany',
+            index2022: 782.72,
+            count2022: 2780
+        },
+        {
+            name: 'French National Centre for Scientific Research (CNRS)',
+            country: 'France',
+            index2022: 675.69,
+            count2022: 4399
+        },
+        {
+            name: 'Helmholtz Association of German Research Centres',
+            country: 'Germany',
+            index2022: 565.07,
+            count2022: 2584
+        },
+        {
+            name: 'University of Oxford',
+            country: 'United Kingdom (UK)',
+            index2022: 452.28,
+            count2022: 1485
+        },
+        {
+            name: 'Swiss Federal Institute of Technology Zurich (ETH Zurich)',
+            country: 'Switzerland',
+            index2022: 395.67,
+            count2022: 1065
+        },
+        {
+            name: 'Imperial College London (ICL),',
+            country: 'United Kingdom (UK)',
+            index2022: 248.3,
+            count2022: 963
+        },
+        {
+            name: 'Russian Academy of Sciences (RAS)',
+            country: 'Russia',
+            index2022: 242.05,
+            count2022: 914
+        },
+        {
+            name: 'Swiss Federal Institute of Technology Lausanne (EPFL)',
+            country: 'Switzerland',
+            index2022: 228.37,
+            count2022: 619
+        },
+        {
+            name: 'UCL',
+            country: 'United Kingdom (UK)',
+            index2022: 222.6,
+            count2022: 981
+        },
+        {
+            name: 'Spanish National Research Council (CSIC)',
+            country: 'Spain',
+            index2022: 209.15,
+            count2022: 1190
+        },
+        {
+            name: 'Leibniz Association',
+            country: 'Germany',
+            index2022: 200.12,
+            count2022: 1001
+        }
     ];
     return {
       scholarSearch: "",
+      orgSearch: "",
       scholarpageCount: 0,
+      orgpageCount: 0,
+      orgDesserts,
+      orgHeader,
+      orgpage: 1,
       scholarpage: 1,
       tab: null,
       fieldOptions,
@@ -349,12 +487,14 @@ export default {
 .rank-content {
   width: vw(1600);
   margin-left: vw(160);
+  height: auto;
   display: flex;
 }
 .field-filter {
   position: relative;
   margin-right: vw(60);
   top: vh(39);
+  height: vh(900);
   left: 0;
 }
 .tree-filter {
@@ -368,11 +508,11 @@ export default {
   overflow: auto;
 }
 .rank-main-content {
-  width:100%;
+  width: 100%;
 }
 .table-filters {
-    padding-left: vw(30);
-    width: vw(250);
+  padding-left: vw(30);
+  width: vw(250);
 }
 .table {
   display: flex;
@@ -385,7 +525,7 @@ export default {
   width: 100%;
 }
 .pagination {
-    margin-top:vh(20)
+  margin-top: vh(20);
 }
 </style>
 <style lang="scss">
