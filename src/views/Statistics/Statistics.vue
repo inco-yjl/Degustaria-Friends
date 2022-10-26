@@ -112,6 +112,6 @@ export default {
 }
 .statistic-content {
   width: 100%;
-  padding-top: 150px;
+  padding-top: 100px;
 }
 </style>

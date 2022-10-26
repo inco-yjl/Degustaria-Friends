@@ -1063,6 +1063,7 @@ export default {
 .illustration-content {
     font-weight: bold;
   width: vw(1300);
+  padding-top: vh(60);
   margin-left: vw(310);
   display: grid;
   grid-template-columns: repeat(6, 1fr);
