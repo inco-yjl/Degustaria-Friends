@@ -41,7 +41,19 @@
 <script>
 export default {
   methods: {
+    getFile() {
+      this.$axios
+        .get("/test/")
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          /* 请求若出现路由找不到等其它异常，则在终端输出错误信息 */
+          console.log(err);
+        });
+      },
     ToRank() {
+      this.getFile();
       if (this.$route.name !== "statisticsRank") {
         this.$router.push({ name: "statisticsRank" });
       }
