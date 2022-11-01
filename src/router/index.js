@@ -47,6 +47,11 @@ const routes = [
             component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Rank.vue')
           }
         ]
+      },
+      {
+        path: '/paperDetail',
+        name: 'paperDetail',
+        component: () => import(/* webpackChunkName: "about" */ '../views/PaperDetail.vue'),
       }
     ]
   },
