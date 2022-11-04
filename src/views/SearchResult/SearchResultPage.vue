@@ -87,7 +87,7 @@ export default {
         "汽车工业",
         "互联网技术",
       ]
-    }
+    },
   }),
 }
 </script>
