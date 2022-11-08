@@ -53,6 +53,76 @@
             <span class="download-button" style="background-color: #28B611">PDF下载</span>
           </div>
         </div>
+        <v-row class="divide-bar">
+          <v-col cols="5" class="divide">
+            <v-divider></v-divider>
+          </v-col>
+          <v-col cols="2">相关推荐</v-col>
+          <v-col cols="5" class="divide">
+            <v-divider></v-divider>
+          </v-col>
+        </v-row>
+        <div class="recommendations">
+          <v-tabs v-model="tab" fixed-tabs background-color="rgb(240,240,240)">
+            <v-tab>相似文献</v-tab>
+            <v-tab>参考文献</v-tab>
+            <v-tab>引证文献</v-tab>
+            <v-tab>相关学术成果</v-tab>
+          </v-tabs>
+          <v-tabs-items v-model="tab">
+            <v-tab-item>
+              <div class="recommendation-tab">
+                <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
+                  <p class="similar-paper-title">{{ paper.title }}</p>
+                  <p class="similar-paper-abstract">{{ paper.abstract }}</p>
+                  <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
+                  <p class="similar-paper-citations-and-year">
+                    {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
+                  <v-divider class="recommendation-tab-item-divider"></v-divider>
+                </div>
+              </div>
+            </v-tab-item>
+            <v-tab-item>
+              <div class="recommendation-tab">
+                <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
+                  <p class="similar-paper-title">{{ paper.title }}</p>
+                  <p class="similar-paper-abstract">{{ paper.abstract }}</p>
+                  <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
+                  <p class="similar-paper-citations-and-year">
+                    {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
+                  <v-divider class="recommendation-tab-item-divider"></v-divider>
+                </div>
+              </div>
+            </v-tab-item>
+            <v-tab-item>
+              <div class="recommendation-tab">
+                <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
+                  <p class="similar-paper-title">{{ paper.title }}</p>
+                  <p class="similar-paper-abstract">{{ paper.abstract }}</p>
+                  <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
+                  <p class="similar-paper-citations-and-year">
+                    {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
+                  <v-divider class="recommendation-tab-item-divider"></v-divider>
+                </div>
+              </div>
+            </v-tab-item>
+            <v-tab-item>
+              <div class="recommendation-tab">
+                <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
+                  <p class="similar-paper-title">{{ paper.title }}</p>
+                  <p class="similar-paper-abstract">{{ paper.abstract }}</p>
+                  <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
+                  <p class="similar-paper-citations-and-year">
+                    {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
+                  <v-divider class="recommendation-tab-item-divider"></v-divider>
+                </div>
+              </div>
+            </v-tab-item>
+            <v-tab-item>456</v-tab-item>
+            <v-tab-item>789</v-tab-item>
+            <v-tab-item>101112</v-tab-item>
+          </v-tabs-items>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -86,6 +156,36 @@ export default {
       keywords: '战略实施 土豆 乌盟 产业化 种植土 发展思路 种植面积 脱毒种薯 脱贫致富 红格尔图',
       year: '2022',
       doi: '10.3969/j.issn.1000-1239.2022.01.001',
+      tab: null,
+      similar_papers: [
+        {
+          id: 1,
+          title: '跨越发展奔小康-—达茂联合旗实施"三集中"战略纪实',
+          abstract: '＜正＞落后旗县如何使经济发展驶入快车道,农牧民收入大提高?达茂旗的实践证明,有了超常规发展的思路,才会有跨越式发展的出路。2002年,达茂旗全社会固定资产投资…',
+          author: '张滨艳',
+          source: '《实践(思想理论版)》',
+          citations: 0,
+          year: 2003
+        },
+        {
+          id: 2,
+          title: '积极实施"六化"战略全力推进跨越发展——府谷县经济社会发展纪实',
+          abstract: '近年来,府谷县紧紧国绕打造国内一流的煤电化载能工业基地的目标,立足资源优势,坚持科学发展,大力实施新型工业化,农业产业化城乡一体化,民企集团化;环境大优化,民生优…',
+          author: '刘玲',
+          source: '《新西部(新闻版)》',
+          citations: 0,
+          year: 2010
+        },
+        {
+          id: 3,
+          title: '跨越 突破 搏击 -- 农二师实施大调整大转变战略纪实',
+          abstract: '新年伊始,记者来到农二师采访,深深地感受到这里在经济结构战略性大调整、发展方式战略性大转变过程中所展现出的勃勃生机,新的希望正在这里冉冉升腾。“要立足农业内涵…',
+          author: '高利，栗卫亚',
+          source: '《当代兵团》',
+          citations: 0,
+          year: 2010
+        }
+      ]
     }
   }
 }
@@ -194,5 +294,56 @@ export default {
   padding: vh(12) vh(30);
   font-size: 14px;
   border-radius: 5px;
+}
+
+.divide-bar {
+  width: 100%;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: "宋体", sans-serif;
+  text-align: center;
+}
+
+.divide {
+  padding-top: vh(40);
+}
+
+.recommendations {
+  margin-left: vw(100);
+  margin-right: vw(100);
+}
+
+.similar-paper-title {
+  font-size: 18px;
+  margin-top: vh(15);
+  margin-left: vw(10);
+  margin-bottom: 0;
+  color: #3366CC;
+}
+
+.similar-paper-abstract {
+  font-size: 12px;
+  margin-top: vh(5);
+  margin-left: vw(10);
+  margin-bottom: 0;
+  color: #7F7F7F;
+  line-height: vh(35);
+}
+
+.similar-paper-author-and-source {
+  font-size: 12px;
+  margin-top: vh(10);
+  margin-left: vw(10);
+  margin-bottom: 0;
+  color: #3366CC;
+}
+
+.similar-paper-citations-and-year{
+  font-size: 12px;
+  margin-top: vh(10);
+  margin-left: vw(10);
+  margin-bottom: vh(20);
+  color: #7F7F7F;
 }
 </style>
