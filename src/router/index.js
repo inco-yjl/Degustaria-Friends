@@ -33,7 +33,16 @@ const routes = [
       },
     ]
   },
-
+  {
+    path: '/scholarPage',
+    name: 'ScholarPage',
+    component: () => import('../views/ScholorPage.vue')
+  },
+  {
+    path: '/PaperShow',
+    name: 'PaperShow',
+    component: () => import('../views/PaperShow.vue')
+  }
 ]
 
 const router = new VueRouter({
