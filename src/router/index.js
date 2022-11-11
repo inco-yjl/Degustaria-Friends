@@ -73,6 +73,7 @@ const routes = [
             name: 'statisticsIllustration',
             component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Illustration.vue')
           },
+
           {
             path: '/statistics/rank',
             name: 'statisticsRank',
