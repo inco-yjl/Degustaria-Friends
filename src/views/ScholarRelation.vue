@@ -1,41 +1,136 @@
 <template>
-  <div class="Echarts">
-    <div id="main" style="width: 600px; height: 400px"></div>
+  <div class="e-graph">
+    <div id="chart" style="width: 100%; height:100%"></div>
   </div>
-</template>
+ </template>
+ <script>
+ import * as  echarts from "echarts";
+ export default {
+  data() {
+    return {
+    };
+  },
+  mounted() {
+    this.initChart()
+  },
  
-<script>
-import * as echarts from "echarts";
-export default {
-  name: "Echarts",
   methods: {
-    myEcharts() {
-      var myChart = this.$echarts.init(document.getElementById("main"));
-      var option = {
-        title: {
-          text: "echarts入门示例",
-        },
+    initChart() {
+      let myChart = echarts.init(document.getElementById('chart'))
+      myChart.resize();
+      myChart.setOption(this.setOption());
+    },
+    setOption() {
+      let option = {
+        color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
         tooltip: {},
-        legend: {
-          data: ["销量"],
-        },
-        xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
-        },
-        yAxis: {},
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: "quinticInOut",
         series: [
           {
-            name: "销量",
-            type: "bar",
-            data: [5, 20, 36, 10, 10, 20],
+            type: "graph",
+            layout: "force",
+            symbolSize: 100,
+            symbolSize: (value, params) => {
+              switch (params.data.category) {
+                case 1:
+                  return 50;
+                  break;
+                case 2:
+                  return 60;
+                  break;
+              }
+            },
+            roam: true,
+            label: {
+              show: true, 
+              position: "right",
+            },
+            focusNodeAdjacency: true, 
+            edgeSymbolSize: [4, 10],
+            draggable: true,
+            edgeLabel: {
+              fontSize: 14,
+            },
+            force: {
+              repulsion: 200,
+              edgeLength: 120,
+            },
+            itemStyle: {
+              color: params => {
+                let colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc']
+                return colorList[params.data.category]
+              }
+            },
+            data: [
+              {
+                name: "xyf",
+                category: 1,
+              },
+              {
+                name: "yjl",
+                category: 2,
+              },
+              {
+                name: "zxc",
+                category: 1,
+              },
+              {
+                name: "pyy",
+                category: 2,
+              },
+              {
+                name: "yxy",
+                category: 1,
+              },
+              {
+                name: "zjr",
+                category: 1,
+              }
+            ],
+            links: [
+              {
+                source: "xyf",
+                target: "zxc",
+              },
+              {
+                source: "yjl",
+                target: "pyy",
+              },
+              {
+                source: "yjl",
+                target: "yxy",
+              },
+              {
+                source: "yjl",
+                target: "zjr",
+              },
+              {
+                source: "xyf",
+                target: "pyy",
+              },
+              {
+                source: "zjr",
+                target: "xyf",
+              }
+            ],
+            lineStyle: {
+              opacity: 0.9,
+              width: 2,
+              curveness: 0,
+            },
           },
         ],
       };
-      myChart.setOption(option);
+      return option;
     },
   },
-  mounted() {
-    this.myEcharts();
-  },
-};
-</script>
+ };
+ </script>
+ 
+ <style scoped>
+ .e-graph {
+  width: 100%;
+  height: 350px;
+ }
+ </style>

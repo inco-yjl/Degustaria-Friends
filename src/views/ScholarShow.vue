@@ -89,7 +89,17 @@
         </v-row>
       </v-col>
       <v-col cols="4">
-        <ScholarRelationVue/>
+        <v-card elevation="6" min-height="420">
+          <v-card-title class="text-left">学者关系图：</v-card-title>
+          <v-card-text>
+            <div style="height: 350px; width: 100%">
+              <scholar-relation-vue/>
+            </div>
+          </v-card-text>
+        </v-card>
+        <!-- <div class="e-graph">
+          <div id="chart" style="width: 100%; height:100%"></div>
+        </div> -->
       </v-col>
     </v-row>
   </v-container>
@@ -156,7 +166,7 @@ export default {
       ],
     };
   },
-  components: { PaperShowVue },
+  components: { PaperShowVue, ScholarRelationVue },
 };
 </script>
 

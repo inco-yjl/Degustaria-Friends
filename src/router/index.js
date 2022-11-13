@@ -38,7 +38,11 @@ const routes = [
       },
     ]
   },
-
+  {
+    path: '/ScholarRelation',
+    name: 'ScholarRelation',
+    component: () => import('../views/ScholarRelation.vue')
+  }
 ]
 
 const router = new VueRouter({
