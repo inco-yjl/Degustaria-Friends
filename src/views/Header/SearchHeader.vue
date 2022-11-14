@@ -619,7 +619,7 @@ export default {
   height: vh(230);
   padding-top: vh(20);
   padding-bottom: vh(0);
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 .high-search-add-minus {

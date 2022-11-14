@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-row justify="center" align="center" class="base-header">
+    <v-row justify="center" align="center" class="base-header" >
       <v-system-bar app color="primary" dark height="70">
-        <div class="d-flex align-center">
+        <div class="d-flex align-center to-home-button" @click="ToHome">
           <v-img
             alt="Gusto Logo"
             class="shrink mr-2"
@@ -22,6 +22,8 @@
             width="200"
           />
         </div>
+        <v-spacer /><v-spacer />
+        <div class="to-statistics" @click="toStatistics()">统计</div>
         <v-spacer />
         <v-avatar size="45" :class="`rounded${45}`" class="border-white">
           <v-btn
@@ -52,6 +54,14 @@ export default {
     };
   },
   methods: {
+    toStatistics() {
+      if (this.$route.name !== 'statisticsRank' && this.$route.name !== 'statisticsIllustration')
+      this.$router.push({name: 'statisticsRank'});
+    },
+    ToHome() {
+      if (this.$route.name !== 'home')
+      this.$router.push({name: 'home'});
+    },
     toUser() {},
     /*
     changeLanguage() {
@@ -74,5 +84,11 @@ export default {
 .user-name-icon{
   font-family:'Times New Roman', Times, serif;
   font-size: 16px;
+}
+.to-home-button {
+  cursor: pointer;
+}
+.to-statistics {
+  cursor: pointer;
 }
 </style>
