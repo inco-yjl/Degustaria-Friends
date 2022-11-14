@@ -145,13 +145,13 @@ export default defineComponent({
             infoDetail: "    土豆，上帝赐予人类最宝贵的礼物，世界上最完美的事物，土豆丝好吃，土豆片好吃，土豆块好吃，土豆泥好吃，炸着吃烤着吃蒸着吃煎着吃都好吃，薯条好吃，薯饼好吃，炖肉好吃，加孜然好吃，蘸辣椒好吃，焗芝士好吃，卷饼里好吃，怎么样都好吃，哪怕整个煮熟了撒盐都好吃，除了发芽吃了会死，没有任何缺陷。\n    发芽吃了会死是人类的缺陷，土豆是完美的。",
             scholars: [
                 {
-                    name: "郭德纲",
-                    loc: "德云社",
+                    name: "DeGang Guo",
+                    loc: "artificial intelligence",
                     photo: require("@/assets/profilePhoto.png")
                 },
                 {
-                    name: "张飞",
-                    loc: "蜀",
+                    name: "Alec Radford",
+                    loc: "Indico Data Solutions",
                     photo: require("@/assets/profilePhoto.png")
                 },
                 {
@@ -701,8 +701,10 @@ export default defineComponent({
     }
     .text1 {
         vertical-align: bottom;
-        font-size: 16px;
+        font-size: 14px;
+        line-height: 26px;
         margin-top: vw(16);
+        color: #7F7F7F;
     }
     .bottom-right-title {
         margin: vh(10) 0 0 vw(30);
@@ -714,29 +716,30 @@ export default defineComponent({
     }
     .scholars {
         // border: 3px solid #bda9bc;
-        height: vh(170);
+        height: vh(125);
         margin-bottom: vh(0);
         border-bottom: 1px solid #d7d7d7;
     }
     .img-scholar {
         // border: 3px solid #bda9bc;
         margin: vh(0) 0 0 vw(20);
-        height: vh(140);
-        width: vw(140);
+        height: vh(90);
+        width: vw(90);
         float: left;
+        margin-top: vh(10);
     }
     .scholar-info {
         // border: 3px solid #bda9bc;
-        margin: vh(30) 0 0 vw(190);
+        margin: vh(10) 0 0 vw(160);
     }
     .scholar-info1 {
-        font-size: 43px;
+        font-size: 33px;
         font-weight: 500;
-        color: #8c8c8c;
+        color: #3c3c3c;
     }
     .scholar-info2 {
-        margin-top: vh(20);
-        font-size: 16px;
+        margin-top: vh(13);
+        font-size: 20px;
         color: #8c8c8c;
     }
 
