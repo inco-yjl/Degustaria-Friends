@@ -78,16 +78,23 @@ const routes = [
             name: 'statisticsIllustration',
             component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Illustration.vue')
           },
-
           {
             path: '/statistics/rank',
             name: 'statisticsRank',
             component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Rank.vue')
           }
         ]
+      },{
+        path:'/scholar',
+        name:'scholar',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/Claim.vue'),
+        children: [
+        
+        ]
       }
     ]
   },
+
 ]
 
 const router = new VueRouter({
