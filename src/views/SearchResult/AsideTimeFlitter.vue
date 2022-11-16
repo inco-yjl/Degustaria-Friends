@@ -32,6 +32,7 @@
             v-model="endTime"
             :items="endTimes"
             persistent-hint
+
             label="结束时间"
             background-color="#ffffff"
             dense

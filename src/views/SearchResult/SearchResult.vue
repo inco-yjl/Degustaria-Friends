@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="recommand_icon_fa_2">
-          <img src="../../assets/quote.png" class="recommand_icon_1_2" />
+          <img src="@/assets/quote.png" class="recommand_icon_1_2" />
           <img :src="saved?collected:uncollected" class="recommand_icon_2_2" />
         </div>
       </v-card>
@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import collected from "../../assets/art_sc.png";
-import uncollected from "../../assets/art_sc_cancel2.png";
+import collected from "@/assets/art_sc.png";
+import uncollected from "@/assets/art_sc_cancel2.png";
 export default {
   name:"SearchResult",
   props:{

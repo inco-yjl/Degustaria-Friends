@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <v-container>
-      <v-row align="start" no-gutters>
+      <v-row align="start d-flex flex-nowrap" no-gutters>
 <!--        侧边栏-->
         <v-col >
           <div class="aside">
@@ -46,9 +46,8 @@
                 <v-tab>引用数量</v-tab>
               </v-tabs>
             </v-row>
-            <v-row>
+            <v-row v-for="i in 10">
               <search-result></search-result>
-              <search-result :saved="true"></search-result>
             </v-row>
           </div>
         </v-col>

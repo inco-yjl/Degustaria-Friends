@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/paperDetail'
   },
   {
     path: '/',
@@ -61,6 +61,11 @@ const routes = [
             name: '/searchResult',
             component:()=>import("../views/SearchResult/SearchResultPage")
           },
+          {
+            path: '/scholarPage',
+            name: 'ScholarPage',
+            component: () => import('../views/Scholar/ScholarShow.vue')
+          },
         ]
       },
       {
@@ -73,14 +78,33 @@ const routes = [
             name: 'statisticsIllustration',
             component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Illustration.vue')
           },
-
           {
             path: '/statistics/rank',
             name: 'statisticsRank',
             component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Rank.vue')
           }
         ]
-      }
+      },{
+        path:'/scholar',
+        name:'scholar',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/Claim.vue'),
+        children: [
+        
+        ]
+      },
+      {
+        path: '/paperDetail',
+        name: 'paperDetail',
+        component: () => import(/* webpackChunkName: "about" */ '../views/PaperDetail.vue'),
+      },
+      {
+        path: '/institution/institutionHomepage',
+        name: 'institutionHomepage',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "about" */ '../views/Institution/InstitutionHomepage.vue'),
+      },
     ]
   },
 
