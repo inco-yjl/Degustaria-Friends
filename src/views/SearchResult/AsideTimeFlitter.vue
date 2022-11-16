@@ -13,7 +13,7 @@
             v-model="startTime"
             :items="startTimes"
             persistent-hint
-
+            allow-overflow="false"
             label="开始时间"
             background-color="#ffffff"
             dense
@@ -32,14 +32,14 @@
             v-model="endTime"
             :items="endTimes"
             persistent-hint
-
             label="结束时间"
             background-color="#ffffff"
             dense
             light
             flat
             solo
-        ></v-select>
+        >
+        </v-select>
       </div>
     </v-col>
   </v-row>
