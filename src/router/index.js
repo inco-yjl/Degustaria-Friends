@@ -61,6 +61,11 @@ const routes = [
             name: '/searchResult',
             component:()=>import("../views/SearchResult/SearchResultPage")
           },
+          {
+            path: '/scholarPage',
+            name: 'ScholarPage',
+            component: () => import('../views/ScholarShow.vue')
+          },
         ]
       },
       {
@@ -83,7 +88,6 @@ const routes = [
       }
     ]
   },
-
 ]
 
 const router = new VueRouter({
