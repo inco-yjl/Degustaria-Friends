@@ -64,7 +64,7 @@ const routes = [
           {
             path: '/scholarPage',
             name: 'ScholarPage',
-            component: () => import('../views/ScholarShow.vue')
+            component: () => import('../views/Scholar/ScholarShow.vue')
           },
         ]
       },
