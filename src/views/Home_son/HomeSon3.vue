@@ -29,8 +29,8 @@
             </div>
           </div>
           <div class="recommand_icon_fa_2">
-            <img src="../../assets/quote.png" class="recommand_icon_1_2" />
-            <img src="../../assets/art_sc_cancel2.png" class="recommand_icon_2_2" />
+            <img src="@/assets/quote.png" class="recommand_icon_1_2" />
+            <img src="@/assets/art_sc_cancel2.png" class="recommand_icon_2_2" />
           </div>
         </v-card>
       </div>
