@@ -90,7 +90,7 @@
         @click="e6 = 1"
       >
         Continue
-      </v-btn>
+      </v-btn> 
       <v-btn text>
         Cancel
       </v-btn>
