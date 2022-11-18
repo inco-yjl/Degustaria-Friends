@@ -18,11 +18,9 @@
         :key="item.id"
       >
         <v-list-item>
-          <v-list-item-avatar>
-            <img
-              :src="item.focus_icon"
-            >
-          </v-list-item-avatar>
+          <div class="scholer_icon_1">
+            <div class="head_style_font">{{item.author_name.charAt(0)}}</div>
+          </div>
           <v-list-item-content>
             <v-list-item-title class="headline_fa">{{item.author_name}}</v-list-item-title>
             <div style="display:flex;">
@@ -50,14 +48,18 @@ export default {
       focus_people: [
         {
           author_name: "NAME PANYUYI",
-          focus_icon: 'https://s1.ax1x.com/2022/10/24/x2o8Rx.jpg',
           h_index: 70,
           article_num: 80,
           quote_num: 10809
         },
         {
           author_name: "YPWDPYM",
-          focus_icon: 'https://s1.ax1x.com/2022/10/24/xRmgw8.jpg',
+          h_index: 100,
+          article_num: 180,
+          quote_num: 18317
+        },
+        {
+          author_name: "软工二",
           h_index: 100,
           article_num: 180,
           quote_num: 18317
@@ -114,8 +116,8 @@ export default {
     padding-bottom: vh(20);
   }
   .headline_fa {
-    font-family: "Source Han Sans CN Normal", sans-serif;
-    font-size: vw(30);
+    font-family: "Source Han Sans CN Medium", sans-serif;
+    font-size: vw(27);
   }
   .headline_focus_1 {
     margin-top: vh(5);
@@ -158,5 +160,20 @@ export default {
   .timeline-item_1 {
     width: 95%;
     margin-right: 5%;
+  }
+  .scholer_icon_1 {
+    border: solid 1px #D3D3D3;
+    width: vw(60);
+    height: vw(60);
+    border-radius: 10000px;
+    margin-right: vw(20);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .head_style_font {
+    font-family: YouSheBiaoTiHei;
+    color: #232f3d;
+    font-size: vw(34);
   }
 </style>
