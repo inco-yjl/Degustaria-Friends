@@ -18,11 +18,13 @@
             <v-card class="d-block mx-auto rounded-lg" flat>
               <div class="tree-filter">
                 <v-treeview
-                  :open="[1]"
+                  :open="[0]"
                   selectable
                   dense
                   selected-color="indigo"
+                  v-model="fieldSelection"
                   :items="fieldOptions"
+                  @update="getScholarRank"
                 ></v-treeview>
               </div>
             </v-card>
@@ -131,85 +133,10 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 export default {
   data() {
-    const fieldOptions = [
-      {
-        id: 1,
-        name: "全部",
-        children: [
-          { id: 2, name: "自动化" },
-          {
-            id: 3,
-            name: "计算机应用",
-            children: [
-              { id: 4, name: "人工智能" },
-              { id: 5, name: "软件工程" },
-            ],
-          },
-          {
-            id: 6,
-            name: "电力技术",
-          },
-          {
-            id: 7,
-            name: "航天航空科学与工程",
-          },
-          {
-            id: 8,
-            name: "汽车工业",
-          },
-          {
-            id: 9,
-            name: "互联网技术",
-          },
-          {
-            id: 10,
-            name: "电信技术",
-          },
-          {
-            id: 11,
-            name: "公路与水路运输",
-          },
-          {
-            id: 95,
-            name: "电信技术",
-          },
-          {
-            id: 103,
-            name: "计算机应用",
-            children: [
-              { id: 104, name: "人工智能" },
-              { id: 105, name: "软件工程" },
-            ],
-          },
-          {
-            id: 106,
-            name: "电力技术",
-          },
-          {
-            id: 107,
-            name: "航天航空科学与工程",
-          },
-          {
-            id: 108,
-            name: "汽车工业",
-          },
-          {
-            id: 109,
-            name: "互联网技术",
-          },
-          {
-            id: 100,
-            name: "电信技术",
-          },
-          {
-            id: 101,
-            name: "公路与水路运输",
-          },
-        ],
-      },
-    ];
+    const fieldOptions = [];
     const scholarHeader = [
       {
         text: "姓名",
@@ -455,7 +382,9 @@ export default {
         }
     ];
     return {
+      get_fields: require("@/assets/json/get_fields.json"),
       scholarSearch: "",
+      fieldSelection: ref(),
       orgSearch: "",
       scholarpageCount: 0,
       orgpageCount: 0,
@@ -469,6 +398,114 @@ export default {
       scholarHeader,
     };
   },
+  methods: {
+
+    getScholarFields() {
+          /*
+      this.$axios({
+      method: "get",
+      url: "/get_fields",
+    })
+      .then((res) => {
+        // res 是 response 的缩写
+        console.log("Scholar:getFields", res.data);
+        var list = res.data;
+        this.fieldOptions = [];
+        this.fieldOptions.push({
+          name: '全部',
+          id: 0,
+          children: []
+        })
+        this.fieldOptions[0].children.push({
+          id: 1,
+          name: 'physics',
+          children: []
+        })
+        for (var index = 1; index < list.length; index++) {
+          if (list[index].includes('physics') || list[index].includes('Physics') ) {
+            this.fieldOptions[0].children[0].children.push({
+              id: index + 1,
+              name: list[index]
+            })
+            continue;
+          }
+          this.fieldOptions[0].children.push({
+            id: index + 1,
+            name: list[index]
+          })
+        }
+      })
+      .catch((err) => {
+        //请求若出现路由找不到等其它异常，则在终端输出错误信息
+        console.log(err);
+      });
+      */
+      const list = this.get_fields.sort();
+        this.fieldOptions = [];
+        this.fieldOptions.push({
+          name: '全部',
+          id: 0,
+          children: []
+        })
+        for (var index = 0; index < list.length; index++) {
+          if (list[index] instanceof Array) {
+            this.fieldOptions[0].children.push({
+              name: list[index][0],
+              id: index+1,
+              children: this.getAllFields(list[index],index)
+            })
+          }else {
+            this.fieldOptions[0].children.push({
+              name: list[index],
+              id: index+1
+            })
+          }
+        }
+    },
+    getAllFields(list,i) {
+      var array = [];
+      for (var index = 1; index < list.length; index++) {
+          if (list[index] instanceof Array) {
+            array.push({
+              name: list[index][0],
+              id: i+index+1,
+              children: this.getAllFields(list[index],i+index)
+            })
+          }
+          else {
+            array.push({
+              name: list[index],
+              id: i+index+1
+            })
+          }
+        }
+      return array;
+    },
+    getScholarRank(){
+      var body = {
+        search_word: null,
+        select_items: [],
+      }
+      this.$axios({
+      method: "get",
+      url: "/get_scholars_by_h_index",
+      data: this.$qs.stringify(this.params),
+    })
+      .then((res) => {
+        // res 是 response 的缩写
+        console.log("Scholar:getFields", res.data);
+      })
+      .catch((err) => {
+        //请求若出现路由找不到等其它异常，则在终端输出错误信息
+        console.log(err);
+      });
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.getScholarFields();
+    });
+  }
 };
 </script>
 
