@@ -75,7 +75,7 @@
               </v-col>
             </v-row>
           </v-card-subtitle>
-          <v-card-text>
+          <v-card-text id="PaperList">
             <div>
                 <v-card
                   class="home_focus_card_2"
@@ -99,6 +99,14 @@
                   </div>
                 </v-card>
               </div>
+              <!-- <v-container class="max-width">
+                <v-pagination
+                  v-model="page"
+                  class="my-4"
+                  :length="PaginationLength"
+                  @click="this.$vuetify.goTo('#PaperList')"
+                ></v-pagination>
+              </v-container> -->
           </v-card-text>
         </v-card>
       </v-col>
@@ -129,6 +137,8 @@ export default {
       SelfImage: "https://cdn.vuetifyjs.com/images/john.jpg",
       Name: "XYF",
       Faculty: "北京航空航天大学 软件学院",
+      PaginationLength: 15,
+      page: 1,
       MainField: [
         {
           id: 1,
@@ -186,7 +196,7 @@ export default {
 
 <style lang="scss" scoped>
 #pcard {
-  height: vw(250);
+  height: vh(250);
 }
 #name {
   margin-top: vw(50);
