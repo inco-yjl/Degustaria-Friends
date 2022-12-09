@@ -137,8 +137,7 @@
     margin-bottom: vh(30);
   }
   .recommand_icon_2_2 {
-    width: vw(31);
-    height: vw(31);
+    width: vw(35);
     margin-left: vw(25);
     margin-bottom: vh(30);
   }
