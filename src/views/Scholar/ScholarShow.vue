@@ -128,13 +128,12 @@
 </template>
 
 <script>
-import PaperShowVue from "./PaperShow.vue";
 import ScholarRelationVue from "./ScholarRelation.vue";
 export default {
   name: "ScholarPage",
   data() {
     return {
-      SelfImage: "https://cdn.vuetifyjs.com/images/john.jpg",
+      SelfImage: "",
       Name: "XYF",
       Faculty: "北京航空航天大学 软件学院",
       PaginationLength: 15,
@@ -190,7 +189,7 @@ export default {
       toggleOne: 0,
     };
   },
-  components: { PaperShowVue, ScholarRelationVue },
+  components: { ScholarRelationVue },
 };
 </script>
 

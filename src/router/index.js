@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/scholarPage'
+    redirect: '/home/focus'
   },
   {
     path: '/',
@@ -62,8 +62,8 @@ const routes = [
             component:()=>import("../views/SearchResult/SearchResultPage")
           },
           {
-            path: '/scholarPage',
-            name: 'ScholarPage',
+            path: '/scholarShow',
+            name: 'ScholarShow',
             component: () => import('../views/Scholar/ScholarShow.vue')
           },
         ]
