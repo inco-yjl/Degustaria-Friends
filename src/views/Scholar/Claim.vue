@@ -50,7 +50,6 @@
              style="display: inline-block;width: 450px"
                 v-model="form.name"
                 :counter="10"
-                :rules="nameRules"
                 label="姓名"
                 hint="发表文章时使用的全名"
                 persistent-hint
@@ -71,7 +70,6 @@
     <v-col>
     <v-text-field
       v-model="form.work"
-      :rules="emailRules"
       label="工作单位"
       hint="例如，北京航空航天大学物理学教授"
       persistent-hint
@@ -82,7 +80,6 @@
     <v-col>
     <v-text-field
       v-model="form.email"
-      :rules="emailRules"
       label="验证电子邮件"
       hint="例如，1195800097@qq.com"
       persistent-hint
@@ -93,7 +90,6 @@
     <v-col>
     <v-text-field
       v-model="form.area"
-      :rules="emailRules"
       label="感兴趣的领域"
       hint="例如，广义相对论、统一场论"
       persistent-hint
@@ -104,7 +100,6 @@
     <v-col>
     <v-text-field
       v-model="form.homepage"
-      :rules="emailRules"
       label="首页（可选）"
       hint="例如，广义相对论、统一场论"
       persistent-hint
@@ -153,7 +148,7 @@
             style="display: inline-block;width:80%"
         >
         </v-text-field>
-        <v-btn style="display: inline-block; position: absolute;right: 30px;" round class="ma-2" color="primary" dark>搜索<v-icon dark right>mdi-magnify</v-icon></v-btn>
+        <v-btn style="display: inline-block; position: absolute;right: 30px;" rounded class="ma-2" color="primary" dark>搜索<v-icon dark right>mdi-magnify</v-icon></v-btn>
         <div class="tabs">
   <v-card>
     <v-tabs
@@ -276,7 +271,7 @@
           <!-- button panel -->
       <v-row  justify="space-around">          
         <v-btn style="margin:100px" color="primary"  @click="e1=2">返回</v-btn>
-        <v-btn style="margin:100px" color="primary"  @click="e1=1">继续</v-btn>
+        <v-btn style="margin:100px" color="primary"  @click="submit">继续</v-btn>
     </v-row>
       </v-stepper-content>
     </v-stepper-items>
@@ -327,7 +322,7 @@ export default {
                     title: '标题:me, Scrott, Jennifer',
                 },
             ],
-            
+            valid:true,
             selected:[2]
         }
     },
@@ -335,11 +330,47 @@ export default {
         baseHeader
     },
     methods: {
-        click(){
-                
-        }
-    },
+      addothername(){
 
+      },
+        submit(){
+          window.alert('switch1:',this.switch1);
+          var sw1="1";
+          var sw2="1";
+          if(this.switch1==false)
+            sw1="0";
+            if(this.switch2==false)
+            sw2="0";
+          var params = {
+            name1:this.form.name,
+            name2:this.form.name,
+            name3:this.form.name,
+            org:this.form.work,
+            interests:this.form.area,
+            e_mail:this.form.email,
+            email_privacy:sw1,
+            home_privacy:sw2,
+            username:this.email,
+          };
+          console.log('params',params);
+      this.$axios
+          .post("/claim_to_be_scholar/", this.$qs.stringify(params))
+          .then((res) => {
+            /* res 是 response 的缩写 */
+            console.log("errno", res.data.errno);
+            if (res.data.errno == 200) {
+              // window.alert(res.data.comment + "创建成功");
+              this.$message.success('提交成功')
+            } else {
+              this.$message.error('创建失败，请稍后再试')
+            }
+          })
+          .catch((err) => {
+            /* 请求若出现路由找不到等其它异常，则在终端输出错误信息 */
+            console.log(err);
+          });
+        },
+    }
 }
 </script>
 

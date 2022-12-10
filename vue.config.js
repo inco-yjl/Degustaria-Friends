@@ -41,6 +41,19 @@ module.exports = defineConfig({
       }
     }
   },
+  // devServer: {
+  //   proxy: {
+
+  //     '/api/*': {
+  //       target: 'http://120.46.201.113:6001/api',
+  //       // ↑这个就是你的接口地址↑
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         '^/api': '/'
+  //       }
+  //     }
+  //   }
+  // },
   css: {
     loaderOptions: {
       sass: {

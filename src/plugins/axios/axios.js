@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = 'http://120.46.201.113:6001'
 
 // 如果请求话费了超过 `timeout` 的时间，请求将被中断s
 axios.defaults.timeout = 10800000;
