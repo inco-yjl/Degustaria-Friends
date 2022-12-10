@@ -32,7 +32,7 @@
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn text color="indigo darken-4"> Learn More </v-btn>
+              <v-btn text color="indigo darken-4" @click="ToRank()"> Learn More </v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -49,7 +49,7 @@
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn text color="indigo darken-4"> Learn More </v-btn>
+              <v-btn text color="indigo darken-4" @click="ToRank()"> Learn More </v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -171,19 +171,19 @@ export default {
       ],
       topCon: [
         {
-          name: 'IEEE/CVF Conference on Computer Vision and Pattern Recognition'
+          name: 'CVPR (IEEE/CVF Conference on Computer Vision and Pattern Recognition)'
         },
         {
-          name: 'International Conference on Learning Representations'
+          name: 'ICLR (International Conference on Learning Representations)'
         },
         {
-          name: 'Neural Information Processing Systems'
+          name: 'NIPS (Neural Information Processing Systems)'
         },
         {
-          name: 'IEEE/CVF International Conference on Computer Vision'
+          name: 'ICCV (IEEE/CVF International Conference on Computer Vision)'
         },
         {
-          name: 'International Conference on Machine Learning'
+          name: 'ICML (International Conference on Machine Learning)'
         }
       ],
       hot_istt: [
