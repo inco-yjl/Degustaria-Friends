@@ -12,14 +12,14 @@
               </div>
             </v-col>
             <v-col class="ml-2">
-              <div class="ma-1 text-h5">
-                <p class="name text-left">&nbsp;&nbsp;{{ Name }}</p>
+              <div class="name ma-1 text-h5">
+                <p class="text-left">&nbsp;&nbsp;{{ Name }}</p>
               </div>
-              <div class="ma-1 text-h6">
-                <p class="faculty text-left">{{ Faculty }}</p>
+              <div class="faculty ma-1 text-h6">
+                <p class="text-left">{{ Faculty }}</p>
               </div>
-              <div class="ma-1 text-body-1">
-                <p class="intro text-left pa-1">
+              <div class="intro ma-1 text-body-1">
+                <p class="text-left pa-1">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Placeat tempora eligendi nihil ex velit ipsam fuga dolorum
                   molestias doloribus. Voluptas saepe nemo ad pariatur doloribus
@@ -37,13 +37,13 @@
           </v-col>
           <v-col>
             <div class="mt-2 text-h6">
-              <p class="main-field-title">·主要研究领域：</p>
+              <p>·主要研究领域：</p>
             </div>
             <v-row class="mt-2" dense>
               <v-col
                 v-for="item in MainField"
-                :key="item.id"
-                cols="5"
+                :key="item.index"
+                cols="6"
                 class="pa-auto"
               >
                 <p class="item-title">{{ item.title }}</p>
@@ -56,7 +56,7 @@
     <v-row class="mx-12">
       <v-col cols="8">
         <v-card elevation="7">
-          <v-card-title class="text-left main-field-title">论文共{{ recommand_content.length }}篇</v-card-title>
+          <v-card-title class="text-left">论文共3篇</v-card-title>
           <v-card-subtitle>
             <v-row dense>
               <v-col cols="12">
@@ -68,14 +68,19 @@
                 </v-btn-toggle>
               </v-col>
               <v-col cols="12">
-                <v-btn-toggle v-model="toggleOne" tile color="primary" group mandatory>
+                <v-btn-toggle v-model="toggleTwo" tile color="primary" group mandatory>
                   <v-btn value="All" depressed elevation="1" small>全部</v-btn>
                   <v-btn value="Recent" depressed elevation="1" small>最近</v-btn>
+                </v-btn-toggle>
+                <v-btn-toggle v-model="toggleTwo" tile color="primary" group mandatory>
+                  <v-btn value="paper" depressed elevation="1" small>论文</v-btn>
+                  <v-btn value="patent" depressed elevation="1" small>专利</v-btn>
+                  <v-btn value="project" depressed elevation="1" small>项目</v-btn>
                 </v-btn-toggle>
               </v-col>
             </v-row>
           </v-card-subtitle>
-          <v-card-text>
+          <v-card-text id="PaperList">
             <div>
                 <v-card
                   class="home_focus_card_2"
@@ -89,39 +94,59 @@
                     <div>
                       <p class="font-weight-black">Number of citation：{{item.quote_num}}</p>
                     </div>
-                    <div style="margin-left: 20px;">
-                      <p class="font-weight-black">Number of visits：{{item.page_view}}</p>
-                    </div>
                   </div>
                   <div class="recommand_icon_fa">
                     <img src="@/assets/quote.png" class="recommand_icon_1" />
                     <img src="@/assets/art_sc.png" class="recommand_icon_2" />
                   </div>
                 </v-card>
+                <v-snackbar
+                  v-model="showSnackBar"
+                  :timeout="2000"
+                  color="red accent-2"
+                >
+                  论文列表加载失败
+                  <template v-slot:action="{ attrs }">
+                    <v-btn
+                      color="blue"
+                      text
+                      v-bind="attrs"
+                      @click="snackbar = false"
+                    >
+                      Close
+                    </v-btn>
+                  </template>
+                </v-snackbar>
               </div>
+              <v-container class="max-width">
+                <v-pagination
+                  v-model="page"
+                  class="my-4"
+                  :length="PaginationLength"
+                  :total-visible="7"
+                  @click="this.$vuetify.goTo('#PaperList')"
+                ></v-pagination>
+              </v-container>
           </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="4">
         <v-card elevation="6" min-height="420">
-          <v-card-title class="scholar-relation text-left">学者关系图：</v-card-title>
+          <v-card-title class="text-left">学者关系图：</v-card-title>
           <v-card-text>
             <div style="height: 350px; width: 100%">
               <scholar-relation-vue/>
             </div>
           </v-card-text>
         </v-card>
-        <!-- <div class="e-graph">
-          <div id="chart" style="width: 100%; height:100%"></div>
-        </div> -->
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import PaperShowVue from "./PaperShow.vue";
 import ScholarRelationVue from "./ScholarRelation.vue";
+import axios from 'axios';
 export default {
   name: "ScholarPage",
   data() {
@@ -129,34 +154,38 @@ export default {
       SelfImage: "https://cdn.vuetifyjs.com/images/john.jpg",
       Name: "XYF",
       Faculty: "北京航空航天大学 软件学院",
+      PaginationLength: 15,
+      page: 1,
+      size: 10,
+      scholarId,
       MainField: [
         {
-          id: 1,
+          index: 1,
           title: "人工智能",
           link: "#",
         },
         {
-          id: 2,
+          index: 2,
           title: "图像处理",
           link: "#",
         },
         {
-          id: 3,
+          index: 3,
           title: "模式识别",
           link: "#",
         },
         {
-          id: 4,
+          index: 4,
           title: "土豆种植",
           link: "#",
         },
         {
-          id: 5,
+          index: 5,
           title: "吃饭睡觉",
           link: "#",
         },
         {
-          id: 6,
+          index: 6,
           title: "啦啦啦啦",
           link: "#",
         },
@@ -167,26 +196,85 @@ export default {
           author: "Zhi Gao,Yuwei Wu,Mehrtash T Harandi,Yunde Jia",
           book: "IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) （2022）",
           quote_num: 0,
-          page_view: 0
+          url: "",
         },
         {
           article_name: "Variational Deep Image Restoration",
           author: "Jae Woong Soh, Nam Ik Cho",
           book: "Computer Science、CCF A",
           quote_num: 0,
-          page_view: 0
+          url: "",
         }
       ],
       toggleOne: 0,
+      toggleTwo: 0,
+      showSnackBar: false,
     };
   },
-  components: { PaperShowVue, ScholarRelationVue },
+  methods: {
+    loadScholarPapers(npage = 1) {
+      let paperformdata = new FormData();
+      let lengthformdata = new FormData();
+      paperformdata.append('scholar_id', this.scholarId);
+      paperformdata.append('page', npage);
+      paperformdata.append('size', 6);
+      let requestconfig = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+      lengthformdata.append('scholar_id', this.scholarId);
+      this.$axios.get('/api/get_p_number_of_scholar', lengthformdata, requestconfig)
+      .then(
+        response => {
+          this.PaginationLength = Math.ceil(response.data.content.paper_number / 6);
+        }
+      )
+      this.$axios.post('/api/get_papers_by_scholar', paperformdata, requestconfig)
+      .then(
+        response => {
+          if (response.data.message === 'success') {
+            for (x in 6) {
+              template.article_name = response.data.content.at(x).title;
+              template.author = response.data.content.at(x).author;
+              template.book = response.data.content.at(x).source;
+              template.quote_num = response.data.content.at(x).citation;
+              template.url = response.data.content.at(x).url;
+              this.recommand_content.push(template);
+            }
+          } else {
+            console.log("failed");
+          }
+        }
+      )
+      .catch(
+        error => {
+          this.showSnackBar = true;
+          console.log(error);
+        }
+      )
+    }
+  },
+  watch: {
+    page: {
+      immediate: true,
+      handler(nval, oval) {
+        console.log(oval + "->" + nval)
+        loadScholarPapers(nval);
+      }
+    },
+  },
+  mounted() {
+    this.scholarId = this.$route.params.scholarId;
+    loadScholarPapers();
+  },
+  components: { ScholarRelationVue },
 };
 </script>
 
 <style lang="scss" scoped>
 #pcard {
-  height: vw(250);
+  height: vh(250);
 }
 #name {
   margin-top: vw(50);
@@ -195,7 +283,9 @@ export default {
   margin-top: 35px;
   min-height: 100%;
   border-left-style: solid;
+  border-left-color: gray;
   border-right-style: solid;
+  border-right-color: gray;
 }
 .name {
   font-family: 'Times New Roman', "Source Han Sans CN Normal";
@@ -210,8 +300,8 @@ export default {
   font-size: 18px;
   font-family: 'Courier New', Courier, 'PingFang SC';
 }
-.item-title :hover {
-  color: midnightblue;
+p.item-title:hover {
+  color: rgb(89, 126, 175);
 }
 .main-field-title {
   font-size: 23px;
@@ -225,8 +315,12 @@ export default {
 }
 .headline_2 {
   margin-left: vw(20);
+  height: vh(30);
   font-size: vw(25);
   font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.headline_2:hover {
+  color: rgb(89, 126, 175);
 }
 .subtitle_recommand_1 {
   margin-left: vw(20);
