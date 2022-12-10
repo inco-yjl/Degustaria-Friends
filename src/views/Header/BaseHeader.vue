@@ -60,7 +60,7 @@ export default {
     },
     ToHome() {
       if (this.$route.name !== 'home')
-      this.$router.push({name: 'home'});
+      this.$router.push({path: '/home'});
     },
     toUser() {},
     /*

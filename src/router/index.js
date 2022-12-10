@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/home/focus'
+    redirect: '/home'
   },
   {
     path: '/',
@@ -22,7 +22,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Header/SearchHeader.vue'),
         children: [
           {
-            path: '/home',
+            path: '/fakehome',
             name: 'home',
             // route level code-splitting
             // this generates a separate chunk (about.[hash].js) for this route
@@ -30,7 +30,7 @@ const routes = [
             component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
             children: [
               {
-                path: '/home/focus',
+                path: '/home',
                 name: 'home_focus',
                 // route level code-splitting
                 // this generates a separate chunk (about.[hash].js) for this route
