@@ -169,7 +169,7 @@
           <v-card-title class="text-left">学者关系图：</v-card-title>
           <v-card-text>
             <div style="height: 350px; width: 100%">
-              <scholar-relation-vue/>
+              <scholar-relation-vue :id="scholarName"/>
             </div>
           </v-card-text>
         </v-card>
@@ -180,7 +180,6 @@
 
 <script>
 import ScholarRelationVue from "./ScholarRelation.vue";
-import axios from 'axios';
 import qs from "qs";
 const SHOW_CONTENT = {
   PAPER: 1,
@@ -360,7 +359,7 @@ export default {
       let year = (this.toggleOne === 1) ? 0 : 1;
       this.$axios({
         method: "get",
-        url: '/api/get_p_number_of_scholar',
+        url: '/get_p_number_of_scholar',
         data: qs.stringify({
           scholar_id: this.scholarName
         })
@@ -385,7 +384,7 @@ export default {
       })
       .then(
         response => {
-          for (let x in 6)
+          for (let x = 0; x < 6; x++)
               this.recommandPatent.push({
                 article_name: response.data.at(x).title,
                 author: response.data.at(x).author,
@@ -497,7 +496,20 @@ export default {
     this.$nextTick(function() {
       loadScholarInfo();
       loadScholarIntro();
-      loadScholarPapers();
+      switch(this.toggleOne) {
+            case undefined:
+            case 1:
+              this.showContent = SHOW_CONTENT.PAPER;
+              loadScholarPapers();
+              break;
+            case 2:
+              this.showContent = SHOW_CONTENT.PATENT;
+              loadScholarPatent();
+              break;
+            case 3:
+              this.showContent = SHOW_CONTENT.PROJECT;
+              break;
+          }
     })
   },
   components: { ScholarRelationVue },
