@@ -33,6 +33,20 @@
             <img src="@/assets/art_sc_cancel2.png" class="recommand_icon_2_2" />
           </div>
         </v-card>
+        <div class="page_index_3">
+          <v-container>
+              <v-row justify="center">
+              <v-col cols="6">
+                  <v-container>
+                  <v-pagination
+                      v-model="page"
+                      :length="15"
+                  ></v-pagination>
+                  </v-container>
+              </v-col>
+              </v-row>
+          </v-container>
+        </div>
       </div>
     </div>
   </template>
@@ -55,7 +69,8 @@
             quote_num: 0,
             page_view: 0
           }
-        ]
+        ],
+        page: 1
       }
     },
     mounted() {
@@ -140,5 +155,9 @@
     width: vw(35);
     margin-left: vw(25);
     margin-bottom: vh(30);
+  }
+  .page_index_3 {
+    text-align: center;
+    margin-top: vh(10);
   }
 </style>

@@ -85,6 +85,20 @@
           <img src="@/assets/art_sc.png" class="recommand_icon_2" />
         </div>
       </v-card>
+      <div class="page_index_2">
+        <v-container>
+            <v-row justify="center">
+            <v-col cols="6">
+                <v-container>
+                <v-pagination
+                    v-model="page"
+                    :length="15"
+                ></v-pagination>
+                </v-container>
+            </v-col>
+            </v-row>
+        </v-container>
+      </div>
     </div>
   </div>
 </template>
@@ -115,7 +129,8 @@ export default {
       rcmd_field: [
         {name: "知识工程"},{name: "进化计算"},{name: "进化计算"},{name: "智能机器人"}
       ],
-      overlay: 0
+      overlay: 0,
+      page: 1
     }
   },
   mounted() {
@@ -301,5 +316,9 @@ export default {
   .home_icon_5 {
     width: vw(25);
     height: vw(25);
+  }
+  .page_index_2 {
+    text-align: center;
+    margin-top: vh(10);
   }
 </style>

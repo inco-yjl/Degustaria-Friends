@@ -37,6 +37,20 @@
           <div class="focus_research_area_item">Computer Science</div>
         </div>
       </v-card>
+      <div class="page_index_1">
+        <v-container>
+            <v-row justify="center">
+            <v-col cols="6">
+                <v-container>
+                <v-pagination
+                    v-model="page"
+                    :length="15"
+                ></v-pagination>
+                </v-container>
+            </v-col>
+            </v-row>
+        </v-container>
+      </div>
     </div>
   </div>
 </template>
@@ -64,11 +78,42 @@ export default {
           article_num: 180,
           quote_num: 18317
         }
-      ]
+      ],
+      user_img: "",
+      user_name: "",
+      user_id: "",
+      user_email: "",
+      page: 1
     }
   },
   mounted() {
-
+    this.user_img = window.localStorage.getItem('user_headshot');
+    this.user_name = window.localStorage.getItem('user_name')
+    this.user_id = window.localStorage.getItem('user_id')
+    this.user_email = window.localStorage.getItem('user_email')
+    this.$axios({
+      method: "post",
+      url: "/get_subscribed_scholar",
+      data: qs.stringify({
+        username: this.user_name
+      }),
+    })
+    .then((res) => {
+      console.log(res.data);
+      if(res.data.errno == 0) {
+        setTimeout(() => { this.$router.push("/home/focus"); }, 1000);
+        this.snackbar = true;
+        this.setData({ snackbar : true });
+      }
+      else {
+        console.log("login:", res.data);
+        this.snackbar2 = true;
+        this.setData({ snackbar2 : true });
+      }
+    })
+    .catch((err) => {
+      console.log(err.errno);
+    });
   },
   methods: {
     into_another_son(choose_num) {
@@ -175,5 +220,9 @@ export default {
     font-family: YouSheBiaoTiHei;
     color: #232f3d;
     font-size: vw(34);
+  }
+  .page_index_1 {
+    text-align: center;
+    margin-top: vh(10);
   }
 </style>
