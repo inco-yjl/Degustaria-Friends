@@ -19,13 +19,11 @@
         >
           <v-list-item-title class="headline_2_2">{{item.article_name}}</v-list-item-title>
           <v-list-item-subtitle class="subtitle_recommand_1_2">{{item.author}}</v-list-item-subtitle>
-          <div class="recommand_book_2">{{item.book}}</div>
+          <v-list-item-subtitle class="subtitle_recommand_1_2">{{item.field}}</v-list-item-subtitle>
+          <div class="recommand_book_2">{{item.book}} ({{item.year}})</div>
           <div class="quote_recommand_2">
             <div>
               <p class="font-weight-black">Number of citation：{{item.quote_num}}</p>
-            </div>
-            <div style="margin-left: 20px;">
-              <p class="font-weight-black">Number of visits：{{item.page_view}}</p>
             </div>
           </div>
           <div class="recommand_icon_fa_2">
@@ -60,14 +58,18 @@
             author: "Zhi Gao,Yuwei Wu,Mehrtash T Harandi,Yunde Jia",
             book: "IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) （2022）",
             quote_num: 0,
-            page_view: 0
+            page_view: 0,
+            field: "AI",
+            year: 2000
           },
           {
             article_name: "Variational Deep Image Restoration",
             author: "Jae Woong Soh, Nam Ik Cho",
             book: "Computer Science、CCF A",
             quote_num: 0,
-            page_view: 0
+            page_view: 0,
+            field: "AI",
+            year: 2000
           }
         ],
         page: 1
@@ -139,7 +141,7 @@
   }
   .quote_recommand_2 {
     margin-left: vw(20);
-    margin-top: vh(15);
+    margin-top: vh(10);
     display: flex;
     font-family: "Source Han Sans CN Normal", sans-serif;
   }

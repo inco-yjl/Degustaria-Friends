@@ -69,15 +69,13 @@
         v-for="item in recommand_content"
         :key="item.id"
       >
-        <v-list-item-title class="headline_2">{{item.article_name}}</v-list-item-title>
+        <v-list-item-title class="headline_2">{{item.title}}</v-list-item-title>
         <v-list-item-subtitle class="subtitle_recommand_1">{{item.author}}</v-list-item-subtitle>
-        <div class="recommand_book">{{item.book}}</div>
+        <v-list-item-subtitle class="subtitle_recommand_1">{{item.field}}</v-list-item-subtitle>
+        <div class="recommand_book">{{item.source}} ({{item.year}})</div>
         <div class="quote_recommand">
           <div>
-            <p class="font-weight-black">Number of citation：{{item.quote_num}}</p>
-          </div>
-          <div style="margin-left: 20px;">
-            <p class="font-weight-black">Number of visits：{{item.page_view}}</p>
+            <p class="font-weight-black">Number of citation：{{item.citation}}</p>
           </div>
         </div>
         <div class="recommand_icon_fa">
@@ -104,24 +102,11 @@
 </template>
   
 <script>
+import qs from "qs";
 export default {
   data() {
     return {
       recommand_content: [
-        {
-          article_name: "Curvature-Adaptive Meta-Learning for Fast Adaptation to Manifold Data",
-          author: "Zhi Gao,Yuwei Wu,Mehrtash T Harandi,Yunde Jia",
-          book: "IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) （2022）",
-          quote_num: 0,
-          page_view: 0
-        },
-        {
-          article_name: "Variational Deep Image Restoration",
-          author: "Jae Woong Soh, Nam Ik Cho",
-          book: "Computer Science、CCF A",
-          quote_num: 0,
-          page_view: 0
-        }
       ],
       concern_field: [
         {name: "Computer Neural Network"},{name: "Computer Perception"},{name: "Intelligent Robotics"}
@@ -130,11 +115,35 @@ export default {
         {name: "知识工程"},{name: "进化计算"},{name: "进化计算"},{name: "智能机器人"}
       ],
       overlay: 0,
-      page: 1
+      page: 1,
+      user_img: "",
+      user_name: "",
+      user_id: "",
+      user_email: "",
+      user_rcm_total: 0
     }
   },
   mounted() {
-
+    this.user_img = window.localStorage.getItem('user_headshot');
+    this.user_name = window.localStorage.getItem('user_name')
+    this.user_id = window.localStorage.getItem('user_id')
+    this.user_email = window.localStorage.getItem('user_email')
+    this.$axios({
+      method:"post",
+      url:"/get_recommended_paper_by_username",
+      data: qs.stringify({
+        username: this.user_name,
+        page: this.page,
+        size: 5
+      }),
+    })
+    .then((res) => {
+      console.log("rcm_content", res.data);
+      this.recommand_content = res.data;
+    })
+    .catch((err) => {
+      console.log(err.errno);
+    });
   },
   methods: {
     into_another_son(choose_num) {

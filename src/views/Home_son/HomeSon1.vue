@@ -19,22 +19,21 @@
       >
         <v-list-item>
           <div class="scholer_icon_1">
-            <div class="head_style_font">{{item.author_name.charAt(0)}}</div>
+            <div class="head_style_font">{{item.name1.charAt(0)}}</div>
           </div>
           <v-list-item-content>
-            <v-list-item-title class="headline_fa">{{item.author_name}}</v-list-item-title>
+            <v-list-item-title class="headline_fa">{{item.name1}}</v-list-item-title>
             <div style="display:flex;">
               <v-list-item-subtitle class="headline_focus_1">H-index：{{item.h_index}}</v-list-item-subtitle>
-              <v-list-item-subtitle class="headline_focus_1">论文数：{{item.article_num}}</v-list-item-subtitle>
-              <v-list-item-subtitle class="headline_focus_1">引用数：{{item.quote_num}}</v-list-item-subtitle>
+              <v-list-item-subtitle class="headline_focus_1">引用数：{{item.citation}}</v-list-item-subtitle>
+              <v-list-item-subtitle class="headline_focus_1">机构：{{item.org}}</v-list-item-subtitle>
             </div>
           </v-list-item-content>
         </v-list-item>
 
         <div class="focus_research_area" style="display: flex;">
           研究领域：
-          <div class="focus_research_area_item">Computer Science</div>
-          <div class="focus_research_area_item">Computer Science</div>
+          <div class="focus_research_area_item">{{item.interests}}</div>
         </div>
       </v-card>
       <div class="page_index_1">
@@ -44,7 +43,8 @@
                 <v-container>
                 <v-pagination
                     v-model="page"
-                    :length="15"
+                    :length="Math.ceil(user_total/5)"
+                    @input="home_get_user_list()"
                 ></v-pagination>
                 </v-container>
             </v-col>
@@ -56,34 +56,18 @@
 </template>
   
 <script>
+import qs from "qs";
 export default {
   data() {
     return {
       focus_people: [
-        {
-          author_name: "NAME PANYUYI",
-          h_index: 70,
-          article_num: 80,
-          quote_num: 10809
-        },
-        {
-          author_name: "YPWDPYM",
-          h_index: 100,
-          article_num: 180,
-          quote_num: 18317
-        },
-        {
-          author_name: "软工二",
-          h_index: 100,
-          article_num: 180,
-          quote_num: 18317
-        }
       ],
       user_img: "",
       user_name: "",
       user_id: "",
       user_email: "",
-      page: 1
+      page: 1,
+      user_total: 0
     }
   },
   mounted() {
@@ -92,30 +76,55 @@ export default {
     this.user_id = window.localStorage.getItem('user_id')
     this.user_email = window.localStorage.getItem('user_email')
     this.$axios({
-      method: "post",
-      url: "/get_subscribed_scholar",
+      method:"post",
+      url:"/get_subscribed_scholar",
+      data: qs.stringify({
+        username: this.user_name,
+        page: this.page,
+        size: 5
+      }),
+    })
+    .then((res) => {
+      console.log(res.data);
+      this.focus_people = res.data;
+    })
+    .catch((err) => {
+      console.log(err.errno);
+    });
+    this.$axios({
+      method:"post",
+      url:"/get_sub_num",
       data: qs.stringify({
         username: this.user_name
       }),
     })
     .then((res) => {
-      console.log(res.data);
-      if(res.data.errno == 0) {
-        setTimeout(() => { this.$router.push("/home/focus"); }, 1000);
-        this.snackbar = true;
-        this.setData({ snackbar : true });
-      }
-      else {
-        console.log("login:", res.data);
-        this.snackbar2 = true;
-        this.setData({ snackbar2 : true });
-      }
+      console.log(res.data.sub_num);
+      this.user_total = res.data.sub_num;
     })
     .catch((err) => {
       console.log(err.errno);
     });
   },
   methods: {
+    home_get_user_list() {
+      this.$axios({
+      method:"post",
+      url:"/get_subscribed_scholar",
+      data: qs.stringify({
+          username: this.user_name,
+          page: this.page,
+          size: 5
+        }),
+      })
+      .then((res) => {
+        console.log(res.data);
+        this.focus_people = res.data;
+      })
+      .catch((err) => {
+        console.log(err.errno);
+      });
+    },
     into_another_son(choose_num) {
       console.log(choose_num);
       if(choose_num == 1) {
@@ -191,6 +200,7 @@ export default {
     margin-left: vw(5);
     font-family: "Source Han Sans CN Normal", sans-serif;
     padding: vw(5);
+    width: vw(1050);
   }
   .focus_research_area_item:hover{
     background-color: #C5CAE9;
