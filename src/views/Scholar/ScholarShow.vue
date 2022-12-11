@@ -20,10 +20,7 @@
               </div>
               <div class="intro ma-1 text-body-1">
                 <p class="text-left pa-1">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Placeat tempora eligendi nihil ex velit ipsam fuga dolorum
-                  molestias doloribus. Voluptas saepe nemo ad pariatur doloribus
-                  nesciunt consequuntur a, quam fuga!
+                  {{ intro }}
                 </p>
               </div>
             </v-col>
@@ -72,7 +69,7 @@
                   <v-btn value="All" depressed elevation="1" small>全部</v-btn>
                   <v-btn value="Recent" depressed elevation="1" small>最近</v-btn>
                 </v-btn-toggle>
-                <v-btn-toggle v-model="toggleTwo" tile color="primary" group mandatory>
+                <v-btn-toggle v-model="toggleThree" tile color="primary" group mandatory>
                   <v-btn value="paper" depressed elevation="1" small>论文</v-btn>
                   <v-btn value="patent" depressed elevation="1" small>专利</v-btn>
                   <v-btn value="project" depressed elevation="1" small>项目</v-btn>
@@ -81,52 +78,89 @@
             </v-row>
           </v-card-subtitle>
           <v-card-text id="PaperList">
-            <div>
-                <v-card
-                  class="home_focus_card_2"
-                  v-for="item in recommand_content"
-                  :key="item.id"
-                >
-                  <v-list-item-title class="headline_2">{{item.article_name}}</v-list-item-title>
-                  <v-list-item-subtitle class="subtitle_recommand_1">{{item.author}}</v-list-item-subtitle>
-                  <div class="recommand_book">{{item.book}}</div>
-                  <div class="quote_recommand">
-                    <div>
-                      <p class="font-weight-black">Number of citation：{{item.quote_num}}</p>
-                    </div>
+            <div v-if="showContent == SHOW_CONTENT.PAPER">
+              <v-card
+                class="home_focus_card_2"
+                v-for="item in recommandPaper"
+                :key="item.id"
+              >
+                <v-list-item-title class="headline_2">{{item.article_name}}</v-list-item-title>
+                <v-list-item-subtitle class="subtitle_recommand_1">{{item.author}}</v-list-item-subtitle>
+                <div class="recommand_book">{{item.book}}</div>
+                <div class="quote_recommand">
+                  <div>
+                    <p class="font-weight-black">Number of citation：{{item.quote_num}}</p>
                   </div>
-                  <div class="recommand_icon_fa">
-                    <img src="@/assets/quote.png" class="recommand_icon_1" />
-                    <img src="@/assets/art_sc.png" class="recommand_icon_2" />
+                </div>
+                <div class="recommand_icon_fa">
+                  <img src="@/assets/quote.png" class="recommand_icon_1" />
+                  <img src="@/assets/art_sc.png" class="recommand_icon_2" />
+                </div>
+              </v-card>
+              <v-snackbar
+                v-model="showSnackBar"
+                :timeout="2000"
+                color="red accent-2"
+              >
+                论文列表加载失败
+                <template v-slot:action="{ attrs }">
+                  <v-btn
+                    color="blue"
+                    text
+                    v-bind="attrs"
+                    @click="snackbar = false"
+                  >
+                    Close
+                  </v-btn>
+                </template>
+              </v-snackbar>
+            </div>
+            <div v-else-if="show_content == SHOW_CONTENT.PATENT">
+              <v-card
+                class="home_focus_card_2"
+                v-for="item in recommandPatent"
+                :key="item.id"
+              >
+                <v-list-item-title class="headline_2">{{item.article_name}}</v-list-item-title>
+                <v-list-item-subtitle class="subtitle_recommand_1">{{item.author}}</v-list-item-subtitle>
+                <div class="recommand_book">{{item.book}}</div>
+                <div class="quote_recommand">
+                  <div>
+                    <p class="font-weight-black">Number of citation：{{item.quote_num}}</p>
                   </div>
-                </v-card>
-                <v-snackbar
-                  v-model="showSnackBar"
-                  :timeout="2000"
-                  color="red accent-2"
-                >
-                  论文列表加载失败
-                  <template v-slot:action="{ attrs }">
-                    <v-btn
-                      color="blue"
-                      text
-                      v-bind="attrs"
-                      @click="snackbar = false"
-                    >
-                      Close
-                    </v-btn>
-                  </template>
-                </v-snackbar>
-              </div>
-              <v-container class="max-width">
-                <v-pagination
-                  v-model="page"
-                  class="my-4"
-                  :length="PaginationLength"
-                  :total-visible="7"
-                  @click="this.$vuetify.goTo('#PaperList')"
-                ></v-pagination>
-              </v-container>
+                </div>
+                <div class="recommand_icon_fa">
+                  <img src="@/assets/quote.png" class="recommand_icon_1" />
+                  <img src="@/assets/art_sc.png" class="recommand_icon_2" />
+                </div>
+              </v-card>
+              <v-snackbar
+                v-model="showSnackBar"
+                :timeout="2000"
+                color="red accent-2"
+              >
+                专利列表加载失败
+                <template v-slot:action="{ attrs }">
+                  <v-btn
+                    color="blue"
+                    text
+                    v-bind="attrs"
+                    @click="snackbar = false"
+                  >
+                    Close
+                  </v-btn>
+                </template>
+              </v-snackbar>
+            </div>
+            <v-container class="max-width">
+              <v-pagination
+                v-model="page"
+                class="my-4"
+                :length="PaginationLength"
+                :total-visible="7"
+                @click="this.$vuetify.goTo('#PaperList')"
+              ></v-pagination>
+            </v-container>
           </v-card-text>
         </v-card>
       </v-col>
@@ -147,6 +181,12 @@
 <script>
 import ScholarRelationVue from "./ScholarRelation.vue";
 import axios from 'axios';
+import qs from "qs";
+const SHOW_CONTENT = {
+  PAPER: 1,
+  PATENT: 1 << 1,
+  PROJECT: 1 << 2,
+}
 export default {
   name: "ScholarPage",
   data() {
@@ -154,44 +194,58 @@ export default {
       SelfImage: "https://cdn.vuetifyjs.com/images/john.jpg",
       Name: "XYF",
       Faculty: "北京航空航天大学 软件学院",
+      Email: "tjyfxiao@126.com",
       PaginationLength: 15,
       page: 1,
       size: 10,
       scholarId,
+      scholarName: "",
+      intro: "",
+      showContent: SHOW_CONTENT.PAPER,
       MainField: [
         {
           index: 1,
           title: "人工智能",
-          link: "#",
         },
         {
           index: 2,
           title: "图像处理",
-          link: "#",
         },
         {
           index: 3,
           title: "模式识别",
-          link: "#",
         },
         {
           index: 4,
           title: "土豆种植",
-          link: "#",
         },
         {
           index: 5,
           title: "吃饭睡觉",
-          link: "#",
         },
         {
           index: 6,
           title: "啦啦啦啦",
-          link: "#",
         },
       ],
-      recommand_content: [
+      recommandPaper: [
         {
+          article_name: "Curvature-Adaptive Meta-Learning for Fast Adaptation to Manifold Data",
+          author: "Zhi Gao,Yuwei Wu,Mehrtash T Harandi,Yunde Jia",
+          book: "IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) （2022）",
+          quote_num: 0,
+          url: "",
+        },
+        {
+          article_name: "Variational Deep Image Restoration",
+          author: "Jae Woong Soh, Nam Ik Cho",
+          book: "Computer Science、CCF A",
+          quote_num: 0,
+          url: "",
+        }
+      ],
+      recommandPatent: [
+      {
           article_name: "Curvature-Adaptive Meta-Learning for Fast Adaptation to Manifold Data",
           author: "Zhi Gao,Yuwei Wu,Mehrtash T Harandi,Yunde Jia",
           book: "IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) （2022）",
@@ -212,39 +266,85 @@ export default {
     };
   },
   methods: {
-    loadScholarPapers(npage = 1) {
-      let paperformdata = new FormData();
-      let lengthformdata = new FormData();
-      paperformdata.append('scholar_id', this.scholarId);
-      paperformdata.append('page', npage);
-      paperformdata.append('size', 6);
-      let requestconfig = {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }
-      lengthformdata.append('scholar_id', this.scholarId);
-      this.$axios.get('/api/get_p_number_of_scholar', lengthformdata, requestconfig)
+    loadScholarInfo() {
+      this.$axios({
+        method: "get",
+        url: '/get_scholar_by_username',
+        data: qs.stringify({
+          username: this.scholarName
+        })
+      })
       .then(
         response => {
-          this.PaginationLength = Math.ceil(response.data.content.paper_number / 6);
+          this.scholarId = response.data.id;
+          this.Faculty = response.data.org;
+          this.Email = response.data.e_mail;
+          let iarr = response.data.interests.split(",");
+          for(let i = 1; i <= 6; i++)
+            this.MainField.push({
+              index: i,
+              title: iarr.at(1 - 1)
+            })
         }
       )
-      this.$axios.post('/api/get_papers_by_scholar', paperformdata, requestconfig)
+      .catch(
+        e => console.log(e)
+      )
+    },
+    loadScholarIntro() {
+      this.$axios({
+        method: "get",
+        url: '/get_scholar_introduction',
+        data: qs.stringify({
+          id: this.scholarName
+        })
+      })
+      .then(
+        res => this.intro = res.data.intro
+      )
+      .catch(
+        e => console.log(e)
+      )
+    },
+    loadScholarPapers(npage = 1) {
+      this.recommandPaper = [];
+      let sort = (this.toggleTwo === 1) ? "year" : "citation";
+      let year = (this.toggleOne === 1) ? 0 : 1;
+      this.$axios({
+        method: "get",
+        url: '/get_p_number_of_scholar',
+        data: qs.stringify({
+          scholar_id: this.scholarName
+        })
+      })
       .then(
         response => {
-          if (response.data.message === 'success') {
-            for (x in 6) {
-              template.article_name = response.data.content.at(x).title;
-              template.author = response.data.content.at(x).author;
-              template.book = response.data.content.at(x).source;
-              template.quote_num = response.data.content.at(x).citation;
-              template.url = response.data.content.at(x).url;
-              this.recommand_content.push(template);
-            }
-          } else {
-            console.log("failed");
-          }
+          this.PaginationLength = Math.ceil(this.toggleOne === 1 ?
+            response.data.paper_number : response.data.paper_number_10 / 6
+          );
+        }
+      )
+      this.$axios.post({
+        method: "post",
+        url: '/get_papers_by_scholar',
+        data: qs.stringify({
+          scholar_id: this.scholarName,
+          page: npage,
+          size: 6,
+          order: sort,
+          year: year,
+        })
+      })
+      .then(
+        response => {
+          for (let x in 6)
+              this.recommandPaper.push({
+                article_name: response.data.at(x).title,
+                author: response.data.at(x).author,
+                book: response.data.at(x).source,
+                quote_num: response.data.at(x).citation,
+                url: response.data.at(x).url,
+              });
         }
       )
       .catch(
@@ -253,20 +353,152 @@ export default {
           console.log(error);
         }
       )
+    },
+    loadScholarPatent(npage = 1) {
+      this.recommandPaper = [];
+      let sort = (this.toggleTwo === 1) ? "year" : "citation";
+      let year = (this.toggleOne === 1) ? 0 : 1;
+      this.$axios({
+        method: "get",
+        url: '/api/get_p_number_of_scholar',
+        data: qs.stringify({
+          scholar_id: this.scholarName
+        })
+      })
+      .then(
+        response => {
+          this.PaginationLength = Math.ceil(this.toggleOne === 1 ?
+            response.data.patent_number : response.data.patent_number_10 / 6
+          );
+        }
+      )
+      this.$axios.post({
+        method: "post",
+        url: '/api/get_patent_by_scholar',
+        data: qs.stringify({
+          scholar_id: this.scholarName,
+          page: npage,
+          size: 6,
+          order: sort,
+          year: year,
+        })
+      })
+      .then(
+        response => {
+          for (let x in 6)
+              this.recommandPatent.push({
+                article_name: response.data.at(x).title,
+                author: response.data.at(x).author,
+                book: response.data.at(x).source,
+                quote_num: response.data.at(x).citation,
+                url: response.data.at(x).url,
+              });
+        }
+      )
+      .catch(
+        error => {
+          this.showSnackBar = true;
+          console.log(error);
+        }
+      )
+    },
+    to_string(strs) {
+      var retstr = "";
+      for (let str in strs) {
+        retstr += str;
+        retstr += ",";
+      }
+      return retstr;
     }
   },
   watch: {
     page: {
       immediate: true,
       handler(nval, oval) {
-        console.log(oval + "->" + nval)
-        loadScholarPapers(nval);
+        console.log(oval + "->" + nval);
+        if (nval !== oval)
+          switch(nval) {
+              case 1:
+                this.showContent = SHOW_CONTENT.PAPER;
+                loadScholarPapers();
+                break;
+              case 2:
+                this.showContent = SHOW_CONTENT.PATENT;
+                loadScholarPatent();
+                break;
+              case 3:
+                this.showContent = SHOW_CONTENT.PROJECT;
+                break;
+            }
       }
     },
+    toggleOne: {
+      immediate: true,
+      handler(nval, oval) {
+        console.log(oval + "->" + nval)
+        if (nval !== oval)
+          switch(nval) {
+              case 1:
+                this.showContent = SHOW_CONTENT.PAPER;
+                loadScholarPapers();
+                break;
+              case 2:
+                this.showContent = SHOW_CONTENT.PATENT;
+                loadScholarPatent();
+                break;
+              case 3:
+                this.showContent = SHOW_CONTENT.PROJECT;
+                break;
+            }
+      }
+    },
+    toggleTwo: {
+      immediate: true,
+      handler(nval, oval) {
+        if (nval !== oval)
+          switch(nval) {
+              case 1:
+                this.showContent = SHOW_CONTENT.PAPER;
+                loadScholarPapers();
+                break;
+              case 2:
+                this.showContent = SHOW_CONTENT.PATENT;
+                loadScholarPatent();
+                break;
+              case 3:
+                this.showContent = SHOW_CONTENT.PROJECT;
+                break;
+            }
+      }
+    },
+    toggleThree: {
+      immediate: true,
+      handler(nval, oval) {
+        if (nval !== oval)
+          switch(nval) {
+            case 1:
+              this.showContent = SHOW_CONTENT.PAPER;
+              loadScholarPapers();
+              break;
+            case 2:
+              this.showContent = SHOW_CONTENT.PATENT;
+              loadScholarPatent();
+              break;
+            case 3:
+              this.showContent = SHOW_CONTENT.PROJECT;
+              break;
+          }
+        console.log(oval + "->" + nval)
+      }
+    }
   },
   mounted() {
-    this.scholarId = this.$route.params.scholarId;
-    loadScholarPapers();
+    this.scholarName = this.$route.params.scholarName;
+    this.$nextTick(function() {
+      loadScholarInfo();
+      loadScholarIntro();
+      loadScholarPapers();
+    })
   },
   components: { ScholarRelationVue },
 };
