@@ -172,7 +172,7 @@ export default {
     padding-bottom: vh(20);
   }
   .headline_fa {
-    font-family: "Baskerville", sans-serif;
+    font-family: "optima", sans-serif;
     font-size: vw(27);
   }
   .headline_focus_1 {
