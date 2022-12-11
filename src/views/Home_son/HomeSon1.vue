@@ -26,14 +26,16 @@
             <div style="display:flex;">
               <v-list-item-subtitle class="headline_focus_1">H-index：{{item.h_index}}</v-list-item-subtitle>
               <v-list-item-subtitle class="headline_focus_1">引用数：{{item.citation}}</v-list-item-subtitle>
-              <v-list-item-subtitle class="headline_focus_1">机构：{{item.org}}</v-list-item-subtitle>
+              <v-list-item-subtitle class="headline_focus_1" v-if="item.org != 'null'">机构：{{item.org}}</v-list-item-subtitle>
+              <v-list-item-subtitle class="headline_focus_1" v-if="item.org == 'null'">机构：-</v-list-item-subtitle>
             </div>
           </v-list-item-content>
         </v-list-item>
 
         <div class="focus_research_area" style="display: flex;">
           研究领域：
-          <div class="focus_research_area_item">{{item.interests}}</div>
+          <div class="focus_research_area_item" v-if="item.interests != 'null'">{{item.interests}}</div>
+          <div class="focus_research_area_item_2" v-if="item.interests == 'null'">无</div>
         </div>
       </v-card>
       <div class="page_index_1">
@@ -72,9 +74,9 @@ export default {
   },
   mounted() {
     this.user_img = window.localStorage.getItem('user_headshot');
-    this.user_name = window.localStorage.getItem('user_name')
-    this.user_id = window.localStorage.getItem('user_id')
-    this.user_email = window.localStorage.getItem('user_email')
+    this.user_name = window.localStorage.getItem('user_name');
+    this.user_id = window.localStorage.getItem('user_id');
+    this.user_email = window.localStorage.getItem('user_email');
     this.$axios({
       method:"post",
       url:"/get_subscribed_scholar",
@@ -170,12 +172,12 @@ export default {
     padding-bottom: vh(20);
   }
   .headline_fa {
-    font-family: "Source Han Sans CN Medium", sans-serif;
+    font-family: "Baskerville", sans-serif;
     font-size: vw(27);
   }
   .headline_focus_1 {
     margin-top: vh(5);
-    font-family: "Source Han Sans CN Normal", sans-serif;
+    font-family: "Baskerville", sans-serif;
   }
   .headline_focus_2 {
     margin-top: vh(5);
@@ -189,25 +191,33 @@ export default {
   }
   .focus_research_area {
     margin-left: vw(20);
-    font-family: "Source Han Sans CN Normal", sans-serif;
+    font-family: "SourceHanSerifCN", sans-serif;
     font-weight: 500;
     font-size: vw(18);
     margin-top: vh(20);
   }
   .focus_research_area_item {
-    background-color: #E8EAF6;
     margin-right: vw(10);
     margin-left: vw(5);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-    padding: vw(5);
+    font-family: "optima", sans-serif;
     width: vw(1050);
+    margin-top: vh(1);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
   }
-  .focus_research_area_item:hover{
-    background-color: #C5CAE9;
+  .focus_research_area_item_2 {
     margin-right: vw(10);
     margin-left: vw(5);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-    padding: vw(5);
+    font-family: "SourceHanSerifCN", sans-serif;
+    width: vw(1050);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
   }
   .fucous_timeline {
     border-top: solid 1px #CFD8DC;
@@ -227,7 +237,7 @@ export default {
     align-items:center;
   }
   .head_style_font {
-    font-family: YouSheBiaoTiHei;
+    font-family: Bodonitown;
     color: #232f3d;
     font-size: vw(34);
   }

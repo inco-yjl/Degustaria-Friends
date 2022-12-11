@@ -185,8 +185,7 @@ export default {
   }
   .card_title_1 {
     font-size: vw(30);
-    font-weight: bold;
-    font-family: "Source Han Sans CN Normal", sans-serif;
+    font-family: "SourceHanSerifCN-2", sans-serif;
     color: #232f3d;
     margin-bottom: vw(20);
   }
@@ -194,7 +193,7 @@ export default {
     font-size: 1.1rem;
     color: rgba(0,0,0,0.8);
     text-justify: auto;
-    font-family: "Source Han Sans CN Normal", sans-serif;
+    font-family: "optima", sans-serif;
     font-weight: 400;
     letter-spacing: 0.009375rem;
     line-height: 28px;
@@ -214,26 +213,26 @@ export default {
   }
   .home_all_1 {
     font-size: vw(20);
+    font-family: "optima", sans-serif;
   }
   .home_all_2 {
     font-size: vw(22);
     font-weight: vw(400);
     color: #232f3d;
     margin-top: 3px;
-    font-family: "Source Han Sans CN Normal", sans-serif;;
+    font-family: "SourceHanSerifCN", sans-serif;
   }
   .home_hot_field {
     margin-right:5px; 
     font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 0.078125rem;
-    font-family: "Source Han Sans CN Normal", sans-serif;;
+    font-family: "optima", sans-serif;;
   }
   .hot_field_title {
-    font-weight:bold; 
     color: #232f3d; 
     margin-top: 30px; 
-    font-family: "Source Han Sans CN Normal", sans-serif;
+    font-family: "SourceHanSerifCN-2", sans-serif;
     font-size: 1.6rem;
   }
   </style>
