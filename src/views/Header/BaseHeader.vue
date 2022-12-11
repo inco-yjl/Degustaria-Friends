@@ -35,7 +35,7 @@
             width="42"
             text
           >
-            <span class="user-name-icon">Yu</span>
+            <span class="user-name-icon">{{user_name.charAt(0)}}</span>
           </v-btn>
         </v-avatar>
       </v-system-bar>
@@ -51,6 +51,11 @@ export default {
     return {
       logo: require("@/assets/logo1.png"),
       gusto: require("@/assets/gusto2.png"),
+      First_name: "",
+      user_img: "",
+      user_name: "",
+      user_id: "",
+      user_email: "",
     };
   },
   methods: {
@@ -63,16 +68,14 @@ export default {
       this.$router.push({name: 'home'});
     },
     toUser() {},
-    /*
-    changeLanguage() {
-      if (this.$vuetify.lang.current === "en") {
-        this.$vuetify.lang.current = "zhHans";
-      } else {
-        this.$vuetify.lang.current = "en";
-      }
-      console.log(this.$vuetify.lang.current);
-    },*/
   },
+  mounted() {
+    this.user_img = window.localStorage.getItem('user_headshot');
+    this.user_name = window.localStorage.getItem('user_name')
+    this.user_id = window.localStorage.getItem('user_id')
+    this.user_email = window.localStorage.getItem('user_email')
+    console.log(this.user_name);
+  }
 };
 </script>
 

@@ -9,6 +9,16 @@ const routes = [
     redirect: '/home/focus'
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/User/login.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import(/* webpackChunkName: "about" */ '../views/User/register.vue'),
+  },
+  {
     path: '/',
     name: 'baseHeader',
     component: () => import(/* webpackChunkName: "about" */ '../views/Header/BaseHeader.vue'),

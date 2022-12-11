@@ -12,7 +12,7 @@
         <div>
             <div class="login_tips">用户名：</div>
             <v-text-field label="User" class="input_login_1" 
-            clearable="true" clear-icon="mdi-close-circle" v-model="input_user"></v-text-field>
+            clearable=true clear-icon="mdi-close-circle" v-model="input_user"></v-text-field>
             <div class="login_tips2">密码：</div>
             <v-text-field
                 v-model="input_password"
@@ -34,11 +34,11 @@
             ></v-text-field>
             <div class="login_tips2">邮箱：</div>
             <v-text-field label="E-mail" class="input_login_1" :rules="emailRules"
-            clearable="true" clear-icon="mdi-close-circle" 
+            clearable=true clear-icon="mdi-close-circle" 
             append-icon="mdi-email-arrow-right-outline" @click:append="send_email" v-model="input_email"></v-text-field>
             <div class="login_tips2">邮箱验证码：</div>
             <v-text-field label="Verification code" class="input_login_1" 
-            clearable="true" clear-icon="mdi-close-circle" v-model="input_email_cf"></v-text-field>       
+            clearable=true clear-icon="mdi-close-circle" v-model="input_email_cf"></v-text-field>       
         </div>
         <div style="display:flex;">
             <div class="login_btn_1" @click="register_ok">
@@ -49,6 +49,118 @@
             </div>
         </div>
       </v-card>
+      <v-snackbar
+        v-model="snackbar"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar
+        v-model="snackbar2"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text2 }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar2 = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar
+        v-model="snackbar3"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text3 }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar3 = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar
+        v-model="snackbar4"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text4 }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar4 = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar
+        v-model="snackbar5"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text5 }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar5 = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar
+        v-model="snackbar6"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text6 }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar6 = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar
+        v-model="snackbar7"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text7 }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar7 = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </template>
   
@@ -77,9 +189,25 @@
                     return pattern.test(v) || 'Invalid e-mail.'
             },
         ],
+        color: '',
+        mode: '',
         snackbar: false,
-        text: '注册成功！',
-        timeout: 2000,
+        snackbar2: false,
+        snackbar3: false,
+        snackbar4: false,
+        snackbar5: false,
+        snackbar6: false,
+        snackbar7: false,
+        text: '邮件已发送！',
+        text2: '注册成功！',
+        text3: '两次输入的密码不一致！',
+        text4: '后端瓦特了...',
+        text5: '邮箱已注册！',
+        text6: '名称已存在！',
+        text7: '验证码错误！',
+        timeout: 3000,
+        x: null,
+        y: 'top',
       };
     },
     mounted() {
@@ -93,9 +221,60 @@
         }
       },
       register_ok() {
-        this.$router.push({
-          name: "login",
+        if(this.input_password != this.input_password2) {
+          this.snackbar3 = true;
+          this.setData({ snackbar3 : true });
+          return;
+        }
+        this.$axios({
+          method: "post",
+          url: "/register",
+          data: qs.stringify({
+            email: this.input_email,
+            code: this.input_email_cf,
+            nickname: this.input_user,
+            password: this.input_password
+          }),
         })
+        .then((res) => {
+          if(res.data.errno == 1) {
+            this.snackbar5 = true;
+            this.setData({ snackbar5 : true });
+            return;
+          }
+          else if(res.data.errno == 2) {
+            this.snackbar6 = true;
+            this.setData({ snackbar6 : true });
+            return;
+          }
+          else if(res.data.errno == 3) {
+            this.snackbar7 = true;
+            this.setData({ snackbar7 : true });
+            return;
+          }
+          else if(res.data.errno == 4) {
+            this.snackbar7 = true;
+            this.setData({ snackbar7 : true });
+            return;
+          }
+          else if(res.data.errno == 5) {
+            this.snackbar7 = true;
+            this.setData({ snackbar7 : true });
+            return;
+          }
+          else if(res.data.errno == 6) {
+            setTimeout(() => { this.$router.push("/login"); }, 1000);
+            this.snackbar2 = true;
+            this.setData({ snackbar2 : true });
+          }
+          else {
+            this.snackbar4 = true;
+            this.setData({ snackbar4 : true });
+          }
+        })
+        .catch((err) => {
+          console.log(err.errno);
+        });
       },
       go_login() {
         this.$router.push({
@@ -108,36 +287,28 @@
           });
       },
       send_email() {
-        if (valid) {
-          this.time = 60;
-          this.timer();
-          let that = this;
-          this.$axios
-            .post(
-                "user/code/",
-                qs.stringify({
-                  email: this.user.email,
-                })
-            )
-            .then((res) => {
-              if (res.data.errno === 2) {
-                console.log("send success");
-                this.$message.success('验证码发送成功')
-              }
-              else {
-                console.log("send failure");
-                console.log(res.data)
-                this.$message.error(res.data.message)
-              }
-              // console.log(response.data.dir_filelist);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        } else {
-          console.log('输入格式不正确');
-          return false;
-        }
+          this.$axios({
+            method: "post",
+            url: "/code",
+            data: qs.stringify({
+              email: this.input_email,
+            }),
+          })
+          .then((res) => {
+            if(res.data.errno == 3) {
+              this.snackbar5 = true;
+              this.setData({ snackbar5 : true });
+              return;
+            }
+            else {
+              console.log("Send_message", res.data);
+              this.snackbar = true;
+              this.setData({ snackbar : true });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       },
     },
   };

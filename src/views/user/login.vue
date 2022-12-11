@@ -10,9 +10,9 @@
             <img src="../../assets/gusto2.png" class="login_logo_3"/>
         </div>
         <div>
-            <div class="login_tips">邮箱：</div>
-            <v-text-field label="E-mail" class="input_login_1" clearable="true" clear-icon="mdi-close-circle" v-model="input_email"></v-text-field>
-            <div class="login_tips">密码：</div>
+            <div class="login_tips">用户名：</div>
+            <v-text-field label="User" class="input_login_1" clearable=true clear-icon="mdi-close-circle" v-model="input_user"></v-text-field>
+            <div class="login_tips2">密码：</div>
             <v-text-field
                 v-model="input_password"
                 class="input_login_1"
@@ -35,6 +35,38 @@
             </div>
         </div>
       </v-card>
+      <v-snackbar
+        v-model="snackbar"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar
+        v-model="snackbar2"
+        :top="y === 'top'"
+        :vertical="mode === 'vertical'"
+      >
+        {{ text2 }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            @click="snackbar2 = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </template>
   
@@ -45,68 +77,59 @@
     data() {
       return {
         user: {
-          email: "",
+          username: "",
           password: "",
         },
-        input_email: "",
+        input_user: "",
         input_password: "",
         show1: false,
-        password: 'Password'
+        password: 'Password',
+        snackbar: false,
+        snackbar2: false,
+        text: '登录成功！',
+        text2: '用户名和密码不匹配！',
+        color: '',
+        mode: '',
+        timeout: 3000,
+        x: null,
+        y: 'top',
       };
     },
     methods: {
-      home() {
-        this.$router.push({
-          path: "/home/focus",
-        });
-      },
       login_now() {
-        this.$router.push({
-          name: "home_focus",
+        this.$axios({
+          method: "post",
+          url: "/login",
+          data: qs.stringify({
+            username: this.input_user,
+            password: this.input_password
+          }),
         })
+        .then((res) => {
+          console.log(res.data);
+          window.localStorage.setItem("user_email", res.data.email);
+          window.localStorage.setItem("user_name", res.data.username);
+          window.localStorage.setItem("user_headshot", res.data.headshot);
+          window.localStorage.setItem("user_id", res.data.id);
+          if(res.data.errno == 0) {
+            setTimeout(() => { this.$router.push("/home/focus"); }, 1000);
+            this.snackbar = true;
+            this.setData({ snackbar : true });
+          }
+          else {
+            console.log("login:", res.data);
+            this.snackbar2 = true;
+            this.setData({ snackbar2 : true });
+          }
+        })
+        .catch((err) => {
+          console.log(err.errno);
+        });
       },
       go_register() {
         this.$router.push({
           name: "register",
         })
-      },
-      login() {
-        this.$refs["user"].validate((valid) => {
-          if (valid) {
-            console.log(this.user);
-            this.$axios
-              .post(
-                "/user/login",
-                qs.stringify({
-                  email: this.user.email,
-                  password: this.user.password,
-                })
-              )
-              .then((res) => {
-                if (res.data.errno === 2) {
-                  console.log("获取到登录信息", res);
-                  this.$message({
-                    message: "登录成功",
-                    type: "success",
-                  });
-                  console.log(res.data);
-                  this.$store.dispatch("saveUserInfo", {
-                    user: "已登录",//存储状态
-                  });
-                  console.log(res.data.data + "已登录");
-                  window.open("/home", "_self");
-                } else {
-                  this.$message.error(res.data.msg);
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          } else {
-            console.log("输入格式不正确");
-            return false;
-          }
-        });
       },
     },
     mounted() {
@@ -142,6 +165,15 @@
     font-family: PingFang SC;
     font-weight: vw(30);
     margin-top: vh(70);
+    margin-left: vw(40);
+    font-size: 1.5rem;
+    text-align: left;
+    letter-spacing: 0.015625rem;
+  }
+  .login_tips2{
+    font-family: PingFang SC;
+    font-weight: vw(30);
+    margin-top: vh(50);
     margin-left: vw(40);
     font-size: 1.5rem;
     text-align: left;
