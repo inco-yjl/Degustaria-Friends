@@ -12,33 +12,6 @@
         min-height="100"
       >
         <v-spacer />
-        <!--原竖版搜索内容选择器
-        <v-card flat color="rgba(255, 255, 255, 0)" width="100">
-          <v-col class="mx-auto" color="primary">
-            <v-item-group class="search-option" mandatory>
-              <v-item
-                v-for="(item, index) in searchOptions"
-                :key="index"
-                v-slot:default="{ active, toggle }"
-                ><v-row>
-                  <div @click="toggle">
-                    <v-btn
-                      depressed
-                      :class="active ? 'active-search-option' : ''"
-                      small
-                      :color="
-                        active ? 'rgb(255, 255, 255)' : 'rgba(255, 255, 255, 0)'
-                      "
-                      @click="setOption(index)"
-                      >{{ item.name }}</v-btn
-                    >
-                  </div>
-                </v-row>
-              </v-item>
-            </v-item-group>
-          </v-col>
-        </v-card>
-      -->
         <!--搜索内容选择器&&输入框-->
         <v-col>
           <div class="tags">
@@ -84,7 +57,7 @@
                     item-text="name"
                     item-value="value"
                     return-object
-                    v-model="singleSelection"
+                    v-model="complexSearchOptions.search_type[0]"
                     height="40"
                     class="selector-input"
                     full-width
@@ -99,53 +72,18 @@
                     solo
                     flat
                     height="40"
-                    v-model="singleInput"
+                    v-model="complexSearchOptions.search_word[0]"
                     append-icon="mdi-magnify"
-                    @click:append="searchSimple()"
+                    @click:append="search"
                     background-color="#ffffff"
                     class="search-input"
                     clearable
-                  ></v-text-field>
-                </div>
-              </v-row>
-              <v-row v-if="method === 'Reference'">
-                <div class="simple-search-selector">
-                  <v-select
-                    :items="referAttributes"
-                    dense
-                    light
-                    solo
-                    flat
-                    item-text="name"
-                    item-value="value"
-                    return-object
-                    v-model="singleSelection"
-                    height="40"
-                    class="selector-input"
-                    full-width
-                    color="primary"
-                    background-color="#ffffff"
-                  ></v-select>
-                </div>
-                <div class="search-textarea">
-                  <v-text-field
-                    dense
-                    light
-                    solo
-                    flat
-                    height="40"
-                    v-model="singleInput"
-                    background-color="#ffffff"
-                    class="search-input"
-                    clearable
-                    @click:append="searchReference()"
-                    append-icon="mdi-magnify"
                   ></v-text-field>
                 </div>
               </v-row>
               <div v-if="method === 'HighLevel'" class="high-level-search-area">
                 <v-row
-                  v-for="(option, index) in complexSearchOptions"
+                  v-for="(option, index) in complexSearchOptions.search_word"
                   :key="index"
                 >
                   <div class="logic-search-selector">
@@ -159,7 +97,7 @@
                       item-text="name"
                       item-value="value"
                       return-object
-                      v-model="option.logic"
+                      v-model="complexSearchOptions.search_logic[index-1]"
                       height="40"
                       class="selector-input"
                       full-width
@@ -177,25 +115,7 @@
                       item-text="name"
                       item-value="value"
                       return-object
-                      v-model="option.word"
-                      height="40"
-                      class="selector-input"
-                      full-width
-                      color="primary"
-                      background-color="#ffffff"
-                    ></v-select>
-                  </div>
-                  <div class="logic-search-selector">
-                    <v-select
-                      :items="accuracyOptions"
-                      dense
-                      light
-                      solo
-                      flat
-                      item-text="name"
-                      item-value="value"
-                      return-object
-                      v-model="option.accuracy"
+                      v-model="complexSearchOptions.search_type[index]"
                       height="40"
                       class="selector-input"
                       full-width
@@ -210,7 +130,7 @@
                       solo
                       flat
                       height="40"
-                      v-model="option.input"
+                      v-model="complexSearchOptions.search_word[index]"
                       background-color="#ffffff"
                       class="search-input"
                       clearable
@@ -221,7 +141,7 @@
                     <v-btn
                       icon
                       color="white"
-                      @click="highSearch()"
+                      @click="search()"
                       v-if="index === 0"
                     >
                       <v-icon>mdi-magnify</v-icon>
@@ -237,8 +157,8 @@
                     <v-btn
                       icon
                       color="white"
-                      v-if="index === complexSearchOptions.length - 1"
-                      @click="addOption()"
+                      v-if="index === complexSearchOptions.search_word.length - 1"
+                      @click="addSearchOptions()"
                     >
                       <v-icon>mdi-plus-circle-outline</v-icon>
                     </v-btn>
@@ -273,17 +193,6 @@
                 </v-btn>
               </div>
             </v-row>
-            <v-row v-if="method !== 'Reference' && mode === 0">
-              <div>
-                <v-btn
-                  depressed
-                  small
-                  color="rgba(255, 255, 255, 0)"
-                  @click="setMethod('Reference')"
-                  >引文检索>
-                </v-btn>
-              </div>
-            </v-row>
           </v-col>
         </v-card>
         <v-spacer></v-spacer>
@@ -295,206 +204,41 @@
   
 <script>
 import { ref } from "vue";
+import {
+  logicOptions, ORDER_TYPE_RELATIVE, ORDER_TYPE_TIME, ORDER_REFSUM, ORDER_DES, ORDER_ASD,
+  AND, OR, NOT,
+  accuracyOptions,
+  PAGE_SIZE,
+  referAttributes, attributes,NOT_REF,REF,
+} from "../SearchResult/SearchDataType"
+import {searchRequest} from "@/views/SearchResult/searchRequest";
 export default {
   name: "searchHeader",
   data() {
-    const attributes = [
-      [
-        {
-          name: "综合",
-          value: "COMBINE",
-        },
-        {
-          name: "主题",
-          value: "TOPIC",
-        },
-        {
-          name: "篇名",
-          value: "NAME",
-        },
-        {
-          name: "摘要",
-          value: "ABSTRACT",
-        },
-        {
-          name: "关键词",
-          value: "KEYWORDS",
-        },
-        {
-          name: "全文",
-          value: "CONTENT",
-        },
-        {
-          name: "作者",
-          value: "AUTHOR",
-        },
-        {
-          name: "作者单位",
-          value: "INSTITUTE",
-        },
-        {
-          name: "参考文献",
-          value: "REFERENCE",
-        },
-        {
-          name: "文献来源",
-          value: "SOURCE",
-        },
-        {
-          name: "DOI",
-          value: "DOI",
-        },
-      ],
-      [
-        {
-          name: "综合",
-          value: "COMBINE",
-        },
-        {
-          name: "主题",
-          value: "TOPIC",
-        },
-        {
-          name: "专利名",
-          value: "NAME",
-        },
-        {
-          name: "摘要",
-          value: "ABSTRACT",
-        },
-        {
-          name: "关键词",
-          value: "KEYWORDS",
-        },
-        {
-          name: "全文",
-          value: "CONTENT",
-        },
-        {
-          name: "申请人",
-          value: "APPLICATOR",
-        },
-        {
-          name: "发明人",
-          value: "INVENTOR",
-        },
-        {
-          name: "代理人",
-          value: "AGENCY",
-        },
-        {
-          name: "申请号",
-          value: "APPLICATENUMBER",
-        },
-        {
-          name: "公开号",
-          value: "PUBLICNUMBER",
-        },
-        {
-          name: "分类号",
-          value: "CLASSNUMBER",
-        },
-        {
-          name: "主分类号",
-          value: "MAINCLASSNUMBER",
-        },
-      ],
-      [
-        {
-          name: "综合",
-          value: "COMBINE",
-        },
-        {
-          name: "主题",
-          value: "TOPIC",
-        },
-        {
-          name: "项目名称",
-          value: "NAME",
-        },
-        {
-          name: "摘要",
-          value: "ABSTRACT",
-        },
-        {
-          name: "关键词",
-          value: "KEYWORDS",
-        },
-        {
-          name: "项目专家",
-          value: "EXPERT",
-        },
-        {
-          name: "承担机构",
-          value: "EXEINSTITUTE",
-        },
-        {
-          name: "资助机构",
-          value: "PAYINSTITUTE",
-        },
-      ],
-    ];
-    const referAttributes = [
-      {
-        name: "被引主题",
-        value: "REFERTOPIC",
-      },
-      {
-        name: "被引题名",
-        value: "REFERNAME",
-      },
-      {
-        name: "被引关键词",
-        value: "REFERKEYWORD",
-      },
-      {
-        name: "被引摘要",
-        value: "REFERABSTRACT",
-      },
-      {
-        name: "被引作者",
-        value: "REFERAUTHOR",
-      },
-      {
-        name: "被引机构",
-        value: "REFERINSTITUTE",
-      },
-      {
-        name: "被引文献来源",
-        value: "REFERSOURCE",
-      },
-    ];
-    const logicOptions = [
-      {
-        name: "而且",
-        value: "AND",
-      },
-      {
-        name: "或者",
-        value: "OR",
-      },
-      {
-        name: "且非",
-        value: "NOT",
-      },
-    ];
-    const accuracyOptions = [
-      {
-        name: "模糊",
-        value: "VAGUE",
-      },
-      {
-        name: "精确",
-        value: "PRECISE",
-      },
-    ];
+
     return {
       singleInput: ref(),
-      logicOptions,
+      logicOptions,ORDER_TYPE_RELATIVE,ORDER_TYPE_TIME,ORDER_REFSUM,ORDER_DES,ORDER_ASD,
+      AND,OR,NOT,attributes,
       accuracyOptions,
-      complexSearchOptions: [],
+      PAGE_SIZE,
+      complexSearchOptions: {
+          search_word:[],
+          search_type:[],
+          search_logic:[],
+          filter_sub:[],
+          filter_thm:[],
+          filter_org:[],
+          filter_src:[],
+          filter_time:[],
+          page:1,
+          size:this.PAGE_SIZE,
+          order:this.ORDER_DES,
+          order_type:this.ORDER_TYPE_RELATIVE,
+          ref:NOT_REF,
+      },
+
       referAttributes,
-      singleSelection: ref(attributes[0][0]),
       logo: require("@/assets/logo1.png"),
       gusto: require("@/assets/gusto2.png"),
       searchOptions: [
@@ -510,73 +254,108 @@ export default {
       ],
       mode: 0,
       method: "Simple",
-      attributes,
       searchAttributes: attributes[0],
     };
   },
   methods: {
     toUser() {},
-    searchSimple() {
-      console.log(this.singleSelection);
-      console.log(this.singleInput);
+    addSearchOptions(){
+      //首先加逻辑，再加关键字
+      if(this.complexSearchOptions.search_word.length>0){
+        this.complexSearchOptions.search_logic.push(this.logicOptions[0].value);
+      }
+      this.complexSearchOptions.search_word.push("");
+      this.complexSearchOptions.search_type.push(this.attributes[0][0].value);
+
+
     },
-    searchReference() {
-      console.log(this.singleSelection);
-      console.log(this.singleInput);
+    search() {
+      //注意，v-model的值不要随便复制!!!
+      let search_word=[]
+      let search_type=[]
+      let search_logic=[]
+      let filter_sub=this.complexSearchOptions.filter_sub
+      let filter_thm=this.complexSearchOptions.filter_thm
+      let filter_org=this.complexSearchOptions.filter_org
+      let filter_src=this.complexSearchOptions.filter_src
+      let filter_time=this.complexSearchOptions.filter_time
+      let page=this.complexSearchOptions.page
+      let size=this.complexSearchOptions.size
+      let order=this.complexSearchOptions.order
+      let order_type=this.complexSearchOptions.order_type
+      let ref=this.complexSearchOptions.ref
+      console.log(this.complexSearchOptions)
+      for(let i=0;i<this.complexSearchOptions.search_word.length;i++){
+        if(i!=0){
+          let logic=this.complexSearchOptions.search_logic[i-1].value
+          if(logic===undefined){
+            logic="0";
+          }
+          search_logic.push(logic)
+
+        }
+        let type=this.complexSearchOptions.search_type[i].value
+        if(type===undefined){
+          type="0";
+        }
+        search_type.push(type)
+        let word=this.complexSearchOptions.search_word[i]
+        if(word===undefined){
+          word=" "
+        }
+        search_word.push(word)
+      }
+      if(search_word[0]===undefined||search_type[0]===undefined||search_logic[0]===undefined){
+        console.log("没有初始化")
+
+      }
+      let param={
+        'search_word':search_word,
+        'search_type':search_type,
+        'search_logic':search_logic,
+        'filter_sub':filter_sub,
+        'filter_thm':filter_thm,
+        'filter_org':filter_org,
+        'filter_src':filter_src,
+        'filter_time':filter_time,
+        'page':page,
+        'size':size,
+        'order':order,
+        'order_type':order_type,
+        'ref':ref,
+      }
+      console.log(param)
+      this.$store.commit("mod_search_param",param)
+      console.log('vuex :',this.$store.getters.get_search_param)
+      this.$router.push('/searchResult')
     },
     setOption(index) {
       console.log(index);
       this.method = "Simple";
       this.mode = index;
       this.searchAttributes = this.attributes[index];
-      this.singleSelection = this.searchAttributes[0];
     },
     setMethod(method) {
-      if (method === "Simple") {
-        this.singleSelection = this.searchAttributes[0];
-      } else if (method === "Reference") {
-        this.singleSelection = this.referAttributes[0];
-      } else {
-        this.complexSearchOptions = [];
-        this.complexSearchOptions.push({
-          logic: null,
-          word: this.searchAttributes[0],
-          accuracy: this.accuracyOptions[0],
-          input: "",
-        });
-        this.complexSearchOptions.push({
-          logic: this.logicOptions[0],
-          word: this.searchAttributes[1],
-          accuracy: this.accuracyOptions[0],
-          input: "",
-        });
+      this.method=method;
+      this.complexSearchOptions.search_word.splice(1 );
+      this.complexSearchOptions.search_type.splice(1 );
+      this.complexSearchOptions.search_logic.splice(1) ;
+      if(method=="HighLevel"){
+        this.addSearchOptions();
       }
-      this.method = method;
     },
     minusOption(index) {
-      this.complexSearchOptions.splice(index, 1);
+      this.complexSearchOptions.search_word.splice(index, 1);
+      this.complexSearchOptions.search_type.splice(index, 1);
+      this.complexSearchOptions.search_logic.splice(index-1, 1);
+
     },
-    addOption() {
-      this.complexSearchOptions.push({
-        logic: this.logicOptions[0],
-        word: this.searchAttributes[1],
-        accuracy: this.accuracyOptions[0],
-        input: "",
-      });
-    },
-    highSearch() {
-      console.log(this.complexSearchOptions);
-    },
-    /*
-      changeLanguage() {
-        if (this.$vuetify.lang.current === "en") {
-          this.$vuetify.lang.current = "zhHans";
-        } else {
-          this.$vuetify.lang.current = "en";
-        }
-        console.log(this.$vuetify.lang.current);
-      },*/
+
   },
+  created() {
+    this.addSearchOptions();
+
+  }
 };
 </script>
   
@@ -595,7 +374,7 @@ export default {
   border-left: 1px solid #232f3d;
 }
 .simple-search-selector {
-  width: vw(150);
+  width: vw(200);
   border-left: 1px solid #232f3d;
   margin-left: vw(20);
 }

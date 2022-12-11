@@ -1,25 +1,31 @@
 <template>
   <div>
     <div>
-      <v-card
-          class="search_result_card"
-          v-for="item in collect_content"
-          :key="item.id"
-      >
-        <v-list-item-title class="headline_2_2">{{item.article_name}}</v-list-item-title>
-        <v-list-item-subtitle class="subtitle_recommand_1_2">{{item.author}}</v-list-item-subtitle>
-        <div class="recommand_book_2">{{item.book}}</div>
+      <v-card class="search_result_card">
+        <v-list-item-title class="headline_2_2">{{paper.title}}</v-list-item-title>
+        <v-list-item-subtitle class="subtitle_recommand_1_2">
+            {{paper.author[0]}}|{{paper.venue[0]}}
+        </v-list-item-subtitle>
+        <div class="recommand_book_1">
+          <span class="year_info">出版单位：{{paper.publisher}}</span>
+          <span class="year_info">出版时间：{{paper.year}}</span>
+        </div>
+        <div class="abstract_info">
+          <span style="font-weight: bold">摘要：</span>
+          {{paper.abstract}}
+        </div>
+        <div class="keywords_info">
+          <span style="font-weight: bold">关键词：</span>
+          <span v-for="i in paper.keywords">{{i+"; "}}</span>
+        </div>
         <div class="quote_recommand_2">
           <div>
-            <p class="font-weight-black">Number of citation：{{item.quote_num}}</p>
-          </div>
-          <div style="margin-left: 20px;">
-            <p class="font-weight-black">Number of visits：{{item.page_view}}</p>
+            <p class="font-weight-black">引用量：{{paper.n_citation}}</p>
           </div>
         </div>
         <div class="recommand_icon_fa_2">
           <img src="@/assets/quote.png" class="recommand_icon_1_2" />
-          <img :src="saved?collected:uncollected" class="recommand_icon_2_2" />
+          <img :src="saved?collected:uncollected" class="recommand_icon_2_2" @click="change_collect()"/>
         </div>
       </v-card>
     </div>
@@ -29,22 +35,40 @@
 <script>
 import collected from "@/assets/art_sc.png";
 import uncollected from "@/assets/art_sc_cancel2.png";
+import {collect_paper, searchRequest} from "@/views/SearchResult/searchRequest";
 export default {
   name:"SearchResult",
   props:{
-    collect_content:{
-      default:      [
+    paper:{
+      type:Object,
+      default:
         {
-          article_name: "Curvature-Adaptive Meta-Learning for Fast Adaptation to Manifold Data",
-          author: "Zhi Gao,Yuwei Wu,Mehrtash T Harandi,Yunde Jia",
-          book: "IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) （2022）",
-          quote_num: 0,
-          page_view: 0
+          id:0,
+          title:"架设东西方的桥梁——英国汉学家理雅各研究",
+          author:["岳峰","张伟"],
+          venue:["福建师范大学","北京大学"],
+          year: 2022,
+          keywords:["理雅各","传教士","翻译", "香港教育", "汉学"],
+          abstract:"本文原载英文版《近现代中国》(Modern China)第17卷第3期,1991年7月。文章发表后在美国理论界、史学界激起很大反响。现经作者同意,特在本刊发表(略有删节)。由于文中提到中国经济社会史上一系列重要的理论问题,如自明清以来的资本主义萌芽问题、商品化与发展的问题、自然经济与市场的问题、公民权力与公众领域问题、封建主义问题等等。特别是作者以方法论的高度提出在这些问题研究上的“规范认识危机”和一系列悖论现象,向传统的解释提出挑战。长期以来,这些问题在海内外的学术界一直存在不同的看法和争论,为了使这种探讨深入下去,我们准备围绕黄宗智教授在这篇论文中提出的这些问题展开讨论,欢迎海内外的学者参加讨论。",
+          field:[],
+          n_citation:103,
+          lang:"",
+          issn:"",
+          isbn:"",
+          doi:"",
+          pdf:"",
+          url:"",
+          publisher:"史学理论研究",
         },
-      ]
+
     },
     saved:{
+      type:Boolean,
       default: false,
+    },
+    type:{
+      type:String,
+      default:"期刊"
     }
   },
   data() {
@@ -57,7 +81,39 @@ export default {
 
   },
   methods: {
+    change_collect(){
+      this.saved=!this.saved
+      let user_name=window.localStorage.getItem("user_name")
+      let op=this.saved?0:1
+      let id=this.paper.id
+      let param={
+        op,
+        id,
+        user_name,
+      }
+      collect_paper(param).then(()=>{
+        this.update_collect()
+      })
+    },
+    update_collect(){
+      let user_name=window.localStorage.getItem("user_name")
+      let op=2
+      let id=this.paper.id
+      let param={
+        op,
+        id,
+        user_name,
+      }
+      collect_paper(param).then((res)=>{
+        let state=res.data.state
+        this.saved=state===1
+      })
+    }
+  },
+  created() {
+    this.update_collect()
   }
+
 }
 </script>
 
@@ -92,8 +148,14 @@ export default {
   margin-left: vw(20);
   font-family: "Source Han Sans CN Normal", sans-serif;
 }
-.recommand_book_2 {
-  color: #455A64;
+.abstract_info {
+  color: #555555;
+  margin-left: vw(20);
+  margin-top: vh(10);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.keywords_info{
+  color: #282626;
   margin-left: vw(20);
   margin-top: vh(10);
   font-family: "Source Han Sans CN Normal", sans-serif;
@@ -117,5 +179,11 @@ export default {
   height: vw(31);
   margin-left: vw(25);
   margin-bottom: vh(30);
+}
+.year_info{
+  color: #282626;
+  margin-left: vw(20);
+  margin-top: vh(10);
+  font-family: "Source Han Sans CN Normal", sans-serif;
 }
 </style>
