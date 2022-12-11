@@ -7,10 +7,12 @@ import '../node_modules/echarts-map/js/world.js'
 import './styles/font.less'
 import axios from '@/plugins/axios/axios.js'
 import qs from 'qs';
+import * as echarts from 'echarts';
 
 Vue.config.productionTip = false;
 Vue.prototype.$qs=qs;
 Vue.prototype.$axios = axios;
+Vue.prototype.$echarts = echarts
 
 new Vue({
   router,

@@ -29,8 +29,8 @@
             </div>
           </div>
           <div class="recommand_icon_fa_2">
-            <img src="../../assets/quote.png" class="recommand_icon_1_2" />
-            <img src="../../assets/art_sc_cancel2.png" class="recommand_icon_2_2" />
+            <img src="@/assets/quote.png" class="recommand_icon_1_2" />
+            <img src="@/assets/art_sc_cancel2.png" class="recommand_icon_2_2" />
           </div>
         </v-card>
       </div>
@@ -137,8 +137,7 @@
     margin-bottom: vh(30);
   }
   .recommand_icon_2_2 {
-    width: vw(31);
-    height: vw(31);
+    width: vw(35);
     margin-left: vw(25);
     margin-bottom: vh(30);
   }
