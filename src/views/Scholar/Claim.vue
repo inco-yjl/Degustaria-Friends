@@ -148,7 +148,7 @@
             style="display: inline-block;width:80%"
         >
         </v-text-field>
-        <v-btn style="display: inline-block; position: absolute;right: 30px;" rounded class="ma-2" color="primary" dark>搜索<v-icon dark right>mdi-magnify</v-icon></v-btn>
+        <v-btn style="display: inline-block; position: absolute;right: 30px;" rounded class="ma-2" color="primary" dark @click="search">搜索<v-icon dark right>mdi-magnify</v-icon></v-btn>
         <div class="tabs">
   <v-card>
     <v-tabs
@@ -300,7 +300,7 @@ export default {
             switch1:true,
             switch2:true,
             ifshow: 1,
-            searchmsg:'',
+            searchmsg:'haha',
             articlenum: 2,
             tab:null,
             grouplist:[
@@ -333,8 +333,35 @@ export default {
       addothername(){
 
       },
+      search(){
+        window.alert('searchmsg'+this.searchmsg);
+        var params={
+          search_word:[this.searchmsg],
+          search_type:[0],
+          page:1,
+          size:8,
+          search_logic:null,
+        };
+        console.log('params:'+params);
+        this.$axios.get('/search_paper/', { params: params})
+        .then((res) => {
+            /* res 是 response 的缩写 */
+            console.log("errno", res.data.errno);
+            if (res.data.errno == 200) {
+              console.log(res.data + " 连上了");
+              this.$message.success('成功')
+            } else {
+              this.$message.error('失败，请稍后再试')
+            }
+          })
+          .catch((err) => {
+            /* 请求若出现路由找不到等其它异常，则在终端输出错误信息 */
+            console.log(err);
+          });
+
+      },
         submit(){
-          window.alert('switch1:',this.switch1);
+          window.alert('switch1:'+this.switch1);
           var sw1="1";
           var sw2="1";
           if(this.switch1==false)
@@ -354,7 +381,7 @@ export default {
           };
           console.log('params',params);
       this.$axios
-          .post("/claim_to_be_scholar/", this.$qs.stringify(params))
+          .post("/api/claim_to_be_scholar/", this.$qs.stringify(params))
           .then((res) => {
             /* res 是 response 的缩写 */
             console.log("errno", res.data.errno);
