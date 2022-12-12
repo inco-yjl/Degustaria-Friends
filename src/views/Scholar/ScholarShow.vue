@@ -69,8 +69,8 @@
               </v-col>
               <v-col cols="12">
                 <v-btn-toggle v-model="toggleTwo" tile color="primary" group mandatory>
-                  <v-btn value="0" depressed elevation="1" small>全部</v-btn>
-                  <v-btn value="1" depressed elevation="1" small>最近</v-btn>
+                  <v-btn value="0" depressed elevation="1" small>升序</v-btn>
+                  <v-btn value="1" depressed elevation="1" small>降序</v-btn>
                 </v-btn-toggle>
               </v-col>
               <v-col cols="12">
@@ -311,8 +311,6 @@ export default {
     },
     loadScholarPapers(npage = 1) {
       this.recommandPaper = [];
-      let sort = (this.toggleTwo === 1) ? "year" : "citation";
-      let year = (this.toggleOne === 1) ? 0 : 1;
       this.$axios({
         method: "post",
         url: "/get_p_number_of_scholar",
@@ -330,24 +328,28 @@ export default {
       .catch(e => console.log(e))
       this.$axios({
         method: "post",
-        url: "/get_papers_by_scholar",
+        url: "/search_paper",
         data: qs.stringify({
-          scholar_id: this.scholarId,
+          search_word: [this.scholarId],
+          search_type: ["3"],
+          search_logic: [],
           page: npage,
           size: 6,
-          order: sort,
-          year: year,
+          order_type: this.toggleOne + 1,
+          order: this.toggleTwo,
         })
       })
       .then(
         response => {
-          for (let x in 6)
+          this.PaginationLength = response.data.n_page
+          let paperlist = response.data.papers
+          for (let x = 0; x < 6; x++)
               this.recommandPaper.push({
-                article_name: response.data.at(x).title,
-                author: response.data.at(x).author,
-                book: response.data.at(x).source,
-                quote_num: response.data.at(x).citation,
-                url: response.data.at(x).url,
+                article_name: paperlist[x].title,
+                author: this.to_string(paperlist[x].author),
+                book: paperlist[x].source,
+                quote_num: paperlist[x].citation,
+                url: paperlist[x].url,
               });
         }
       )
@@ -392,11 +394,11 @@ export default {
           console.log("patent")
           for (let x = 0; x < 6; x++)
               this.recommandPatent.push({
-                article_name: response.data.at(x).title,
-                author: response.data.at(x).author,
-                book: response.data.at(x).source,
-                quote_num: response.data.at(x).citation,
-                url: response.data.at(x).url,
+                article_name: response.data[x].title,
+                author: response.data[x].author,
+                book: response.data[x].source,
+                quote_num: response.data[x].citation,
+                url: response.data[x].url,
               });
         }
       )
