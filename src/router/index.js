@@ -93,6 +93,14 @@ const routes = [
         ]
       },
       {
+        path:'/scholarold',
+        name:'scholarold',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/Claimold.vue'),
+        children: [
+        
+        ]
+      },
+      {
         path: '/paperDetail',
         name: 'paperDetail',
         component: () => import(/* webpackChunkName: "about" */ '../views/PaperDetail.vue'),

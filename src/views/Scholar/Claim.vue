@@ -38,78 +38,92 @@
               <div class="card1">
                 <v-form ref="form" v-model="valid" lazy-validation>
                   <v-container>
-                    <v-col>
-                      <v-text-field
-                        style="display: inline-block; width: 450px"
-                        v-model="form.name"
-                        :counter="10"
-                        :rules="nameRules"
-                        label="姓名"
-                        hint="发表文章时使用的全名"
-                        persistent-hint
-                        filled
-                        shaped
-                      ></v-text-field>
 
-                      <v-btn
-                        style="
-                          display: inline-block;
-                          margin-left: 30px;
-                          text-align: center;
-                        "
-                        text
-                        x-large
-                        color="primary"
-                        @click="addothername"
-                      >
-                        + 添加其他姓名
-                      </v-btn>
-                    </v-col>
-                    <v-col>
-                      <v-text-field
-                        v-model="form.work"
-                        :rules="emailRules"
-                        label="工作单位"
-                        hint="例如，北京航空航天大学物理学教授"
-                        persistent-hint
-                        filled
-                        shaped
-                      ></v-text-field>
-                    </v-col>
-                    <v-col>
-                      <v-text-field
-                        v-model="form.email"
-                        :rules="emailRules"
-                        label="验证电子邮件"
-                        hint="例如，1195800097@qq.com"
-                        persistent-hint
-                        filled
-                        shaped
-                      ></v-text-field>
-                    </v-col>
-                    <v-col>
-                      <v-text-field
-                        v-model="form.area"
-                        :rules="emailRules"
-                        label="感兴趣的领域"
-                        hint="例如，广义相对论、统一场论"
-                        persistent-hint
-                        filled
-                        shaped
-                      ></v-text-field>
-                    </v-col>
-                    <v-col>
-                      <v-text-field
-                        v-model="form.homepage"
-                        :rules="emailRules"
-                        label="首页（可选）"
-                        hint="例如，广义相对论、统一场论"
-                        persistent-hint
-                        filled
-                        shaped
-                      ></v-text-field>
-                    </v-col>
-                  </v-container>
+     <v-col>
+             <v-text-field
+             style="display: inline-block;width: 450px"
+                v-model="form.name1"
+                :counter="10"
+                label="姓名"
+                hint="发表文章时使用的全名1"
+                persistent-hint
+                filled
+                shaped
+             ></v-text-field>
+             <v-text-field
+             style="display: inline-block;width: 450px"
+                v-if="namenum>=2"
+                v-model="form.name2"
+                :counter="10"
+                label="姓名"
+                hint="发表文章时使用的全名2"
+                persistent-hint
+                filled
+                shaped
+             ></v-text-field>
+             <v-text-field
+             style="display: inline-block;width: 450px"
+                v-if="namenum>=3"
+                v-model="form.name3"
+                :counter="10"
+                label="姓名"
+                hint="发表文章时使用的全名3"
+                persistent-hint
+                filled
+                shaped
+             ></v-text-field>
+     
+            <v-btn
+                 style="display: inline-block; margin-left: 30px;text-align:center;"
+                 text
+                 x-large
+                 color="primary"
+                 @click="addothername"
+                >
+                + 添加其他姓名
+            </v-btn>
+    </v-col>
+    <v-col>
+    <v-text-field
+      v-model="form.work"
+      label="工作单位"
+      hint="例如，北京航空航天大学物理学教授"
+      persistent-hint
+      filled
+      shaped
+    ></v-text-field>
+    </v-col>
+    <v-col>
+    <v-text-field
+      v-model="form.email"
+      label="验证电子邮件"
+      hint="例如，1195800097@qq.com"
+      persistent-hint
+      filled
+      shaped
+    ></v-text-field>
+    </v-col>
+    <v-col>
+    <v-text-field
+      v-model="form.area"
+      label="感兴趣的领域"
+      hint="例如，广义相对论、统一场论"
+      persistent-hint
+      filled
+      shaped
+    ></v-text-field>
+    </v-col>
+    <v-col>
+    <v-text-field
+      v-model="form.homepage"
+      label="首页（可选）"
+      hint="例如，广义相对论、统一场论"
+      persistent-hint
+      filled
+      shaped
+    ></v-text-field>
+    </v-col>
+  </v-container>
 
                   <!-- <v-select
       v-model="select"
@@ -125,43 +139,41 @@
       label="Do you agree?"
       required
     ></v-checkbox> -->
-                </v-form>
-              </div>
-              <v-row align="center" justify="space-around">
-                <v-btn
-                  style="margin: auto; margin: 20px"
-                  color="primary"
-                  @click="e1 = 2"
-                  >下一步</v-btn
-                >
-              </v-row>
-            </v-card>
-          </v-stepper-content>
-          <!-- card2 -->
-          <v-stepper-content step="2">
-            <v-card class="mb-12" color="blue-grey lighten-5">
-              <span class="card2tit" style="display: block">
-                <h3 style="display: inline-block">添加您撰写的文章</h3>
-                <span class="cntstyle">已选篇数：{{ articlenum }}</span>
-              </span>
-              <v-text-field
-                v-model="searchmsg"
-                label="请输入"
-                style="display: inline-block; width: 80%"
-              >
-              </v-text-field>
-              <v-btn
-                style="display: inline-block; position: absolute; right: 30px"
-                round
-                class="ma-2"
-                color="primary"
-                dark
-                >搜索<v-icon dark right>mdi-magnify</v-icon></v-btn
-              >
-              <div class="tabs">
-                <v-card>
-                  <v-tabs v-model="tab" centered fixed-tabs icons-and-text>
-                    <v-tabs-slider></v-tabs-slider>
+    
+     </v-form>
+    </div>
+    <v-row align="center" justify="space-around">
+          <v-btn style="margin: auto;margin:20px" color="primary"  @click="e1=2">下一步</v-btn>
+    </v-row>
+        </v-card>
+    
+      </v-stepper-content>
+        <!-- card2 -->
+      <v-stepper-content step="2">
+        <v-card
+          class="mb-12"
+          color="blue-grey lighten-5"
+        >
+        <span class="card2tit" style="display: block">
+            <h3 style="display: inline-block">添加您撰写的文章</h3>
+            <span class="cntstyle">已选篇数：{{articlenum}}</span>
+        </span>
+        <v-text-field
+            v-model="searchmsg"
+            label="请输入"
+            style="display: inline-block;width:80%"
+        >
+        </v-text-field>
+        <v-btn style="display: inline-block; position: absolute;right: 30px;" rounded class="ma-2" color="primary" dark @click="search">搜索<v-icon dark right>mdi-magnify</v-icon></v-btn>
+        <div class="tabs">
+  <v-card>
+    <v-tabs
+      v-model="tab"
+      centered
+      fixed-tabs
+      icons-and-text
+    >
+      <v-tabs-slider></v-tabs-slider>
 
                     <v-tab href="#tab-1" class="primary--text">
                       文章组
@@ -189,7 +201,7 @@
                           >
                             <template v-for="(item, index) in grouplist">
                               <v-list-item
-                                :key="item.title"
+                                :key="item.paper_id"
                                 style="width: 600px"
                               >
                                 <template v-slot:default="{ active }">
@@ -200,23 +212,24 @@
 
                                     <v-list-item-subtitle
                                       class="text--primary"
-                                      v-text="item.subtitle"
+                                      v-text="item.keyword"
                                     ></v-list-item-subtitle>
 
                                     <v-list-item-subtitle
-                                      v-text="item.content"
+                                      v-text="item.abstract"
                                     ></v-list-item-subtitle>
                                   </v-list-item-content>
 
                                   <v-list-item-action>
                                     <v-icon
+                                    @click="addart(item.paper_id,active)"
                                       v-if="!active"
                                       color="blue-grey lighten-1"
                                     >
                                       mdi-star-plus-outline
                                     </v-icon>
-
-                                    <v-icon v-else color="blue-grey darken-4">
+                                    <v-icon v-else color="blue-grey darken-4"
+                                    @click="delart(item.id,active)">
                                       mdi-star-plus
                                     </v-icon>
                                   </v-list-item-action>
@@ -233,7 +246,7 @@
                       </v-card>
                       <!-- 页脚 -->
                       <div class="text-center">
-                        <v-pagination v-model="page" :length="3"></v-pagination>
+                        <v-pagination v-model="page" :length="pagenum" @next="nextpage" @previous="prepage"></v-pagination>
                       </div>
                       <!-- button panel -->
                       <v-row justify="space-around">
@@ -257,35 +270,38 @@
             </v-card>
           </v-stepper-content>
 
-          <!-- card 3 -->
-          <v-stepper-content step="3">
-            <v-card class="mx-auto" color="blue-grey lighten-4">
-              <h1 style="padding: 20px">隐私设置</h1>
-              <v-sheet class="pa-5" color="blue-grey lighten-4">
-                <v-switch
-                  v-model="switch1"
-                  inset
-                  :label="`我的邮箱公开可见`"
-                ></v-switch>
-                <v-switch
-                  v-model="switch2"
-                  inset
-                  :label="`学者主页公开可见`"
-                ></v-switch>
-              </v-sheet>
-            </v-card>
-            <!-- button panel -->
-            <v-row justify="space-around">
-              <v-btn style="margin: 100px" color="primary" @click="e1 = 2"
-                >返回</v-btn
-              >
-              <v-btn style="margin: 100px" color="primary" @click="e1 = 1"
-                >继续</v-btn
-              >
-            </v-row>
-          </v-stepper-content>
-        </v-stepper-items>
-      </v-stepper>
+          <v-divider
+            v-if="index < grouplist.length - 1"
+            :key="index"
+          ></v-divider>
+  <!-- card 3 -->
+      <v-stepper-content step="3">
+        <v-card
+          class="mx-auto"
+          color="blue-grey lighten-4"
+        >
+        <h1 style="padding: 20px">隐私设置</h1>
+        <v-sheet class="pa-5" color="blue-grey lighten-4">
+         <v-switch
+           v-model="switch1"
+           inset
+           :label="`我的邮箱公开可见`"
+          ></v-switch>
+          <v-switch
+            v-model="switch2"
+            inset
+            :label="`学者主页公开可见`"
+           ></v-switch>
+         </v-sheet>
+        </v-card>
+          <!-- button panel -->
+      <v-row  justify="space-around">          
+        <v-btn style="margin:100px" color="primary"  @click="e1=2">返回</v-btn>
+        <v-btn style="margin:100px" color="primary"  @click="submit">继续</v-btn>
+    </v-row>
+      </v-stepper-content>
+    </v-stepper-items>
+  </v-stepper>
     </div>
   </div>
 </template>
@@ -294,55 +310,174 @@
 // 学者认领页
 import baseHeader from "../Header/BaseHeader.vue";
 export default {
-  name: "Claim",
-  data() {
-    return {
-      e1: 1,
-      email: "1195800097@qq.com",
-      form: {
-        name: "",
-        work: "",
-        email: "",
-        area: "",
-        homepage: "",
+    name:'Claim',
+    data() {
+        return {
+            e1: 1,
+            email:"1195800097@qq.com",
+            form:{
+                name1:'',
+                name2:'',
+                name3:'',
+                work:'',
+                email:'',
+                area:'',
+                homepage:'',
+            },
+            pagenum:1,
+            page:1,
+            namenum:1,
+            switch1:true,
+            switch2:true,
+            ifshow: 1,
+            searchmsg:'haha',
+            articlenum: 2,
+            tab:null,
+            active:false,
+            grouplist:[
+                        {
+                            id:1,
+                            keywords: ['Brunch this weekend?'],
+                            author:['ycp'],
+                            abstract: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+                            title: 'Ali Connors',
+                        },
+                    ],
+            valid:true,
+            selected:[2],
+            selected_articlesid:[],
+        }
+    },
+    components:{
+        baseHeader
+    },
+    methods: {
+      addothername(){
+        console.log(this.namenum);
+          this.namenum++;
       },
-      page: 1,
-      switch1: true,
-      switch2: true,
-      ifshow: 1,
-      searchmsg: "",
-      articlenum: 2,
-      tab: null,
-      grouplist: [
-        {
-          subtitle: "Brunch this weekend?",
-          content: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-          title: "Ali Connors",
-        },
-        {
-          subtitle: "摘要:Summer BBQ",
-          content: "内容:Wish I could come, but I am out of town this weekend.",
-          title: "标题:me, Scrott, Jennifer",
-        },
-      ],
-      singlelist: [
-        {
-          subtitle: "摘要:Summer BBQ",
-          content: "内容:Wish I could come, but I am out of town this weekend.",
-          title: "标题:me, Scrott, Jennifer",
-        },
-      ],
+      addart(el1,el2){
+        console.log(el1);
+        console.log(el2);
+        if(el2==false){
+          this.selected_articlesid.push(el1);
+          console.log('list:'+this.selected_articlesid);
+        }
+      },
+      delart(el1,el2){
+        if(el2==true){
+          const index=this.selected_articlesid.indexOf(el1);
+          if(index!=-1)
+            this.selected_articlesid.splice(index,1);
+        }
+        console.log('list:'+this.selected_articlesid);
+      },
+      nextpage(){
+        this.search();
+      },
+      prevpage(){
+        this.search();
+      },
+      search(){
+        // window.alert('searchmsg'+this.searchmsg);
+         var arr1=new Array();arr1.push(this.searchmsg);
+         var arr2=new Array();arr2.push("1");
+         var arr3=new Array();
+       var data={
+          search_word:arr1,
+          search_type:arr2,
+          search_logic:arr3,
+          page:this.page,
+          size:5,
+          order_type:0,
+          order:0
+		}
+    console.log(JSON.stringify(data))
+      this.$axios({
+        url:'/search',
+	      method:'post',
+	      data: JSON.stringify(data), 
+	      header:{
+	      'Content-Type':'application/json'  //如果写成contentType会报错,如果不写这条也报错
+	//Content type 'application/x-www-form-urlencoded;charset=UTF-8'...
+	      }
+					
+      })
+        .then((res) => {
+            /* res 是 response 的缩写 */
+            console.log('搜索成功');
+            console.log(res.data);
+            this.pagenum=res.data.n_page;
+            this.grouplist=res.data.papers;
+            
+          })
+          .catch((err) => {
+            /* 请求若出现路由找不到等其它异常，则在终端输出错误信息 */
+            console.log(err);
+          });
 
-      selected: [2],
-    };
-  },
-  components: {
-    baseHeader,
-  },
-  methods: {
-    click() {},
-  },
-};
+      },
+        submit(){
+          var sw1="1";
+          var sw2="1";
+          if(this.switch1==false)
+            sw1="0";
+            if(this.switch2==false)
+            sw2="0";
+          var str=this.selected_articlesid.toString();
+           const formData = new FormData();
+        formData.append('name1', this.form.name);
+        formData.append('name2', this.form.name);
+        formData.append('name3', this.form.name);
+        formData.append('org', this.form.work);
+        formData.append('interests', this.form.area);
+        formData.append('e_mail', this.form.email);
+        formData.append('email_privacy', sw1);
+        formData.append('home_privacy', sw2);
+        formData.append('username', "panyuyi");
+        formData.append('paper_ids', str);
+          var params = {
+            name1:this.form.name1,
+            name2:this.form.name2,
+            name3:this.form.name3,
+            org:this.form.work,
+            interests:this.form.area,
+            e_mail:this.form.email,
+            email_privacy:sw1,
+            home_privacy:sw2,
+            username:"panyuyi",
+            paper_ids:str,
+          };
+          console.log('params',params);
+          this.$axios({
+        method: "post",
+        url: '/claim_to_be_scholar',
+        data: formData
+      })
+        .then((res) => {
+          console.log("认证成功", res.data);
+        })
+        .catch((err) => {
+          //请求若出现路由找不到等其它异常，则在终端输出错误信息
+          console.log(err);
+        });
+
+        },
+        addpaper(){
+                  // 添加文章
+        var str=this.selected_articlesid.toString;
+        var params1={
+            scholar_id:1,
+            paper_id:str
+        }
+        this.$axios({
+          method:"post",
+          url:"/add_paper_for_scholar",
+          data: this.$qs.stringify({params1})
+        })
+        }
+    }
+}
 </script>
 
 <style>
