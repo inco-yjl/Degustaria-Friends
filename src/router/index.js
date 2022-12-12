@@ -103,6 +103,16 @@ const routes = [
         ]
       },
       {
+        path: '/scholarSearch',
+        name: 'scholarSearch',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/SearchScholar.vue'),
+      },
+      {
+        path: '/institutionSearch',
+        name: 'institutionSearch',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Institution/SearchInstitution.vue'),
+      },
+      {
         path: '/paperDetail',
         name: 'paperDetail',
         component: () => import(/* webpackChunkName: "about" */ '../views/PaperDetail.vue'),
