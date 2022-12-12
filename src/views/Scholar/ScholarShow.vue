@@ -13,15 +13,18 @@
             </v-col>
             <v-col class="ml-2">
               <div class="name ma-1 text-h5">
-                <p class="text-left">&nbsp;&nbsp;{{ Name }}</p>
+                <p class="text-left name">&nbsp;&nbsp;{{ Name }}</p>
               </div>
               <div class="faculty ma-1 text-h6">
-                <p class="text-left">{{ Faculty }}</p>
+                <p class="text-left faculty">{{ Faculty }}</p>
               </div>
               <div class="intro ma-1 text-body-1">
-                <p class="text-left pa-1">
+                <p class="text-left pa-1 intro">
                   {{ intro }}
                 </p>
+              </div>
+              <div class="ma-1" v-if="showEmail">
+                <p class="text-left faculty">Email:&nbsp; {{Email}}</p>
               </div>
             </v-col>
           </v-row>
@@ -188,15 +191,16 @@ export default {
   data() {
     return {
       SelfImage: "https://cdn.vuetifyjs.com/images/john.jpg",
-      Name: "Azadeh Amin",
+      Name: "",
       Faculty: "北京航空航天大学 软件学院",
       Email: "tjyfxiao@126.com",
       PaginationLength: 15,
       page: 1,
       size: 10,
-      scholarId: 65,
+      scholarId: 0,
       scholarName: "Azadeh Amin",
       intro: "",
+      showEmail: true,
       MainField: [
         {
           index: 1,
@@ -273,7 +277,7 @@ export default {
       .then(
         response => {
           this.MainField=[];
-          this.scholarName = response.data.name1;
+          this.Name = response.data.name1;
           this.Faculty = response.data.org;
           this.Email = response.data.e_mail;
           let iarr = response.data.interests.split(",");
@@ -282,6 +286,8 @@ export default {
               index: i,
               title: iarr[i - 1]
             })
+          if (this.Email == null)
+            this.showEmail = false;
         }
       )
       .catch(
@@ -372,7 +378,7 @@ export default {
       )
       this.$axios({
         method: "post",
-        url: "/get_patent_by_scholar",
+        url: "/get_patents_by_scholar",
         data: qs.stringify({
           scholar_id: this.scholarId,
           page: npage,
@@ -479,6 +485,9 @@ export default {
       }
     }
   },
+  beforeMount() {
+    this.scholarId = parseInt(this.$route.params.scholar_id);
+  },
   mounted() {
     this.loadScholarInfo();
     this.loadScholarIntro();
@@ -517,7 +526,8 @@ export default {
   font-family: "Times New Roman", "Source Han Sans CN Normal";
 }
 .faculty {
-  font-family: Serif, STZhongsong;
+  font-family: "Times New Roman", STZhongsong;
+  font-size: medium;
 }
 .intro {
   font-family: Georgia, "Source Han Sans CN Normal";
