@@ -1,141 +1,61 @@
 <template>
     <div class="home-page">
         <div class="page-top">
-            <!-- {{ imgSrc }} -->
-            <!-- <v-img
-                class="img1"
-                max-height="150"
-                max-width="150"
-                :src="imgSrc"
-            ></v-img> -->
             <div class="page-top-info">
                 <div class="title1">{{ institutionName }}</div>
-                <div class="title2">{{ institutionLocation }}</div>
-                <div class="title3">学术成果总量 {{ num }} 篇</div>
-                <div class="title4">收录范围： {{ rangeLow }} - {{ rangeHigh }}</div>
+                <div v-if="wiki !== null" class="title3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -6 24 22" width="20" fill="currentColor"><path d="M19.857.021H15.875V.708h.398c.311 0 .592.161.751.431a.88.88 0 0 1 .016.872l-4.283 7.93-1.95-4.69 1.836-3.402A2.165 2.165 0 0 1 14.548.708h.217V.02h-4.112V.708h.398c.311 0 .592.161.75.431a.88.88 0 0 1 .017.872l-1.333 2.467-1.188-2.856a.654.654 0 0 1 .059-.62A.642.642 0 0 1 9.9.708h.435V.02H5.467V.708h.194c.909 0 1.723.546 2.074 1.391L9.49 6.32 7.535 9.942l-3.46-8.32a.654.654 0 0 1 .059-.62.642.642 0 0 1 .544-.294H5.276V.02H0V.708h.439c.908 0 1.723.546 2.074 1.391l3.988 9.591a.446.446 0 0 0 .804.042l.52-.964 1.986-3.676 1.912 4.598a.446.446 0 0 0 .804.041l.52-.963 4.819-8.92A2.165 2.165 0 0 1 19.77.709h.217V.02h-.13z"></path></svg>
+                     {{ wiki }} 
+                </div>
+                <div v-if="web !== null" class="title3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 22" width="20" fill="currentColor"><path d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0 2C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10z"></path><path d="M10 18c.448 0 1.119-.568 1.747-1.823C12.532 14.607 13 12.392 13 10c0-2.392-.468-4.607-1.253-6.177C11.119 2.568 10.447 2 10 2c-.448 0-1.119.568-1.747 1.823C7.468 5.393 7 7.608 7 10c0 2.392.468 4.607 1.253 6.177C8.881 17.432 9.553 18 10 18zm0 2c-2.761 0-5-4.477-5-10S7.239 0 10 0s5 4.477 5 10-2.239 10-5 10z"></path><path d="M2 12h16v2H2v-2zm0-6h16v2H2V6z"></path></svg>
+                     {{ web }} 
+                </div>
             </div>
             <div class="page-top-detail">
-                <div class="text1" style="white-space: pre-wrap;">{{ infoDetail }}</div>
+                <div v-if="infoDetail !== null" class="text1" style="white-space: pre-wrap;">{{ infoDetail }}</div>
             </div>
         </div>
         <!-- <v-divider
         ></v-divider> -->
         <div class="page-bottom">
-            <div class="bottom-left">
-                <div class="bottom-left-1">
-                    <div class="bottom-left-1-top">
-                        <div id="pie1"></div>
-                        <div id="pie2"></div>
-                        <div id="pie3"></div>
-                        <div id="pie4"></div>
-                        <div class="pie-num">总计 {{ numPie }} 篇</div>
+            <v-card
+                class="home_focus_card"
+                v-for="item in focus_people"
+                :key="item.id"
+            >
+                <v-list-item>
+                <div class="scholer_icon_1">
+                    <div class="head_style_font" v-if="item.icon.length === 0">
+                    {{ item.author_name.charAt(0) }}
                     </div>
-                    <div class="bottom-left-1-bottom">
-                        <div id="category1"></div>
-                        <div id="category2"></div>
-                    </div>
+                    <div class="icon-div" v-else><img :src="item.icon" /></div>
                 </div>
-                <div class="bottom-left-2">
-                    <v-divider
-                    ></v-divider>
-                    <div class="bottom-left-2-title">
-                        学术成果
+                <v-list-item-content>
+                    <v-list-item-title class="headline_fa">{{
+                    item.author_name
+                    }}</v-list-item-title>
+                    <div style="display: flex">
+                    <v-list-item-subtitle class="headline_focus_1"
+                        >H-index：{{ item.h_index }}</v-list-item-subtitle
+                    >
+                    <v-list-item-subtitle class="headline_focus_1"
+                        >论文数：{{ item.article_num }}</v-list-item-subtitle
+                    >
+                    <v-list-item-subtitle class="headline_focus_1"
+                        >引用数：{{ item.quote_num }}</v-list-item-subtitle
+                    >
                     </div>
-                    <div class="tabs">
-                        <v-card>
-                            <v-toolbar
-                                color="#ffffff"
-                                dark
-                                flat
-                            >
-                                <v-tabs
-                                    v-model="tab"
-                                >
-                                    <v-tabs-slider color="yellow"></v-tabs-slider>
-                                    <v-tab
-                                        v-for="item in items"
-                                        :key="item.name"
-                                    >
-                                        <div class="tab-name">{{ item.name }}</div>
-                                        <div class="tab-num">共 {{ item.num }} 篇</div>
-                                    </v-tab>
-                                </v-tabs>
-                            </v-toolbar>
+                </v-list-item-content>
+                </v-list-item>
 
-                            <v-tabs-items v-model="tab">
-                                <v-tab-item
-                                    v-for="item in items"
-                                    :key="item.name"
-                                >
-                                    <v-card flat>
-                                        <div class="selector">
-                                            <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
-                                            <p class="similar-paper-title">{{ paper.title }}</p>
-                                            <p class="similar-paper-abstract">{{ paper.abstract }}</p>
-                                            <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
-                                            <p class="similar-paper-citations-and-year">
-                                                {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
-                                            <v-divider class="recommendation-tab-item-divider"></v-divider>
-                                            </div>
-                                        </div>
-                                    </v-card>
-                                </v-tab-item>
-                            </v-tabs-items>
-                        </v-card>
+                <div v-if="item.domains !== null" class="focus_research_area" style="display: flex">
+                研究领域：
+                    <div v-for="domain in item.domains" :key="domain">
+                        <div class="focus_research_area_item">domain</div>
                     </div>
                 </div>
-                <div class="bottom-left-3">
-                    <v-divider
-                    ></v-divider>
-                    <div class="bottom-left-2-title">
-                        刊物
-                    </div>
-                    <div class="bottom-left-3-left">
-                        <div class="journals" v-for="journal in journals">
-                            <div class="journal">
-                                <v-img
-                                    class="img-scholar"
-                                    :src="journal.photo"
-                                ></v-img>
-                                <div class="scholar-info">
-                                    <div class="scholar-info1">{{ journal.name }}</div>
-                                    <div class="scholar-info2">{{ journal.intro }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <v-divider
-                        inset
-                        vertical
-                        style="float: left;"
-                    ></v-divider>
-                    <div class="bottom-left-3-right">
-
-                    </div>
-                </div>
-            </div>
-            <div class="bottom-right">
-                <v-divider
-                    inset
-                    vertical
-                    style="float: left;"
-                ></v-divider>
-                <div class="bottom-right-title">
-                    机构学者
-                </div>
-                <div class="scholar-list">
-                    <div class="scholars" v-for="scholar in scholars">
-                        <!-- <v-img
-                            class="img-scholar"
-                            :src="scholar.photo"
-                        ></v-img> -->
-                        <div class="scholar-info">
-                            <div class="scholar-info1">{{ scholar.name }}</div>
-                            <div class="scholar-info2">{{ scholar.loc }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </v-card>
         </div>
     </div>
 </template>
@@ -146,487 +66,53 @@ import qs from "qs";
 export default defineComponent({
     data() {
         return {
-            imgSrc: require("@/assets/profilePhoto.png"),
             institutionName: "Accident Research Centre",
-            // institutionLocation: "野比大雄的院子",
-            institutionLocation: "",
             institutionId: -7,
-            num: "123",
-            rangeLow: "1111",
-            rangeHigh: "2232",
-            // infoDetail: "    土豆，上帝赐予人类最宝贵的礼物，世界上最完美的事物，土豆丝好吃，土豆片好吃，土豆块好吃，土豆泥好吃，炸着吃烤着吃蒸着吃煎着吃都好吃，薯条好吃，薯饼好吃，炖肉好吃，加孜然好吃，蘸辣椒好吃，焗芝士好吃，卷饼里好吃，怎么样都好吃，哪怕整个煮熟了撒盐都好吃，除了发芽吃了会死，没有任何缺陷。\n    发芽吃了会死是人类的缺陷，土豆是完美的。",
-            infoDetail: "Lorem ipsm dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elit",
-            // scholars: [
-            //     {
-            //         name: "DeGang Guo",
-            //         loc: "artificial intelligence",
-            //         photo: require("@/assets/profilePhoto.png")
-            //     },
-            //     {
-            //         name: "Alec Radford",
-            //         loc: "Indico Data Solutions",
-            //         photo: require("@/assets/profilePhoto.png")
-            //     },
-            //     {
-            //         name: "郭德纲",
-            //         loc: "德云社",
-            //         photo: require("@/assets/profilePhoto.png")
-            //     },
-            //     {
-            //         name: "郭德纲",
-            //         loc: "德云社",
-            //         photo: require("@/assets/profilePhoto.png")
-            //     },
-            //     {
-            //         name: "郭德纲",
-            //         loc: "德云社",
-            //         photo: require("@/assets/profilePhoto.png")
-            //     }
-            // ],
+            web: "IEEE Computer Graphics and Applications (2021)",
+            wiki: "IEEE Computer Graphics and Applications (2021)",
+            infoDetail: "",
             scholars: [],
-            journals: [
-                {
-                    name: "土豆种植模式",
-                    intro: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                    photo: require("@/assets/profilePhoto.png")
-                },
-                {
-                    name: "模式种植土豆",
-                    intro: "Proin gravida dolor sit amet lacus accumsan et viverra.",
-                    photo: require("@/assets/profilePhoto.png")
-                },
-                {
-                    name: "郭德纲吃土豆",
-                    intro: "Aenean euismod bibendum laoreet.",
-                    photo: require("@/assets/profilePhoto.png")
-                }
+            focus_people: [
+                // {
+                //     author_name: "NAME PANYUYI",
+                //     h_index: 70,
+                //     icon: "",
+                //     article_num: 80,
+                //     quote_num: 10809,
+                //     domains: [computer ,science],
+                // },
+                // {
+                //     author_name: "YJL",
+                //     h_index: 100,
+                //     icon: "https://i.imgtg.com/2022/05/08/zDhaG.jpg",
+                //     article_num: 180,
+                //     quote_num: 18317,
+                // },
+                // {
+                //     author_name: "软工二",
+                //     h_index: 100,
+                //     icon: "",
+                //     article_num: 180,
+                //     quote_num: 18317,
+                // },
             ],
-            numPie: "666",
-            // /
-            tab: null,
-            items: [
-                {
-                    name: '论文',
-                    num: 68,
-                },
-                {
-                    name: '专利',
-                    num: 55,
-                },
-                {
-                    name: '项目',
-                    num: 77,
-                },
-            ],
-            text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            similar_papers: [
-                {
-                    id: 1,
-                    title: '跨越发展奔小康-—达茂联合旗实施"三集中"战略纪实',
-                    abstract: '＜正＞落后旗县如何使经济发展驶入快车道,农牧民收入大提高?达茂旗的实践证明,有了超常规发展的思路,才会有跨越式发展的出路。2002年,达茂旗全社会固定资产投资…',
-                    author: '张滨艳',
-                    source: '《实践(思想理论版)》',
-                    citations: 0,
-                    year: 2003
-                },
-                {
-                    id: 2,
-                    title: '积极实施"六化"战略全力推进跨越发展——府谷县经济社会发展纪实',
-                    abstract: '近年来,府谷县紧紧国绕打造国内一流的煤电化载能工业基地的目标,立足资源优势,坚持科学发展,大力实施新型工业化,农业产业化城乡一体化,民企集团化;环境大优化,民生优…',
-                    author: '刘玲',
-                    source: '《新西部(新闻版)》',
-                    citations: 0,
-                    year: 2010
-                },
-                {
-                    id: 3,
-                    title: '跨越 突破 搏击 -- 农二师实施大调整大转变战略纪实',
-                    abstract: '新年伊始,记者来到农二师采访,深深地感受到这里在经济结构战略性大调整、发展方式战略性大转变过程中所展现出的勃勃生机,新的希望正在这里冉冉升腾。“要立足农业内涵…',
-                    author: '高利，栗卫亚',
-                    source: '《当代兵团》',
-                    citations: 0,
-                    year: 2010
-                }
-            ]
         }
     },
     mounted() {
         // 自动刷新数据
         this.$nextTick(() => {
             setTimeout(() => {
-                this.initGraph();
                 this.initInfo();
             }, 500);
         });
         window.onresize = () => {
             return (() => {
                 this.$nextTick(() => {
-                    this.initGraph();
                 });
             })();
         };
     },
     methods: {
-        initGraph() {
-            this.drawPieChart1();
-            this.drawPieChart2();
-            this.drawPieChart3();
-            this.drawPieChart4();
-            this.drawCategory1();
-            this.drawCategory2();
-        },
-        drawPieChart1() {
-            echarts.dispose(document.getElementById('pie1'));
-            var chartDom = document.getElementById('pie1');
-            var myChart = echarts.init(chartDom);
-            var option;
-            option = {
-                tooltip: {
-                    trigger: 'item'
-                },
-                graphic: [
-                    { //环形图中间添加文字
-                        type: 'text', //通过不同top值可以设置上下显示
-                        left: 'center',
-                        top: '38%',
-                        style: {
-                            text: '论文',
-                            textAlign: 'center',
-                            fill: '#8c8c8c', //文字的颜色 
-                            width: 30,
-                            height: 30,
-                            fontSize: 25,
-                            fontFamily: "Microsoft YaHei"
-                        }
-                    },
-                    // 写了两个文字插入是因为业务要求两行不一样样式的字
-                    { //环形图中间添加文字  
-                        type: 'text', //通过不同top值可以设置上下显示
-                        left: 'center',
-                        top: '53%',
-                        style: {
-                            text: '85%',
-                            textAlign: 'center',
-                            fill: '#123212', //文字的颜色
-                            width: 30,
-                            height: 30,
-                            fontSize: 30,
-                            fontFamily: "Microsoft YaHei" // 这个自己看着办
-                        }
-                    }
-                ],
-                series: [
-                    {
-                        color: ['#169bd5', '#d7d7d7'],
-                        type: 'pie',
-                        radius: ['60%', '90%'],
-                        avoidLabelOverlap: false,
-                        label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            label: {
-                            show: false,
-                            fontSize: '40',
-                            fontWeight: 'bold'
-                            }
-                        },
-                        labelLine: {
-                            show: false
-                        },
-                        data: [
-                            { value: 58, name: 'Search Engine',  },
-                            { value: 735, name: 'Direct' },
-                        ]
-                    }
-                ]
-            };
-            option && myChart.setOption(option);
-        },
-        drawPieChart2() {
-            echarts.dispose(document.getElementById('pie2'));
-            var chartDom = document.getElementById('pie2');
-            var myChart = echarts.init(chartDom);
-            var option;
-            option = {
-                tooltip: {
-                    trigger: 'item'
-                },
-                graphic: [
-                    { //环形图中间添加文字
-                        type: 'text', //通过不同top值可以设置上下显示
-                        left: 'center',
-                        top: '38%',
-                        style: {
-                            text: '项目',
-                            textAlign: 'center',
-                            fill: '#8c8c8c', //文字的颜色 
-                            width: 30,
-                            height: 30,
-                            fontSize: 25,
-                            fontFamily: "Microsoft YaHei"
-                        }
-                    },
-                    // 写了两个文字插入是因为业务要求两行不一样样式的字
-                    { //环形图中间添加文字  
-                        type: 'text', //通过不同top值可以设置上下显示
-                        left: 'center',
-                        top: '53%',
-                        style: {
-                            text: '85%',
-                            textAlign: 'center',
-                            fill: '#123212', //文字的颜色
-                            width: 30,
-                            height: 30,
-                            fontSize: 30,
-                            fontFamily: "Microsoft YaHei" // 这个自己看着办
-                        }
-                    }
-                ],
-                series: [
-                    {
-                        color: ['#169bd5', '#d7d7d7'],
-                        type: 'pie',
-                        radius: ['60%', '90%'],
-                        avoidLabelOverlap: false,
-                        label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            label: {
-                            show: false,
-                            fontSize: '40',
-                            fontWeight: 'bold'
-                            }
-                        },
-                        labelLine: {
-                            show: false
-                        },
-                        data: [
-                            { value: 158, name: 'Search Engine',  },
-                            { value: 735, name: 'Direct' },
-                        ]
-                    }
-                ]
-            };
-            option && myChart.setOption(option);
-        },
-        drawPieChart3() {
-            echarts.dispose(document.getElementById('pie3'));
-            var chartDom = document.getElementById('pie3');
-            var myChart = echarts.init(chartDom);
-            var option;
-            option = {
-                tooltip: {
-                    trigger: 'item'
-                },
-                graphic: [
-                    { //环形图中间添加文字
-                        type: 'text', //通过不同top值可以设置上下显示
-                        left: 'center',
-                        top: '38%',
-                        style: {
-                            text: '专利',
-                            textAlign: 'center',
-                            fill: '#8c8c8c', //文字的颜色 
-                            width: 30,
-                            height: 30,
-                            fontSize: 25,
-                            fontFamily: "Microsoft YaHei"
-                        }
-                    },
-                    // 写了两个文字插入是因为业务要求两行不一样样式的字
-                    { //环形图中间添加文字  
-                        type: 'text', //通过不同top值可以设置上下显示
-                        left: 'center',
-                        top: '53%',
-                        style: {
-                            text: '85%',
-                            textAlign: 'center',
-                            fill: '#123212', //文字的颜色
-                            width: 30,
-                            height: 30,
-                            fontSize: 30,
-                            fontFamily: "Microsoft YaHei" // 这个自己看着办
-                        }
-                    }
-                ],
-                series: [
-                    {
-                        color: ['#169bd5', '#d7d7d7'],
-                        type: 'pie',
-                        radius: ['60%', '90%'],
-                        avoidLabelOverlap: false,
-                        label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            label: {
-                            show: false,
-                            fontSize: '40',
-                            fontWeight: 'bold'
-                            }
-                        },
-                        labelLine: {
-                            show: false
-                        },
-                        data: [
-                            { value: 258, name: 'Search Engine',  },
-                            { value: 735, name: 'Direct' },
-                        ]
-                    }
-                ]
-            };
-            option && myChart.setOption(option);
-        },
-        drawPieChart4() {
-            echarts.dispose(document.getElementById('pie4'));
-            var chartDom = document.getElementById('pie4');
-            var myChart = echarts.init(chartDom);
-            var option;
-            option = {
-                tooltip: {
-                    trigger: 'item'
-                },
-                graphic: [
-                    { //环形图中间添加文字
-                        type: 'text', //通过不同top值可以设置上下显示
-                        left: 'center',
-                        top: '38%',
-                        style: {
-                            text: '其他',
-                            textAlign: 'center',
-                            fill: '#8c8c8c', //文字的颜色 
-                            width: 30,
-                            height: 30,
-                            fontSize: 25,
-                            fontFamily: "Microsoft YaHei"
-                        }
-                    },
-                    // 写了两个文字插入是因为业务要求两行不一样样式的字
-                    { //环形图中间添加文字  
-                        type: 'text', //通过不同top值可以设置上下显示
-                        left: 'center',
-                        top: '53%',
-                        style: {
-                            text: '85%',
-                            textAlign: 'center',
-                            fill: '#123212', //文字的颜色
-                            width: 30,
-                            height: 30,
-                            fontSize: 30,
-                            fontFamily: "Microsoft YaHei" // 这个自己看着办
-                        }
-                    }
-                ],
-                series: [
-                    {
-                        color: ['#169bd5', '#d7d7d7'],
-                        type: 'pie',
-                        radius: ['60%', '90%'],
-                        avoidLabelOverlap: false,
-                        label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            label: {
-                            show: false,
-                            fontSize: '40',
-                            fontWeight: 'bold'
-                            }
-                        },
-                        labelLine: {
-                            show: false
-                        },
-                        data: [
-                            { value: 358, name: 'Search Engine',  },
-                            { value: 735, name: 'Direct' },
-                        ]
-                    }
-                ]
-            };
-            option && myChart.setOption(option);
-        },
-        drawCategory1() {
-            echarts.dispose(document.getElementById('category1'));
-            var chartDom = document.getElementById('category1');
-            var myChart = echarts.init(chartDom);
-            var option;
-            option = {
-                tooltip: {
-                    trigger: 'axis',
-                    position: function (pt) {
-                        return [pt[0], '10%'];
-                    }
-                },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [
-                    {
-                        data: [123, 932, 422, 934, 1290, 1330, 1320],
-                        type: 'line',
-                        areaStyle: {}
-                    }
-                ],
-                grid: {
-                    x: 1,
-                    y: 1,
-                    x2: 1,
-                    y2: 25,
-                    borderWidth: 1,
-                }
-            };
-            option && myChart.setOption(option);
-        },
-        drawCategory2() {
-            echarts.dispose(document.getElementById('category2'));
-            var chartDom = document.getElementById('category2');
-            var myChart = echarts.init(chartDom);
-            var option;
-            option = {
-                tooltip: {
-                    trigger: 'axis',
-                    position: function (pt) {
-                        return [pt[0], '10%'];
-                    }
-                },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [
-                    {
-                        data: [123, 932, 422, 934, 1290, 1330, 1320],
-                        type: 'line',
-                        areaStyle: {}
-                    }
-                ],
-                grid: {
-                    x: 1,
-                    y: 1,
-                    x2: 1,
-                    y2: 25,
-                    borderWidth: 1,
-                }
-            };
-            option && myChart.setOption(option);
-        },
-
-        
         initInfo() {
             this.searchOrg();
             this.getScholarsByOrg();
@@ -651,7 +137,11 @@ export default defineComponent({
                 console.log(res);
                 this.institutionId = res.data[0].id;
                 this.institutionLocation = res.data[0].country;
-                this.infoDetail = res.data[0].introduction;
+                if ( res.data[0].introduction === "null" ) {
+                    this.infoDetail = null;
+                } else {
+                    this.infoDetail = res.data[0].introduction;
+                }
                 console.log("searchOrg");
             })
             .catch((err) => {
@@ -671,11 +161,24 @@ export default defineComponent({
             })
             .then((res) => {
                 console.log(res);
+                this.focus_people = [];
                 for (var i=0; i<res.data.length; i++) {
                     var aScholar = {};
-                    aScholar.name = res.data[i].name1;
-                    aScholar.loc = res.data[i].interests;
-                    this.scholars.push(aScholar);
+                    aScholar.author_name = res.data[i].name1;
+                    aScholar.h_index = res.data[i].h_index;
+                    aScholar.icon = "";
+                    aScholar.article_num = "";
+                    aScholar.quote_num = res.data[i].citation;
+
+                    if ( res.data[i].interests === "null" ) {
+                        aScholar.domains = null;
+                    } else {
+                        var strList = res.data[i].interests.split(",");
+                        // console.log(strList)
+                        aScholar.domains = strList;
+                    }
+
+                    this.focus_people.push(aScholar);
                 }
                 console.log("getScholarsByOrg");
             })
@@ -798,9 +301,80 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+
+
+.home_focus_card {
+    // border: 3px solid #1f22ff;
+  margin-left: vw(255);
+  margin-top: vh(40);
+  width: vw(1190);
+  padding-bottom: vh(20);
+}
+.scholer_icon_1 {
+  box-shadow: 0 0 1px 1px #CFD8DC;
+  width: vw(60);
+  height: vw(60);
+  border-radius: 100px;
+  margin-right: vw(20);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit:fill
+  }
+}
+.head_style_font {
+  font-family: YouSheBiaoTiHei;
+  color: #232f3d;
+  font-size: vw(34);
+}
+.icon-div {
+  position: relative;
+  float:left;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.headline_fa {
+  font-family: "Source Han Sans CN Medium", sans-serif;
+  font-size: vw(27);
+}
+.headline_focus_1 {
+  margin-top: vh(5);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.focus_research_area {
+  margin-left: vw(20);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+  font-weight: 500;
+  font-size: vw(18);
+  margin-top: vh(20);
+}
+.focus_research_area_item {
+    background-color: #e8eaf6;
+    margin-right: vw(10);
+    margin-left: vw(5);
+    font-family: "Source Han Sans CN Normal", sans-serif;
+    padding: vw(5);
+}
+
+
+
+
+
+
+
+
+    // 
+    // 
+    // 
     .home-page {
         // background-color:yellow;
-        height:vh(3000);//改成自适应的
+        // height:vh(3000);//改成自适应的
         padding-top:40px;
         //绝对，为了使顶部内容正常显示，不被search-bar遮挡
         margin-left: vw(100);
@@ -835,7 +409,7 @@ export default defineComponent({
     }
     .page-bottom {
         // border: 3px solid #1f22ff;
-        height:vh(2000);//改成自适应的
+        // height:vh(2000);//改成自适应的
         //绝对，为了使顶部内容正常显示，不被search-bar遮挡
         width:vw(1720);
     }
@@ -910,9 +484,7 @@ export default defineComponent({
     }
     .title3 {
         font-size: 20px;
-    }
-    .title4 {
-        font-size: 23px;
+        color: #646262;
     }
     .text1 {
         vertical-align: bottom;
