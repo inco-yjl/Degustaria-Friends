@@ -1,8 +1,28 @@
 <template>
     <div id="register" class="register">
+      <vue-particles
+        class="login-bg"
+      color="#39AFFD"
+      :particleOpacity="0.7"
+      :particlesNumber="100"
+      shapeType="circle"
+      :particleSize="4"
+      linesColor="#8DD1FE"
+      :linesWidth="1"
+      :lineLinked="true"
+      :lineOpacity="0.4"
+      :linesDistance="150"
+      :moveSpeed="3"
+      :hoverEffect="true"
+      hoverMode="grab"
+      :clickEffect="true"
+      clickMode="push"
+      >
+      </vue-particles>
       <v-card
-        color="rgba(35,47,61,0.9)"
+        color="rgba(35,47,61,0.4)"
         dark
+        flat
         class="login_card"
       >
         <div style="display: flex;">
@@ -25,12 +45,12 @@
         <div style="display:flex;">
             <div class="login_btn_1">
                 <v-card-actions @click="login_now">
-                    <v-btn color="#022c52">Login Now</v-btn>
+                    <v-btn color="rgba(0,0,0,0.6)">Login Now</v-btn>
                 </v-card-actions>
             </div>
             <div class="login_btn_2" @click="go_register">
                 <v-card-actions>
-                    <v-btn color="#4e7394">Go register</v-btn>
+                    <v-btn light color="rgba(255,255,255,0.6)">Go register</v-btn>
                 </v-card-actions>
             </div>
         </div>
@@ -147,6 +167,13 @@
     background-size: 100%;
     display: flex;
   }
+  .login-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
   .login_card {
     width: vw(600);
     height: 100%;
@@ -162,7 +189,7 @@
     letter-spacing: -0.03125rem;
   }
   .login_tips{
-    font-family: PingFang SC;
+    font-family: Source Han Sans CN Normal;
     font-weight: vw(30);
     margin-top: vh(70);
     margin-left: vw(40);
@@ -171,7 +198,7 @@
     letter-spacing: 0.015625rem;
   }
   .login_tips2{
-    font-family: PingFang SC;
+    font-family: Source Han Sans CN Normal;
     font-weight: vw(30);
     margin-top: vh(50);
     margin-left: vw(40);
@@ -185,10 +212,14 @@
     margin-right: vw(40);
   }
   .login_btn_1 {
-    margin-left: vw(30);
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bolder;
+    margin-left: vw(140);
     margin-top: vh(50);
   }
   .login_btn_2 {
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bolder;
     margin-left: vw(10);
     margin-top: vh(50);
   }
@@ -200,7 +231,7 @@
   .login_logo_3 {
     width: vw(250);
     height: vw(55);
-    margin-top: vh(240);
+    margin-top: vh(180);
     margin-left: vw(10);
   }
   .login_logo_2 {

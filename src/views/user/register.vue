@@ -1,7 +1,26 @@
 <template>
     <div id="register" class="register">
+      <vue-particles
+        class="login-bg"
+      color="#39AFFD"
+      :particleOpacity="0.7"
+      :particlesNumber="100"
+      shapeType="circle"
+      :particleSize="4"
+      linesColor="#8DD1FE"
+      :linesWidth="1"
+      :lineLinked="true"
+      :lineOpacity="0.4"
+      :linesDistance="150"
+      :moveSpeed="3"
+      :hoverEffect="true"
+      hoverMode="grab"
+      :clickEffect="true"
+      clickMode="push"
+      >
+      </vue-particles>
       <v-card
-        color="rgba(35,47,61,0.9)"
+        color="rgba(35,47,61,0.4)"
         dark
         class="login_card"
       >
@@ -42,10 +61,10 @@
         </div>
         <div style="display:flex;">
             <div class="login_btn_1" @click="register_ok">
-              <v-btn color="#022c52">Register Now</v-btn>
+              <v-btn color="rgba(0,0,0,0.6)">Register</v-btn>
             </div>
             <div class="login_btn_2" @click="go_login">
-              <v-btn color="#4e7394">Go LOGIN</v-btn>
+              <v-btn light color="rgba(255,255,255,0.6)">Go LOGIN</v-btn>
             </div>
         </div>
       </v-card>
@@ -315,6 +334,13 @@
   </script>
   
   <style scoped lang="scss">
+    .login-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
   #register {
     width: 100%;
     overflow: hidden;
@@ -360,10 +386,14 @@
     margin-right: vw(40);
   }
   .login_btn_1 {
-    margin-left: vw(30);
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bolder;
+    margin-left: vw(160);
     margin-top: vh(10);
   }
   .login_btn_2 {
+    font-family:'Times New Roman', Times, serif;
+    font-weight:bolder;
     margin-left: vw(20);
     margin-top: vh(10);
   }
@@ -376,7 +406,7 @@
   .login_logo_3 {
     width: vw(250);
     height: vw(55);
-    margin-top: vh(130);
+    margin-top: vh(80);
     margin-left: vw(10);
   }
   .login_logo_2 {
