@@ -220,34 +220,34 @@ export default defineComponent({
             ],
             text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
             similar_papers: [
-            {
-                id: 1,
-                title: '跨越发展奔小康-—达茂联合旗实施"三集中"战略纪实',
-                abstract: '＜正＞落后旗县如何使经济发展驶入快车道,农牧民收入大提高?达茂旗的实践证明,有了超常规发展的思路,才会有跨越式发展的出路。2002年,达茂旗全社会固定资产投资…',
-                author: '张滨艳',
-                source: '《实践(思想理论版)》',
-                citations: 0,
-                year: 2003
-            },
-            {
-                id: 2,
-                title: '积极实施"六化"战略全力推进跨越发展——府谷县经济社会发展纪实',
-                abstract: '近年来,府谷县紧紧国绕打造国内一流的煤电化载能工业基地的目标,立足资源优势,坚持科学发展,大力实施新型工业化,农业产业化城乡一体化,民企集团化;环境大优化,民生优…',
-                author: '刘玲',
-                source: '《新西部(新闻版)》',
-                citations: 0,
-                year: 2010
-            },
-            {
-                id: 3,
-                title: '跨越 突破 搏击 -- 农二师实施大调整大转变战略纪实',
-                abstract: '新年伊始,记者来到农二师采访,深深地感受到这里在经济结构战略性大调整、发展方式战略性大转变过程中所展现出的勃勃生机,新的希望正在这里冉冉升腾。“要立足农业内涵…',
-                author: '高利，栗卫亚',
-                source: '《当代兵团》',
-                citations: 0,
-                year: 2010
-            }
-        ]
+                {
+                    id: 1,
+                    title: '跨越发展奔小康-—达茂联合旗实施"三集中"战略纪实',
+                    abstract: '＜正＞落后旗县如何使经济发展驶入快车道,农牧民收入大提高?达茂旗的实践证明,有了超常规发展的思路,才会有跨越式发展的出路。2002年,达茂旗全社会固定资产投资…',
+                    author: '张滨艳',
+                    source: '《实践(思想理论版)》',
+                    citations: 0,
+                    year: 2003
+                },
+                {
+                    id: 2,
+                    title: '积极实施"六化"战略全力推进跨越发展——府谷县经济社会发展纪实',
+                    abstract: '近年来,府谷县紧紧国绕打造国内一流的煤电化载能工业基地的目标,立足资源优势,坚持科学发展,大力实施新型工业化,农业产业化城乡一体化,民企集团化;环境大优化,民生优…',
+                    author: '刘玲',
+                    source: '《新西部(新闻版)》',
+                    citations: 0,
+                    year: 2010
+                },
+                {
+                    id: 3,
+                    title: '跨越 突破 搏击 -- 农二师实施大调整大转变战略纪实',
+                    abstract: '新年伊始,记者来到农二师采访,深深地感受到这里在经济结构战略性大调整、发展方式战略性大转变过程中所展现出的勃勃生机,新的希望正在这里冉冉升腾。“要立足农业内涵…',
+                    author: '高利，栗卫亚',
+                    source: '《当代兵团》',
+                    citations: 0,
+                    year: 2010
+                }
+            ]
         }
     },
     mounted() {
@@ -632,6 +632,9 @@ export default defineComponent({
             this.getScholarsByOrg();
             // this.getPAmountByOrg();
             // this.getMagazinesByOrg();
+            // this.getPapersByOrg();
+            // this.getPatentsByOrg();
+            // this.getProjectsByOrg();
         },
         searchOrg() {
             // console.log("searchOrg");
@@ -730,7 +733,7 @@ export default defineComponent({
                 console.error(err);
             });
         },
-        getPapersByOrg() {
+        getPapersByOrg() {      // 数据库表未空
             // console.log("getPapersByOrg");
             this.$axios({
                 method: "post",
@@ -743,14 +746,48 @@ export default defineComponent({
             })
             .then((res) => {
                 console.log(res);
-                // for (var i=0; i<res.data.length; i++) {
-                //     var aScholar = {};
-                //     aScholar.name = res.data[i].name1;
-                //     aScholar.loc = res.data[i].interests;
-                //     this.scholars.push(aScholar);
-                // }
 
                 console.log("getPapersByOrg");
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        },
+        getPatentsByOrg() {       // 数据库表未空
+            // console.log("getPapersByOrg");
+            this.$axios({
+                method: "post",
+                url: "/get_patents_by_org",
+                data: qs.stringify({
+                    name: this.institutionName,
+                    page: 1,
+                    size: 100,
+                }),
+            })
+            .then((res) => {
+                console.log(res);
+
+                console.log("getPatentsByOrg");
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        },
+        getProjectsByOrg() {        // 数据库表未空
+            // console.log("getPapersByOrg");
+            this.$axios({
+                method: "post",
+                url: "/get_projects_by_org",
+                data: qs.stringify({
+                    name: this.institutionName,
+                    page: 1,
+                    size: 100,
+                }),
+            })
+            .then((res) => {
+                console.log(res);
+
+                console.log("getProjectsByOrg");
             })
             .catch((err) => {
                 console.error(err);
