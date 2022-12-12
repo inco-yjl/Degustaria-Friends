@@ -171,28 +171,30 @@
         <!--检索方式选择器-->
         <v-card color="rgba(255, 255, 255, 0)" flat>
           <v-col class="search-method-options" color="primary">
-            <v-row v-if="method !== 'Simple'">
-              <div>
-                <v-btn
-                  depressed
-                  small
-                  color="rgba(255, 255, 255, 0)"
-                  @click="setMethod('Simple')"
+            <div v-if="this.mode==0">
+              <v-row v-if="method !== 'Simple'">
+                <div>
+                  <v-btn
+                      depressed
+                      small
+                      color="rgba(255, 255, 255, 0)"
+                      @click="setMethod('Simple')"
                   >简单检索>
-                </v-btn>
-              </div>
-            </v-row>
-            <v-row v-if="method !== 'HighLevel'">
-              <div>
-                <v-btn
-                  depressed
-                  small
-                  color="rgba(255, 255, 255, 0)"
-                  @click="setMethod('HighLevel')"
+                  </v-btn>
+                </div>
+              </v-row>
+              <v-row v-if="method !== 'HighLevel'">
+                <div>
+                  <v-btn
+                      depressed
+                      small
+                      color="rgba(255, 255, 255, 0)"
+                      @click="setMethod('HighLevel')"
                   >高级检索>
-                </v-btn>
-              </div>
-            </v-row>
+                  </v-btn>
+                </div>
+              </v-row>
+            </div>
           </v-col>
         </v-card>
         <v-spacer></v-spacer>
@@ -208,8 +210,8 @@ import {
   logicOptions, ORDER_TYPE_RELATIVE, ORDER_TYPE_TIME, ORDER_REFSUM, ORDER_DES, ORDER_ASD,
   AND, OR, NOT,
   accuracyOptions,
-  PAGE_SIZE,
-  referAttributes, attributes,NOT_REF,REF,
+  PAGE_SIZE,NormalizeSearchParam,
+  referAttributes, attributes, NOT_REF, REF, MODE_PATENT, MODE_PROJECT,MODE_PAPER
 } from "../SearchResult/SearchDataType"
 import {searchRequest} from "@/views/SearchResult/searchRequest";
 export default {
@@ -217,9 +219,9 @@ export default {
   data() {
 
     return {
-      singleInput: ref(),
+      res_show:true,
       logicOptions,ORDER_TYPE_RELATIVE,ORDER_TYPE_TIME,ORDER_REFSUM,ORDER_DES,ORDER_ASD,
-      AND,OR,NOT,attributes,
+      AND,OR,NOT,attributes,MODE_PAPER,MODE_PROJECT,MODE_PATENT,
       accuracyOptions,
       PAGE_SIZE,
       complexSearchOptions: {
@@ -252,7 +254,7 @@ export default {
           name: "项目检索",
         },
       ],
-      mode: 0,
+      mode: MODE_PAPER,
       method: "Simple",
       searchAttributes: attributes[0],
     };
@@ -266,7 +268,8 @@ export default {
       }
       this.complexSearchOptions.search_word.push("");
       this.complexSearchOptions.search_type.push(this.attributes[0][0].value);
-
+      this.complexSearchOptions.order=ORDER_DES
+      this.complexSearchOptions.order_type=ORDER_TYPE_RELATIVE
 
     },
     search() {
@@ -280,10 +283,11 @@ export default {
       let filter_src=this.complexSearchOptions.filter_src
       let filter_time=this.complexSearchOptions.filter_time
       let page=this.complexSearchOptions.page
-      let size=this.complexSearchOptions.size
+      let size=this.PAGE_SIZE
       let order=this.complexSearchOptions.order
       let order_type=this.complexSearchOptions.order_type
       let ref=this.complexSearchOptions.ref
+      let mode=this.mode
       console.log(this.complexSearchOptions)
       for(let i=0;i<this.complexSearchOptions.search_word.length;i++){
         if(i!=0){
@@ -307,7 +311,6 @@ export default {
       }
       if(search_word[0]===undefined||search_type[0]===undefined||search_logic[0]===undefined){
         console.log("没有初始化")
-
       }
       let param={
         'search_word':search_word,
@@ -323,16 +326,31 @@ export default {
         'order':order,
         'order_type':order_type,
         'ref':ref,
+        'mode':mode,
       }
-      console.log(param)
       this.$store.commit("mod_search_param",param)
       console.log('vuex :',this.$store.getters.get_search_param)
-      this.$router.push('/searchResult')
+      searchRequest(this.$store.getters.get_search_param).then(res=>{
+
+        console.log(res.data)
+        this.$store.commit('mod_page_info',res.data)
+        console.log('Header完成搜索')
+      }).then(()=>{
+        console.log("进入 searchResult")
+        this.$router.push('/searchResult')
+      })
+
     },
     setOption(index) {
       console.log(index);
       this.method = "Simple";
-      this.mode = index;
+      if(index==0){
+        this.mode=MODE_PAPER
+      }else if(index==1){
+        this.mode=MODE_PATENT
+      }else {
+        this.mode=MODE_PROJECT
+      }
       this.searchAttributes = this.attributes[index];
     },
     setMethod(method) {
@@ -418,7 +436,7 @@ export default {
   position: relative;
 }
 .search-method-options {
-  position: relative;
+  position: absolute;
   margin-left: vw(20);
 }
 .search-header {

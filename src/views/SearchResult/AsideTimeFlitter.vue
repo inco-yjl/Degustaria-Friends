@@ -15,7 +15,7 @@
             persistent-hint
             allow-overflow="false"
             label="开始时间"
-            autofocus="true"
+
             background-color="#ffffff"
             dense
             light
@@ -34,7 +34,6 @@
             v-model="endTime"
             :items="endTimes"
             persistent-hint
-            autofocus="true"
             label="结束时间"
             background-color="#ffffff"
             dense

@@ -26,11 +26,13 @@ export default {
   props:{
     subjects:{
       type:Array,
-      default:[
-        "计算机科学与技术",
-        "数学",
-        "英语",
-      ]
+      default:()=>{
+        return [
+          "计算机科学与技术",
+          "数学",
+          "英语",
+        ]
+      }
     },
     title:{
       type:String,
@@ -59,8 +61,8 @@ export default {
   },
   methods:{
     change(){
-      this.showNums=this.showNums==Math.min(this.subjects.length,this.max_showNum)?this.mini_showNum:Math.min(this.subjects.length,this.max_showNum)
-      this.moreIcon=this.moreIcon=="mdi-chevron-down"?"mdi-chevron-up":"mdi-chevron-down";
+      this.showNums=this.showNums===Math.min(this.subjects.length,this.max_showNum)?this.mini_showNum:Math.min(this.subjects.length,this.max_showNum)
+      this.moreIcon=this.moreIcon==="mdi-chevron-down"?"mdi-chevron-up":"mdi-chevron-down";
     },
     update(){
       let param=this.$store.getters.get_search_param

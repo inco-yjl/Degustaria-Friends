@@ -1,7 +1,7 @@
 <template>
-  <div class="layout">
+  <div class="layout" v-if="status">
     <v-container>
-      <v-row align="start d-flex flex-nowrap" no-gutters>
+      <v-row  no-gutters>
 <!--        侧边栏-->
         <v-col >
           <div class="aside">
@@ -21,32 +21,36 @@
 <!--        搜索结果-->
         <v-col>
           <div class="searchResult">
-            <v-row align="center">
+            <v-row>
               <v-tabs>
                 <v-tab v-for="(item,index) in this.order_type" :key="index" @click="order_change(index)">
                   {{item.name}}
-                  <v-icon v-if="active_order===index">{{ item.order==0?des_svg:asc_svg }}</v-icon>
+                  <v-icon v-if="active_order===index&&index!==0">{{ item.order==0?des_svg:asc_svg }}</v-icon>
                 </v-tab>
               </v-tabs>
             </v-row>
-            <v-row v-for="i in 5" align="center" >
-                <search-result></search-result>
+
+            <v-row>
+                <search-result v-if="this.n_page!==undefined"
+                               v-for="(paper,index) in this.papers"
+                               :paper="paper"
+                ></search-result>
             </v-row>
-
-            <div class="pagination">
-              <v-row align="center">
-
+            <v-btn @click="check"></v-btn>
+            <v-row >
+              <div class="pagination">
                 <v-pagination
                     v-model="page"
-                    :length="pageNums"
+                    :length="this.n_page"
                     :next-icon="nextIcon"
                     :prev-icon="prevIcon"
                     :page="page"
-                    :total-visible="totalVisible"
+                    :total-visible=Math.min(10,this.n_page)
 
                 ></v-pagination>
-              </v-row>
-            </div>
+              </div>
+            </v-row>
+
           </div>
 
         </v-col>
@@ -63,15 +67,11 @@ import AsideArtributeFilter from "@/views/SearchResult/AsideArtributeFilter";
 import SearchResult from "@/views/SearchResult/SearchResult";
 import {searchRequest} from "@/views/SearchResult/searchRequest";
 import { mdiArrowUp,mdiArrowDown,mdiArrowRight,mdiArrowLeft } from '@mdi/js';
+import { ref, computed } from 'vue'
 export default {
   name: "SearchResultPage",
   components: {SearchResult, AsideArtributeFilter, AsideTimeFlitter, SearchHeader},
   data: () => ({
-    alignments: [
-      'start',
-      'center',
-      'end',
-    ],
     all_aside_artibute:[
       'filter_sub','filter_thm','filter_src','filter_org'
     ],
@@ -92,18 +92,33 @@ export default {
       }
     ],
     active_order:0,
-    pageNums: 100,
     nextIcon: mdiArrowRight,
     prevIcon: mdiArrowLeft,
     page: 1,
-    totalVisible: 9,
+    n_page:1,
+    papers:[],
+    status:true,
+
   }),
   methods:{
+    check(){
+      console.log(this.papers,this.n_page)
+    },
     update(){
-      console.log('更新搜索条件')
-      let param=this.$store.getters.get_search_param
-      searchRequest(param).then((res)=>{
-        console.log(res.data)
+      let _this=this
+      // this.status=false
+      return searchRequest(this.$store.getters.get_search_param).
+      then((res)=>{
+        let data=res.data
+        console.log("搜索结果：")
+        console.log(data)
+        _this.$store.commit('mod_page_info',data)
+        _this.n_page=data.n_page
+        _this.papers=data.papers
+        console.log("准备刷新")
+        // _this.status=true
+        // _this.$forceUpdate()
+
       })
     },
     order_change(index){
@@ -122,16 +137,24 @@ export default {
       this.$store.commit("mod_search_param",param)
       console.log('修改page',this.$store.getters.get_search_param)
       this.update()
+
     }
-  },
-  created() {
-    this.update()
   },
   watch:{
     page(old_value,new_value){
-      this.page_change()
-    }
+      if(old_value!==new_value){
+        this.page_change()
+      }
+    },
+  },
+
+  mounted() {
+    console.log("准备渲染")
+    this.update()
+    // this.papers=this.$store.getters.get_page_info.papers
+    // this.n_page=this.$store.getters.get_page_info.n_page
   }
+
 }
 </script>
 

@@ -45,90 +45,55 @@ export const attributes = [
     [
         {
             name: "综合",
-            value: "COMBINE",
+            value: "0",
         },
         {
             name: "主题",
-            value: "TOPIC",
+            value: "1",
         },
         {
             name: "专利名",
-            value: "NAME",
-        },
-        {
-            name: "摘要",
-            value: "ABSTRACT",
+            value: "2",
         },
         {
             name: "关键词",
-            value: "KEYWORDS",
-        },
-        {
-            name: "全文",
-            value: "CONTENT",
-        },
-        {
-            name: "申请人",
-            value: "APPLICATOR",
+            value: "3",
         },
         {
             name: "发明人",
-            value: "INVENTOR",
-        },
-        {
-            name: "代理人",
-            value: "AGENCY",
-        },
-        {
-            name: "申请号",
-            value: "APPLICATENUMBER",
-        },
-        {
-            name: "公开号",
-            value: "PUBLICNUMBER",
-        },
-        {
-            name: "分类号",
-            value: "CLASSNUMBER",
-        },
-        {
-            name: "主分类号",
-            value: "MAINCLASSNUMBER",
+            value: "4",
         },
     ],
     [
         {
             name: "综合",
-            value: "COMBINE",
+            value: "0",
         },
         {
             name: "主题",
-            value: "TOPIC",
+            value: "1",
         },
         {
             name: "项目名称",
-            value: "NAME",
+            value: "2",
         },
         {
-            name: "摘要",
-            value: "ABSTRACT",
+            name: "简介",
+            value: "3",
         },
         {
             name: "关键词",
-            value: "KEYWORDS",
+            value: "4",
         },
         {
             name: "项目专家",
-            value: "EXPERT",
+            value: "5",
         },
         {
             name: "承担机构",
-            value: "EXEINSTITUTE",
+            value: "6",
         },
-        {
-            name: "资助机构",
-            value: "PAYINSTITUTE",
-        },
+
     ],
 ];
 export const referAttributes = [
@@ -182,7 +147,7 @@ export const accuracyOptions = [
         value: "PRECISE",
     },
 ];
-export const PAGE_SIZE=0;
+export const PAGE_SIZE=10;
 export const ORDER_TYPE_RELATIVE=0;
 export const ORDER_TYPE_TIME=1;
 export const ORDER_REFSUM=2;
@@ -193,10 +158,42 @@ export const OR=1;
 export const NOT=2;
 export const REF=1;
 export const NOT_REF=0;
-// export default {
-//     logicOptions,ORDER_TYPE_RELATIVE,ORDER_TYPE_TIME,ORDER_REFSUM,ORDER_DES,ORDER_ASD,
-//     AND,OR,NOT,
-//     accuracyOptions,
-//     PAGE_SIZE,
-//     referAttributes,
-// }
+export const MODE_PAPER=0;
+export const MODE_PATENT=1;
+export const MODE_PROJECT=2;
+export function NormalizeSearchParam(param){
+    if(param.search_word!==undefined){
+        for(let i=0;i<param.search_word;i++){
+            param.search_word[i]=param.search_word[i].toString()
+        }
+    }
+    if(param.search_type!==undefined){
+        for(let i=0;i<param.search_type;i++){
+            param.search_type[i]=parseInt(param.search_type[i])
+        }
+    }
+    if(param.search_logic!==undefined){
+        for(let i=0;i<param.search_logic;i++){
+            param.search_logic[i]=parseInt(param.search_logic[i])
+        }
+    }
+    if(param.mode!==undefined){
+        param.mode=parseInt(param.mode)
+    }
+    if(param.page!==undefined){
+        param.page=parseInt(param.page)
+    }
+    if(param.size!==undefined){
+        param.size=parseInt(param.size)
+    }
+    if(param.order!==undefined){
+        param.order=parseInt(param.order)
+    }
+    if(param.order_type!==undefined){
+        param.order_type=parseInt(param.order_type)
+    }
+    if(param.ref!==undefined){
+        param.ref=parseInt(param.ref)
+    }
+    return param
+}
