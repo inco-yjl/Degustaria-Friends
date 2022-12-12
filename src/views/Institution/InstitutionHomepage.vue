@@ -2,12 +2,12 @@
     <div class="home-page">
         <div class="page-top">
             <!-- {{ imgSrc }} -->
-            <v-img
+            <!-- <v-img
                 class="img1"
                 max-height="150"
                 max-width="150"
                 :src="imgSrc"
-            ></v-img>
+            ></v-img> -->
             <div class="page-top-info">
                 <div class="title1">{{ institutionName }}</div>
                 <div class="title2">{{ institutionLocation }}</div>
@@ -18,8 +18,8 @@
                 <div class="text1" style="white-space: pre-wrap;">{{ infoDetail }}</div>
             </div>
         </div>
-        <v-divider
-        ></v-divider>
+        <!-- <v-divider
+        ></v-divider> -->
         <div class="page-bottom">
             <div class="bottom-left">
                 <div class="bottom-left-1">
@@ -54,7 +54,7 @@
                                     <v-tabs-slider color="yellow"></v-tabs-slider>
                                     <v-tab
                                         v-for="item in items"
-                                        :key="item"
+                                        :key="item.name"
                                     >
                                         <div class="tab-name">{{ item.name }}</div>
                                         <div class="tab-num">共 {{ item.num }} 篇</div>
@@ -65,7 +65,7 @@
                             <v-tabs-items v-model="tab">
                                 <v-tab-item
                                     v-for="item in items"
-                                    :key="item"
+                                    :key="item.name"
                                 >
                                     <v-card flat>
                                         <div class="selector">
@@ -125,10 +125,10 @@
                 </div>
                 <div class="scholar-list">
                     <div class="scholars" v-for="scholar in scholars">
-                        <v-img
+                        <!-- <v-img
                             class="img-scholar"
                             :src="scholar.photo"
-                        ></v-img>
+                        ></v-img> -->
                         <div class="scholar-info">
                             <div class="scholar-info1">{{ scholar.name }}</div>
                             <div class="scholar-info2">{{ scholar.loc }}</div>
@@ -142,43 +142,48 @@
 <script>
 import {defineComponent, reactive, ref} from 'vue';
 import * as echarts from 'echarts';
+import qs from "qs";
 export default defineComponent({
     data() {
         return {
             imgSrc: require("@/assets/profilePhoto.png"),
-            institutionName: "土豆研究所",
-            institutionLocation: "野比大雄的院子",
+            institutionName: "Accident Research Centre",
+            // institutionLocation: "野比大雄的院子",
+            institutionLocation: "",
+            institutionId: -7,
             num: "123",
             rangeLow: "1111",
             rangeHigh: "2232",
-            infoDetail: "    土豆，上帝赐予人类最宝贵的礼物，世界上最完美的事物，土豆丝好吃，土豆片好吃，土豆块好吃，土豆泥好吃，炸着吃烤着吃蒸着吃煎着吃都好吃，薯条好吃，薯饼好吃，炖肉好吃，加孜然好吃，蘸辣椒好吃，焗芝士好吃，卷饼里好吃，怎么样都好吃，哪怕整个煮熟了撒盐都好吃，除了发芽吃了会死，没有任何缺陷。\n    发芽吃了会死是人类的缺陷，土豆是完美的。",
-            scholars: [
-                {
-                    name: "DeGang Guo",
-                    loc: "artificial intelligence",
-                    photo: require("@/assets/profilePhoto.png")
-                },
-                {
-                    name: "Alec Radford",
-                    loc: "Indico Data Solutions",
-                    photo: require("@/assets/profilePhoto.png")
-                },
-                {
-                    name: "郭德纲",
-                    loc: "德云社",
-                    photo: require("@/assets/profilePhoto.png")
-                },
-                {
-                    name: "郭德纲",
-                    loc: "德云社",
-                    photo: require("@/assets/profilePhoto.png")
-                },
-                {
-                    name: "郭德纲",
-                    loc: "德云社",
-                    photo: require("@/assets/profilePhoto.png")
-                }
-            ],
+            // infoDetail: "    土豆，上帝赐予人类最宝贵的礼物，世界上最完美的事物，土豆丝好吃，土豆片好吃，土豆块好吃，土豆泥好吃，炸着吃烤着吃蒸着吃煎着吃都好吃，薯条好吃，薯饼好吃，炖肉好吃，加孜然好吃，蘸辣椒好吃，焗芝士好吃，卷饼里好吃，怎么样都好吃，哪怕整个煮熟了撒盐都好吃，除了发芽吃了会死，没有任何缺陷。\n    发芽吃了会死是人类的缺陷，土豆是完美的。",
+            infoDetail: "Lorem ipsm dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elit",
+            // scholars: [
+            //     {
+            //         name: "DeGang Guo",
+            //         loc: "artificial intelligence",
+            //         photo: require("@/assets/profilePhoto.png")
+            //     },
+            //     {
+            //         name: "Alec Radford",
+            //         loc: "Indico Data Solutions",
+            //         photo: require("@/assets/profilePhoto.png")
+            //     },
+            //     {
+            //         name: "郭德纲",
+            //         loc: "德云社",
+            //         photo: require("@/assets/profilePhoto.png")
+            //     },
+            //     {
+            //         name: "郭德纲",
+            //         loc: "德云社",
+            //         photo: require("@/assets/profilePhoto.png")
+            //     },
+            //     {
+            //         name: "郭德纲",
+            //         loc: "德云社",
+            //         photo: require("@/assets/profilePhoto.png")
+            //     }
+            // ],
+            scholars: [],
             journals: [
                 {
                     name: "土豆种植模式",
@@ -249,28 +254,27 @@ export default defineComponent({
         // 自动刷新数据
         this.$nextTick(() => {
             setTimeout(() => {
-                this.drawPieChart1();
-                this.drawPieChart2();
-                this.drawPieChart3();
-                this.drawPieChart4();
-                this.drawCategory1();
-                this.drawCategory2();
+                this.initGraph();
+                this.initInfo();
             }, 500);
         });
         window.onresize = () => {
             return (() => {
                 this.$nextTick(() => {
-                    this.drawPieChart1();
-                    this.drawPieChart2();
-                    this.drawPieChart3();
-                    this.drawPieChart4();
-                    this.drawCategory1();
-                    this.drawCategory2();
+                    this.initGraph();
                 });
             })();
         };
     },
     methods: {
+        initGraph() {
+            this.drawPieChart1();
+            this.drawPieChart2();
+            this.drawPieChart3();
+            this.drawPieChart4();
+            this.drawCategory1();
+            this.drawCategory2();
+        },
         drawPieChart1() {
             echarts.dispose(document.getElementById('pie1'));
             var chartDom = document.getElementById('pie1');
@@ -621,9 +625,141 @@ export default defineComponent({
             };
             option && myChart.setOption(option);
         },
+
+        
+        initInfo() {
+            this.searchOrg();
+            this.getScholarsByOrg();
+            // this.getPAmountByOrg();
+            // this.getMagazinesByOrg();
+        },
+        searchOrg() {
+            // console.log("searchOrg");
+            this.$axios({
+                method: "post",
+                url: "/search_org",
+                data: qs.stringify({
+                    search_word: this.institutionName,
+                    page: 1,
+                    size: 1,
+                }),
+            })
+            .then((res) => {
+                console.log(res);
+                this.institutionId = res.data[0].id;
+                this.institutionLocation = res.data[0].country;
+                this.infoDetail = res.data[0].introduction;
+                console.log("searchOrg");
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        },
+        getScholarsByOrg() {
+            // console.log("getScholarsByOrg");
+            this.$axios({
+                method: "post",
+                url: "/get_scholars_by_org",
+                data: qs.stringify({
+                    name: this.institutionName,
+                    page: 1,
+                    size: 100,
+                }),
+            })
+            .then((res) => {
+                console.log(res);
+                for (var i=0; i<res.data.length; i++) {
+                    var aScholar = {};
+                    aScholar.name = res.data[i].name1;
+                    aScholar.loc = res.data[i].interests;
+                    this.scholars.push(aScholar);
+                }
+                console.log("getScholarsByOrg");
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        },
+        getPAmountByOrg() {    // 后端有问题 未完成
+            // console.log("getPAmountByOrg");
+            this.$axios({
+                method: "post",
+                url: "/get_p_amount_by_org",
+                data: qs.stringify({
+                    name: this.institutionName,
+                }),
+            })
+            .then((res) => {
+                console.log(res);
+                // for (var i=0; i<res.data.length; i++) {
+                //     var aScholar = {};
+                //     aScholar.name = res.data[i].name1;
+                //     aScholar.loc = res.data[i].interests;
+                //     this.scholars.push(aScholar);
+                // }
+
+                console.log("getPAmountByOrg");
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        },
+        getMagazinesByOrg() {    // 后端magezine表无数据
+            // console.log("getMagazinesByOrg");
+            this.$axios({
+                method: "post",
+                url: "/get_magazines_by_org",
+                data: qs.stringify({
+                    name: this.institutionName,
+                    page: 1,
+                    size: 100,
+                }),
+            })
+            .then((res) => {
+                console.log(res);
+                // for (var i=0; i<res.data.length; i++) {
+                //     var aScholar = {};
+                //     aScholar.name = res.data[i].name1;
+                //     aScholar.loc = res.data[i].interests;
+                //     this.scholars.push(aScholar);
+                // }
+
+                console.log("getMagazinesByOrg");
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        },
+        getPapersByOrg() {
+            // console.log("getPapersByOrg");
+            this.$axios({
+                method: "post",
+                url: "/get_papers_by_org",
+                data: qs.stringify({
+                    name: this.institutionName,
+                    page: 1,
+                    size: 100,
+                }),
+            })
+            .then((res) => {
+                console.log(res);
+                // for (var i=0; i<res.data.length; i++) {
+                //     var aScholar = {};
+                //     aScholar.name = res.data[i].name1;
+                //     aScholar.loc = res.data[i].interests;
+                //     this.scholars.push(aScholar);
+                // }
+
+                console.log("getPapersByOrg");
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        },
     }
 });
 </script>
+
 <style scoped lang="scss">
     .home-page {
         // background-color:yellow;
@@ -636,25 +772,29 @@ export default defineComponent({
     }
     .page-top {
         // border: 3px solid #ff2fff;
-        height:vh(250);//改成自适应的
+        // height:vh(250);//改成自适应的
         //绝对，为了使顶部内容正常显示，不被search-bar遮挡
-        width:vw(1720);
+        width: vw(1720);
+        padding-bottom: 20px;
+        border-bottom: 1px solid #d7d7d7;
     }
     .page-top-info {
         // border: 3px solid #ff2fff;
-        margin-left: vw(60);
-        height:vh(250);//改成自适应的
+        margin-left: vw(260);
+        // height:vh(250);//改成自适应的
         //绝对，为了使顶部内容正常显示，不被search-bar遮挡
-        width:vw(400);
-        float: left;
+        width:vw(700);
+        // float: left;
+        display: inline-block;
     }
     .page-top-detail {
         // border: 3px solid #ff2fff;
         margin-left: vw(50);
-        height:vh(250);//改成自适应的
+        // height:vh(250);//改成自适应的
         //绝对，为了使顶部内容正常显示，不被search-bar遮挡
         width:vw(400);
-        float: left;
+        // float: left;
+        display: inline-block;
     }
     .page-bottom {
         // border: 3px solid #1f22ff;
@@ -750,12 +890,13 @@ export default defineComponent({
         border-bottom: 1px dashed #797979;
     }
     .scholar-list {
-        margin: vh(0) 0 0 vw(40);
+        margin: vh(10) 0 0 vw(40);
     }
     .scholars {
         // border: 3px solid #bda9bc;
-        height: vh(125);
-        margin-bottom: vh(0);
+        // height: vh(125);
+        margin-bottom: vh(10);
+        padding-bottom: vh(10);
         border-bottom: 1px solid #d7d7d7;
     }
     .img-scholar {
@@ -768,16 +909,16 @@ export default defineComponent({
     }
     .scholar-info {
         // border: 3px solid #bda9bc;
-        margin: vh(10) 0 0 vw(160);
+        margin: vh(10) 0 0 vw(10);
     }
     .scholar-info1 {
-        font-size: 33px;
+        font-size: 30px;
         font-weight: 500;
         color: #3c3c3c;
     }
     .scholar-info2 {
-        margin-top: vh(13);
-        font-size: 20px;
+        margin-top: vh(3);
+        font-size: 15px;
         color: #8c8c8c;
     }
 
@@ -856,11 +997,11 @@ export default defineComponent({
         margin-left: vw(10);
         margin-top: vh(10);
     }
-    .selector {
-        // border: 3px solid #bda9bc;
-        // width: vw(200);
-        // height: vh(200);
-    }
+    // .selector {
+    //     // border: 3px solid #bda9bc;
+    //     // width: vw(200);
+    //     // height: vh(200);
+    // }
     .bottom-left-3-left {
         // border: 3px solid #bda9bc;
         margin-left: vw(50);
