@@ -5,16 +5,54 @@
  </template>
  <script>
  import * as  echarts from "echarts";
+ import qs from "qs";
  export default {
   data() {
     return {
+      scholarId: "",
+      rdata: [],
+      relation: []
     };
   },
+  props: {
+    id: {type: Number}
+  },
   mounted() {
-    this.initChart()
+    this.scholarId = this.id
+    this.$nextTick(function() {
+      this.getRelationship();
+      this.initChart();
+    })
   },
  
   methods: {
+    getRelationship() {
+      this.$axios({
+        method: "post",
+        url: '/get_relationships_by_scholar_id',
+        data: qs.stringify({
+          id: this.scholarId
+        })
+      })
+      .then(
+        res => {
+          console.log(res.data)
+          for (let r in res.data) {
+            this.rdata.push({
+              name: r.target,
+              category: Math.floor(Math.random() * 9)
+            });
+            this.relation.push({
+              source: this.scholarId,
+              target: r.target,
+            })
+          }
+        }
+      )
+      .catch(
+        e => console.log(e)
+      )
+    },
     initChart() {
       let myChart = echarts.init(document.getElementById('chart'))
       myChart.resize();
@@ -33,12 +71,24 @@
             symbolSize: 100,
             symbolSize: (value, params) => {
               switch (params.data.category) {
+                case 0:
+                  return 30;
                 case 1:
-                  return 50;
-                  break;
+                  return 15;
                 case 2:
-                  return 60;
-                  break;
+                  return 20;
+                case 3:
+                  return 25;
+                case 4:
+                  return 30;
+                case 5:
+                  return 35;
+                case 6:
+                  return 40;
+                case 7:
+                  return 10;
+                case 8:
+                  return 45;
               }
             },
             roam: true,
@@ -73,19 +123,19 @@
               },
               {
                 name: "zxc",
-                category: 1,
+                category: 3,
               },
               {
                 name: "pyy",
-                category: 2,
+                category: 5,
               },
               {
                 name: "yxy",
-                category: 1,
+                category: 7,
               },
               {
                 name: "zjr",
-                category: 1,
+                category: 8,
               }
             ],
             links: [

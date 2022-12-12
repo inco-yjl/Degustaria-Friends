@@ -62,7 +62,7 @@ const routes = [
             component:()=>import("../views/SearchResult/SearchResultPage")
           },
           {
-            path: '/scholarShow/:scholarId',
+            path: '/scholarShow',
             name: 'ScholarShow',
             component: () => import('../views/Scholar/ScholarShow.vue')
           },
