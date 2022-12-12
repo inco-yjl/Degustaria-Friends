@@ -113,6 +113,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Institution/SearchInstitution.vue'),
       },
       {
+        path: '/institutionResult',
+        name: 'institutionResult',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Institution/InstitutionResult.vue'),
+      },
+      {
         path: '/paperDetail',
         name: 'paperDetail',
         component: () => import(/* webpackChunkName: "about" */ '../views/PaperDetail.vue'),

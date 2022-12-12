@@ -526,7 +526,7 @@ export default {
   position: relative;
   left: 0;
   height: auto;
-  margin-top: vh(80);
+  margin-top: 69px;
   width: vw(1900);
 }
 .rank-tabs {

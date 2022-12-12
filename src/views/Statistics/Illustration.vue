@@ -955,7 +955,7 @@ export default {
 .illustration-content {
   font-weight: bold;
   width: vw(1300);
-  padding-top: vh(120);
+  padding-top: 92px;
   margin-left: vw(310);
   display: flex;
   flex-wrap: wrap;

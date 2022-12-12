@@ -9,12 +9,14 @@ import axios from '@/plugins/axios/axios.js'
 import qs from 'qs';
 import * as echarts from 'echarts';
 import VueParticles from 'vue-particles'
-Vue.use(VueParticles)
 
+Vue.use(VueParticles)
 Vue.config.productionTip = false;
 Vue.prototype.$qs=qs;
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts
+
+
 
 new Vue({
   router,

@@ -289,7 +289,7 @@
         <v-spacer></v-spacer>
       </v-app-bar>
     </v-row>
-    <div class="main-container"> <router-view /></div>
+    <div class="main-container" :class="method === 'HighLevel'?'highTop':'simpleTop'"> <router-view /></div>
   </div>
 </template>
   
@@ -644,10 +644,17 @@ export default {
 }
 .search-header {
   overflow-y: hidden;
+  height: auto;
 }
 .main-container{
   height:1000px;
   width:vw(1920);
+  margin-top: 180px;
+}
+
+.highTop{
+    //绝对，为了使顶部内容正常显示，不被search-bar遮挡
+  padding-top: 200px;
 }
 </style>
 <style lang="scss">

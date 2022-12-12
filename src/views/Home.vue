@@ -219,8 +219,6 @@ export default {
 <style scoped lang="scss">
 .home-page {
   background-color: white;
-  padding-top: vh(240);
-  //绝对，为了使顶部内容正常显示，不被search-bar遮挡
   width: vw(1920);
   display: flex;
 }
