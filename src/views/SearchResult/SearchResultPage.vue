@@ -71,20 +71,17 @@
               </div>
 
             </v-row>
-            <v-row v-if="showPapers&&!no_paper">
-              <div class="pagination">
-                <v-pagination
-                    v-model="page"
-                    :length="this.n_page"
-                    :next-icon="nextIcon"
-                    :prev-icon="prevIcon"
-                    :page="page"
-                    :total-visible=Math.min(10,this.n_page)
+            <div class="pagination" v-if="showPapers&&!no_paper">
+              <v-pagination
+                  v-model="page"
+                  :length="this.n_page"
+                  :next-icon="nextIcon"
+                  :prev-icon="prevIcon"
+                  :page="page"
+                  :total-visible=Math.min(10,this.n_page)
 
-                ></v-pagination>
-              </div>
-            </v-row>
-
+              ></v-pagination>
+            </div>
           </div>
 
         </v-col>
@@ -243,7 +240,11 @@ export default {
   width: vw(400);
 }
 .pagination{
-  align-self:center;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   position: relative;
   //left: vw(-120);
   top: vh(40);
