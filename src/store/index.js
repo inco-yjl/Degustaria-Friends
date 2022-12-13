@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {NormalizeSearchParam} from "@/views/SearchResult/SearchDataType";
+import {NormalizeSearchParam, PAGE_SIZE} from "@/views/SearchResult/SearchDataType";
 
 Vue.use(Vuex)
 
-let search_param;
+let search_param={
+  size:PAGE_SIZE
+};
 let page_info={
   org:[],
-  sub:[],
-  thm:[],
-  src:[],
+  field:[],
+  source:[],
   papers:[],
   n_page:0
 };
@@ -20,10 +21,10 @@ export default new Vuex.Store({
   },
   getters: {
     get_search_param(state){
-      return state.search_param
+      return JSON.parse(JSON.stringify(state.search_param))
     },
     get_page_info(state){
-      return state.page_info
+      return JSON.parse(JSON.stringify(state.page_info))
     }
   },
   mutations: {

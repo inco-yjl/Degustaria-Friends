@@ -162,6 +162,7 @@ export const MODE_PAPER=0;
 export const MODE_PATENT=1;
 export const MODE_PROJECT=2;
 export function NormalizeSearchParam(param){
+    param.size=PAGE_SIZE
     if(param.search_word!==undefined){
         for(let i=0;i<param.search_word;i++){
             param.search_word[i]=param.search_word[i].toString()

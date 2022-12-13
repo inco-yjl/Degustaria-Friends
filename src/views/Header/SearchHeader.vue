@@ -277,16 +277,9 @@ export default {
       let search_word=[]
       let search_type=[]
       let search_logic=[]
-      let filter_sub=this.complexSearchOptions.filter_sub
-      let filter_thm=this.complexSearchOptions.filter_thm
-      let filter_org=this.complexSearchOptions.filter_org
-      let filter_src=this.complexSearchOptions.filter_src
-      let filter_time=this.complexSearchOptions.filter_time
       let page=this.complexSearchOptions.page
-      let size=this.PAGE_SIZE
       let order=this.complexSearchOptions.order
       let order_type=this.complexSearchOptions.order_type
-      let ref=this.complexSearchOptions.ref
       let mode=this.mode
       console.log(this.complexSearchOptions)
       for(let i=0;i<this.complexSearchOptions.search_word.length;i++){
@@ -316,29 +309,15 @@ export default {
         'search_word':search_word,
         'search_type':search_type,
         'search_logic':search_logic,
-        'filter_sub':filter_sub,
-        'filter_thm':filter_thm,
-        'filter_org':filter_org,
-        'filter_src':filter_src,
-        'filter_time':filter_time,
         'page':page,
-        'size':size,
         'order':order,
         'order_type':order_type,
-        'ref':ref,
         'mode':mode,
       }
-      this.$store.commit("mod_search_param",param)
+      this.$store.commit("mod_search_param",JSON.parse(JSON.stringify(param)))
       console.log('vuex :',this.$store.getters.get_search_param)
-      searchRequest(this.$store.getters.get_search_param).then(res=>{
+      this.$router.push('/searching')
 
-        console.log(res.data)
-        this.$store.commit('mod_page_info',res.data)
-        console.log('Header完成搜索')
-      }).then(()=>{
-        console.log("进入 searchResult")
-        this.$router.push('/searchResult')
-      })
 
     },
     setOption(index) {

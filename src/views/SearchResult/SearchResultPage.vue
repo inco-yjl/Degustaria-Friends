@@ -1,19 +1,29 @@
 <template>
-  <div class="layout" v-if="status">
+  <div class="layout" >
     <v-container>
       <v-row  no-gutters>
 <!--        侧边栏-->
         <v-col >
-          <div class="aside">
+          <div class="aside" >
             <v-row>
               <div class="aside-flitter">
-                <aside-time-flitter @update="update"></aside-time-flitter>
+                <aside-time-flitter @update="update" :time_end="this.time_end"
+                                    :time_start="this.time_start"></aside-time-flitter>
               </div>
             </v-row>
-            <v-row v-for="(af,index) in this.all_aside_artibute" :key="index">
-              <div class="aside-flitter">
-                <aside-artribute-filter :title=af @update="update">
-                </aside-artribute-filter>
+            <v-row v-if="source_not_null">
+              <div class="aside-flitter" >
+                <aside-artribute-filter title="来源" @update="update"></aside-artribute-filter>
+              </div>
+            </v-row>
+            <v-row v-if="org_not_null">
+              <div class="aside-flitter" >
+                <aside-artribute-filter title="机构" @update="update"></aside-artribute-filter>
+              </div>
+            </v-row>
+            <v-row v-if="field_not_null">
+              <div class="aside-flitter" >
+                <aside-artribute-filter title="领域" @update="update"></aside-artribute-filter>
               </div>
             </v-row>
           </div>
@@ -30,14 +40,38 @@
               </v-tabs>
             </v-row>
 
-            <v-row>
-                <search-result v-if="this.n_page!==undefined"
-                               v-for="(paper,index) in this.papers"
-                               :paper="paper"
+            <v-row v-if="showPapers">
+                <search-result
+                    v-for="paper in this.papers"
+                    :paper="paper"
                 ></search-result>
             </v-row>
-            <v-btn @click="check"></v-btn>
-            <v-row >
+            <v-row v-if="!showPapers">
+              <v-sheet
+                  color="grey lighten-4"
+              >
+                <v-skeleton-loader
+                    class="loading"
+                    type="card"
+                ></v-skeleton-loader>
+              </v-sheet>
+            </v-row>
+            <v-row v-if="no_paper&&showPapers">
+              <div class="not_found">
+                <v-card shaped=true>
+                  <v-card-title>
+                    对不起！暂无数据
+                  </v-card-title>
+
+                  <v-card-text>
+                    您可以尝试减少检索条件进行检索<br>
+                    我们将会努力丰富资源
+                  </v-card-text>
+                </v-card>
+              </div>
+
+            </v-row>
+            <v-row v-if="showPapers&&!no_paper">
               <div class="pagination">
                 <v-pagination
                     v-model="page"
@@ -68,13 +102,14 @@ import SearchResult from "@/views/SearchResult/SearchResult";
 import {searchRequest} from "@/views/SearchResult/searchRequest";
 import { mdiArrowUp,mdiArrowDown,mdiArrowRight,mdiArrowLeft } from '@mdi/js';
 import { ref, computed } from 'vue'
+import {PAGE_SIZE} from "@/views/SearchResult/SearchDataType";
 export default {
   name: "SearchResultPage",
   components: {SearchResult, AsideArtributeFilter, AsideTimeFlitter, SearchHeader},
   data: () => ({
-    all_aside_artibute:[
-      'filter_sub','filter_thm','filter_src','filter_org'
-    ],
+    org:[],
+    field:[],
+    source:[],
     asc_svg:mdiArrowUp,
     des_svg:mdiArrowDown,
     order_type:[
@@ -95,30 +130,34 @@ export default {
     nextIcon: mdiArrowRight,
     prevIcon: mdiArrowLeft,
     page: 1,
-    n_page:1,
-    papers:[],
-    status:true,
-
+    status:false,
+    papers: [],
+    time_start:1950,
+    time_end:2022
   }),
   methods:{
     check(){
       console.log(this.papers,this.n_page)
+      console.log("vuex内容",this.$store.getters.get_page_info)
+
     },
     update(){
       let _this=this
-      // this.status=false
+      this.status=false
       return searchRequest(this.$store.getters.get_search_param).
       then((res)=>{
         let data=res.data
         console.log("搜索结果：")
         console.log(data)
         _this.$store.commit('mod_page_info',data)
-        _this.n_page=data.n_page
-        _this.papers=data.papers
-        console.log("准备刷新")
-        // _this.status=true
-        // _this.$forceUpdate()
-
+        _this.papers=this.$store.getters.get_page_info.papers
+        _this.field=data.field
+        _this.source=data.source
+        _this.org=data.org
+        _this.status=true
+        _this.time_start=data.time[0]
+        _this.time_end=data.time[1]
+        console.log(this.status)
       })
     },
     order_change(index){
@@ -137,7 +176,27 @@ export default {
       this.$store.commit("mod_search_param",param)
       console.log('修改page',this.$store.getters.get_search_param)
       this.update()
+    },
 
+  },
+  computed:{
+    n_page(){
+      return this.$store.getters.get_page_info.n_page
+    },
+    showPapers(){
+      return this.status
+    },
+    source_not_null(){
+      return this.source.length!==0
+    },
+    field_not_null(){
+      return this.field.length!==0
+    },
+    org_not_null(){
+      return this.org.length!==0
+    },
+    no_paper(){
+      return this.$store.getters.get_page_info.n_page===0
     }
   },
   watch:{
@@ -147,12 +206,14 @@ export default {
       }
     },
   },
-
-  mounted() {
-    console.log("准备渲染")
-    this.update()
-    // this.papers=this.$store.getters.get_page_info.papers
-    // this.n_page=this.$store.getters.get_page_info.n_page
+  created() {
+    this.papers=this.$store.getters.get_page_info.papers
+    this.field=this.$store.getters.get_page_info.field
+    this.source=this.$store.getters.get_page_info.source
+    this.org=this.$store.getters.get_page_info.org
+    this.time_start=this.$store.getters.get_page_info.time[0]
+    this.time_end=this.$store.getters.get_page_info.time[1]
+    this.status=true
   }
 
 }
@@ -187,5 +248,20 @@ export default {
   //left: vw(-120);
   top: vh(40);
 }
+.loading{
+  width: vw(700)
+}
+.not_found{
+  margin: vw(10);
+  padding: vh(10);
+  width: vw(800);
+  height: vh(800);
+}
 
+.headline_2_2 {
+  margin-left: vw(20);
+  font-size: vw(40);
+  font-weight: vw(16);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
 </style>

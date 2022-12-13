@@ -69,6 +69,11 @@ const routes = [
             component:()=>import("../views/SearchResult/SearchResultPage")
           },
           {
+            path: '/searching',
+            name: 'searching',
+            component:()=>import("../views/SearchResult/Searching")
+          },
+          {
             path: '/scholarShow/:scholarId',
             name: 'ScholarShow',
             component: () => import('../views/Scholar/ScholarShow.vue')

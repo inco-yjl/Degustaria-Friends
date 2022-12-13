@@ -4,15 +4,16 @@
       <v-card class="search_result_card">
         <v-list-item-title class="headline_2_2">{{paper.title}}</v-list-item-title>
         <v-list-item-subtitle class="subtitle_recommand_1_2">
-            {{text_process("第一作者："+paper.author[0])}}{{text_process(" | 来源："+text_process(paper.venue))}}
+            {{text_process("作者："+this.authors)}}
         </v-list-item-subtitle>
         <div class="recommand_book_1" v-if="this.mode==MODE_PAPER">
-          <span class="year_info">出版单位：{{text_process(paper.publisher)}}</span>
-          <span class="year_info">出版时间：{{text_process(paper.year)}}</span>
+          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>
+          <div class="year_info">出版时间：{{text_process(paper.year)}}</div>
+          <div class="year_info">来源:{{text_process(paper.venue)}}</div>
         </div>
         <div class="recommand_book_1" v-if="this.mode==MODE_PATENT">
-          <span class="year_info">机构：{{text_process(paper.publisher)}}</span>
-          <span class="year_info">应用时间：{{text_process(paper.apply_datetime)}}</span>
+          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>
+          <div class="year_info">申请时间：{{text_process(paper.apply_datetime)}}</div>
         </div>
 
         <v-list-item-action-text>
@@ -98,13 +99,18 @@ import {MODE_PAPER,MODE_PROJECT,MODE_PATENT,} from "@/views/SearchResult/SearchD
 export default {
   name:"SearchResult",
   props:{
+    index:{
+      type:Number,
+      default:0,
+    },
     paper:{
       type:Object,
       default:()=>{
         return {
           id:0,
           title:"架设东西方的桥梁——英国汉学家理雅各研究",
-          author:["岳峰","张伟"],
+          author_name:["岳峰","张伟"],
+          author_org:["org1"],
           venue:"史学理论研究",//来源
           year: 2022,
           keywords:["理雅各","传教士","翻译", "香港教育", "汉学"],
@@ -143,10 +149,10 @@ export default {
       dialog_show:false,
       MODE_PAPER,MODE_PROJECT,MODE_PATENT,
       snackbar:false,
+      // paper:{
+      //
+      // }
     }
-  },
-  mounted() {
-
   },
   computed:{
     download_img(){
@@ -157,12 +163,12 @@ export default {
     },
     context(){
       let ret="[1] "
-      for(let index=0; index< this.paper.author.length;index++){
-        ret+=this.paper.author[index]
+      for(let index=0; index< this.paper.author_name.length;index++){
+        ret+=this.paper.author_name[index]
         ret+="."
       }
       ret+=this.paper.title+"[J]."
-      ret+=this.paper.publisher+","+this.paper.year+"."
+      ret+=this.paper.author_org[0]+","+this.paper.year+"."
       ret+=this.paper.url[0]
       return ret
     },
@@ -170,7 +176,23 @@ export default {
       if(this.paper.abstract.length>300){
         return this.paper.abstract.substr(0,300)+"..."
       }
+      else if(typeof this.abstract!=String||this.paper.abstract.length<10){
+        return "暂无摘要"
+      }
       return this.paper.abstract.length
+    },
+    authors(){
+      if(this.paper.author_name===undefined||this.paper.author_name.length==0){
+        return "佚名"
+      }
+      let ret=""
+      for(let i=0;i<Math.min(3,this.paper.author_name.length);i++){
+        ret+=this.paper.author_name[i]
+        if(i!==Math.min(3,this.paper.author_name.length)-1){
+          ret+=", "
+        }
+      }
+      return ret
     }
   },
   methods: {
@@ -221,11 +243,9 @@ export default {
       // })
     }
   },
-  created() {
+  mounted() {
     this.update_collect()
-
-
-  }
+  },
 
 }
 </script>

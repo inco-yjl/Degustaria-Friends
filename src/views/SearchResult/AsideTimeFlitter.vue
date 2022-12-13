@@ -21,7 +21,6 @@
             light
             flat
             solo
-            @click="update()"
         ></v-select>
       </div>
     </v-col>
@@ -40,7 +39,6 @@
             light
             flat
             solo
-            @click="update()"
         >
         </v-select>
       </div>
@@ -76,6 +74,16 @@
 <script>
 export default {
   name: "AsideTimeFlitter",
+  props:{
+    time_start:{
+      type:Number,
+      default:1950
+    },
+    time_end:{
+      type:Number,
+      default: 2022
+    }
+  },
   data () {
     return {
       startTime:1970,
@@ -104,11 +112,28 @@ export default {
       this.update()
     }
   },
-  created() {
-    for(let i=2022;i>=1970;i--){
-      this.startTimes.push(i)
+  mounted() {
+    let page_info=this.$store.getters.get_page_info
+    this.startTime=page_info.time[0]
+    this.endTime=page_info.time[1]
+    for(let i=this.endTime;i>=this.startTime;i--){
       this.endTimes.push(i)
     }
+    for(let i=this.startTime;i<=this.endTime;i++){
+      this.startTimes.push(i)
+    }
+  },
+  watch:{
+    startTime(newVal,oldVal){
+      if(newVal!=oldVal){
+        this.update()
+      }
+    },
+    endTime(newVal,oldVal){
+      if(newVal!=oldVal){
+        this.update()
+      }
+    },
   }
 }
 </script>
