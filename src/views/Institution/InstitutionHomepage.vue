@@ -361,6 +361,7 @@ export default defineComponent({
       this.searchOrg();
     },
     ToScholar(item) {
+      console.log(item)
       this.$router.push({
         name: "ScholarShow",
         query: {
@@ -433,7 +434,7 @@ export default defineComponent({
               aScholar.icon =
                 "http://120.46.201.113:6001/api" + res.data[i].icon;
             }
-
+            aScholar.id = res.data[i].id;
             aScholar.article_num = "";
             aScholar.quote_num = res.data[i].citation;
             aScholar.interests = res.data[i].interests;
