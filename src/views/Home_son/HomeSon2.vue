@@ -395,223 +395,223 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .focus_1 {
-    margin-left: vw(110);
-    color: #232f3d;
-    margin-top: vh(20);
-  }
-  .focus_2 {
-    margin-left: vw(20);
-    color: #232f3d;
-    margin-top: vh(20);
-  }
-  .focus_2_2 {
-    color: #232f3d;
-    margin-top: vh(20);
-  }
-  .focus_3 {
-    margin-left: vw(20);
-    color: #232f3d;
-    margin-top: vh(20);
-  }
-  .home_focus_card_2 {
-    margin-left: vw(110);
-    margin-top: vh(40);
-    width: vw(1190);
-    padding-top: 10px;
-    padding-bottom: 0.5px;
-    padding-right: vw(20);
-  }
-  .headline_2 {
-    margin-left: vw(20);
-    font-size: vw(25);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-  }
-  .subtitle_recommand_1 {
-    margin-left: vw(20);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-  }
-  .author_rcm {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-  }
-  .subtitle_recommand_2 {
-    margin-left: vw(20);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-    color: #90A4AE;
-  }
-  .recommand_book {
-    color: #455A64;
-    margin-left: vw(20);
-    margin-top: vh(15);
-    margin-right: vw(20);
-    font-weight: bold;
-    font-family: "optima", sans-serif;
-  }
-  .recommand_book_2 {
-    color: #455A64;
-    margin-left: vw(20);
-    margin-top: vh(5);
-    margin-right: vw(20);
-    font-family: "optima", sans-serif;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-  }
-  .recommand_book_3 {
-    color: #455A64;
-    margin-left: vw(20);
-    margin-top: vh(5);
-    margin-right: vw(20);
-    font-family: "SourceHanSerifCN", sans-serif;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-  }
-  .quote_recommand_fa {
-    width: vw(1090);
-    margin-bottom: vh(10);
-    margin-top: vh(20);
-  }
-  .quote_recommand {
-    margin-left: vw(5);
-    margin-top: vh(17);
-    display: flex;
-    font-family: "optima", sans-serif;
-    font-weight: bolder;
-    font-size: vw(19);
-  }
-  .quote_recommand_0 {
-    margin-left: vw(20);
-    margin-top: vh(15);
-    display: flex;
-    font-family: "SourceHanSerifCN", sans-serif;
-    font-weight: bolder;
-    font-size: vw(19);
-    float: left;
-  }
-  .recommand_icon_fa {
-    display: flex;
-    margin-left: vw(1130);
-  }
-  .recommand_icon_2 {
-    width: vw(36);
-    margin-left: vw(20);
-    margin-bottom: vh(30);
-  }
-  .add_keyword_class {
-    color: white;
-    margin-left: vw(30);
-    margin-top: vh(25);
-  }
-  .add_keyword_class_2 {
-    color: white;
-    margin-left: vw(20);
-    margin-top: vh(25);
-  }
-  .display_box_1 {
-    background-color: rgba(255,255,255,0.97);
-    margin-bottom: vh(30);
-    width: vw(1250);
-    border-radius: vw(10);
-    padding: vw(20);
-  }
-  .display_botton_1 {
-    text-align: center;
-  }
-  .headline_display_1 {
-    font-weight: 550;
-    font-size: 1rem;
-    letter-spacing: 0.009375rem;
-    color: #232f3d;
-    margin-top: vh(10);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-  }
-  .headline_display_2 {
-    font-weight: 500;
-    font-size: 0.9rem;
-    letter-spacing: 0.008375rem;
-    color: #90A4AE;
-    margin-left: vw(10);
-    margin-top: vh(10);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-  }
-  .headline_display_3 {
-    font-weight: 550;
-    font-size: 1rem;
-    letter-spacing: 0.009375rem;
-    color: #232f3d;
-    margin-top: vh(70);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-  }
-  .headline_display_4 {
-    font-weight: 500;
-    font-size: 0.9rem;
-    letter-spacing: 0.008375rem;
-    color: #90A4AE;
-    margin-left: vw(10);
-    margin-top: vh(70);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-  }
-  .display_item_1 {
-    color: #232f3d;
-    display: flex;
-    margin-top: vh(20);
-  }
-  .display_item_2 {
-    background-color: #232f3d;
-    margin-right: vw(20);
-    padding: vw(10);
-    border-radius: vw(10);
-    font-family: "optima", sans-serif;
-    color: whitesmoke;
-  }
-  .display_item_3 {
-    color: #232f3d;
-    display: flex;
-  }
-  .display_item_4 {
-    background-color: #232f3d;
-    margin-right: vw(20);
-    padding: vw(10);
-    border-radius: vw(10);
-    box-shadow: 0 0 5px 1px #232f3d;
-    margin-bottom: vh(20);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-  }
-  .display_item_4:hover {
-    background-color: #37474F;
-    margin-right: vw(20);
-    color: white;
-    padding: vw(10);
-    border-radius: vw(10);
-    box-shadow: 0 0 5px 1px #37474F;
-    margin-bottom: vh(20);
-    font-family: "Source Han Sans CN Normal", sans-serif;
-  }
-  .add_key_focus_1 {
-    margin-top: vh(30);
-  }
-  .home_icon_5 {
-    width: vw(25);
-    height: vw(25);
-  }
-  .page_index_2 {
-    text-align: center;
-    margin-top: vh(10);
-  }
-  .recommand_icon_1 {
-    margin-top: vh(48);
-  }
-  .recommand_icon_2 {
-    margin-top: vh(49);
-    margin-left: vw(10);
-  }
+.focus_1 {
+  margin-left: vw(110);
+  color: #232f3d;
+  margin-top: vh(20);
+}
+.focus_2 {
+  margin-left: vw(20);
+  color: #232f3d;
+  margin-top: vh(20);
+}
+.focus_2_2 {
+  color: #232f3d;
+  margin-top: vh(20);
+}
+.focus_3 {
+  margin-left: vw(20);
+  color: #232f3d;
+  margin-top: vh(20);
+}
+.home_focus_card_2 {
+  margin-left: vw(110);
+  margin-top: vh(40);
+  width: vw(1190);
+  padding-top: 10px;
+  padding-bottom: 0.5px;
+  padding-right: vw(20);
+}
+.headline_2 {
+  margin-left: vw(20);
+  font-size: vw(25);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.subtitle_recommand_1 {
+  margin-left: vw(20);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.author_rcm {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+.subtitle_recommand_2 {
+  margin-left: vw(20);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+  color: #90A4AE;
+}
+.recommand_book {
+  color: #455A64;
+  margin-left: vw(20);
+  margin-top: vh(15);
+  margin-right: vw(20);
+  font-weight: bold;
+  font-family: "optima", sans-serif;
+}
+.recommand_book_2 {
+  color: #455A64;
+  margin-left: vw(20);
+  margin-top: vh(5);
+  margin-right: vw(20);
+  font-family: "optima", sans-serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+.recommand_book_3 {
+  color: #455A64;
+  margin-left: vw(20);
+  margin-top: vh(5);
+  margin-right: vw(20);
+  font-family: "SourceHanSerifCN", sans-serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+.quote_recommand_fa {
+  width: vw(1090);
+  margin-bottom: vh(10);
+  margin-top: vh(20);
+}
+.quote_recommand {
+  margin-left: vw(5);
+  margin-top: vh(17);
+  display: flex;
+  font-family: "optima", sans-serif;
+  font-weight: bolder;
+  font-size: vw(19);
+}
+.quote_recommand_0 {
+  margin-left: vw(20);
+  margin-top: vh(15);
+  display: flex;
+  font-family: "SourceHanSerifCN", sans-serif;
+  font-weight: bolder;
+  font-size: vw(19);
+  float: left;
+}
+.recommand_icon_fa {
+  display: flex;
+  margin-left: vw(1130);
+}
+.recommand_icon_2 {
+  width: vw(36);
+  margin-left: vw(20);
+  margin-bottom: vh(30);
+}
+.add_keyword_class {
+  color: white;
+  margin-left: vw(30);
+  margin-top: vh(25);
+}
+.add_keyword_class_2 {
+  color: white;
+  margin-left: vw(20);
+  margin-top: vh(25);
+}
+.display_box_1 {
+  background-color: rgba(255,255,255,0.97);
+  margin-bottom: vh(30);
+  width: vw(1250);
+  border-radius: vw(10);
+  padding: vw(20);
+}
+.display_botton_1 {
+  text-align: center;
+}
+.headline_display_1 {
+  font-weight: 550;
+  font-size: 1rem;
+  letter-spacing: 0.009375rem;
+  color: #232f3d;
+  margin-top: vh(10);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.headline_display_2 {
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.008375rem;
+  color: #90A4AE;
+  margin-left: vw(10);
+  margin-top: vh(10);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.headline_display_3 {
+  font-weight: 550;
+  font-size: 1rem;
+  letter-spacing: 0.009375rem;
+  color: #232f3d;
+  margin-top: vh(70);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.headline_display_4 {
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.008375rem;
+  color: #90A4AE;
+  margin-left: vw(10);
+  margin-top: vh(70);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.display_item_1 {
+  color: #232f3d;
+  display: flex;
+  margin-top: vh(20);
+}
+.display_item_2 {
+  background-color: #232f3d;
+  margin-right: vw(20);
+  padding: vw(10);
+  border-radius: vw(10);
+  font-family: "optima", sans-serif;
+  color: whitesmoke;
+}
+.display_item_3 {
+  color: #232f3d;
+  display: flex;
+}
+.display_item_4 {
+  background-color: #232f3d;
+  margin-right: vw(20);
+  padding: vw(10);
+  border-radius: vw(10);
+  box-shadow: 0 0 5px 1px #232f3d;
+  margin-bottom: vh(20);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.display_item_4:hover {
+  background-color: #37474F;
+  margin-right: vw(20);
+  color: white;
+  padding: vw(10);
+  border-radius: vw(10);
+  box-shadow: 0 0 5px 1px #37474F;
+  margin-bottom: vh(20);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.add_key_focus_1 {
+  margin-top: vh(30);
+}
+.home_icon_5 {
+  width: vw(25);
+  height: vw(25);
+}
+.page_index_2 {
+  text-align: center;
+  margin-top: vh(10);
+}
+.recommand_icon_1 {
+  margin-top: vh(48);
+}
+.recommand_icon_2 {
+  margin-top: vh(49);
+  margin-left: vw(10);
+}
 </style>
