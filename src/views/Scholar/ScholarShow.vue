@@ -1,5 +1,6 @@
 <template>
   <v-container id="page">
+    <div style="height: 30px"></div>
     <v-row no-gutters>
       <v-col id="pcard" cols="8">
         <div class="pcard ma-2 pa-1">
@@ -12,9 +13,44 @@
               </div>
             </v-col>
             <v-col class="ml-2">
-              <div class="name ma-1 text-h5">
-                <p class="text-left name">&nbsp;&nbsp;{{ Name }}</p>
-              </div>
+              <v-row>
+                <v-col cols="11">
+                  <div class="name ma-1 text-h5">
+                    <p class="text-left name">&nbsp;&nbsp;{{ Name }}</p>
+                  </div>
+                </v-col>
+                <v-col cols="1" v-if="!isMyPage && (scholarId != userId)">
+                  <v-btn
+                    class="mx-2"
+                    fab
+                    dark
+                    small
+                    color="primary"
+                    @click="subscribeScholar()"
+                  >
+                    <v-icon dark>
+                      mdi-account-plus
+                    </v-icon>
+                    <v-snackbar
+                      v-model="unlog"
+                      :timeout="2000"
+                      color="red accent-2"
+                    >
+                      用户未登录
+                      <template v-slot:action="{ attrs }">
+                        <v-btn
+                          color="blue"
+                          text
+                          v-bind="attrs"
+                          @click="snackbar = false"
+                        >
+                          Close
+                        </v-btn>
+                      </template>
+                    </v-snackbar>
+                  </v-btn>
+                </v-col>
+              </v-row>
               <div class="faculty ma-1 text-h6">
                 <p class="text-left faculty">{{ Faculty }}</p>
               </div>
@@ -56,7 +92,7 @@
     <v-row class="mx-12">
       <v-col cols="8">
         <v-card elevation="7">
-          <v-card-title class="text-left">论文共3篇</v-card-title>
+          <v-card-title class="text-left">论文共{{recommandPaper.length}}篇</v-card-title>
           <v-card-subtitle>
             <v-row dense>
               <v-col cols="12">
@@ -83,18 +119,18 @@
             </v-row>
           </v-card-subtitle>
           <v-card-text id="PaperList">
-            <div v-if="toggleThree === 0">
+            <div v-if="toggleThree == 0">
               <v-card
                 class="home_focus_card_2"
                 v-for="item in recommandPaper"
-                :key="item.id"
+                :key="item.index"
               >
-                <v-list-item-title class="headline_2">{{item.article_name}}</v-list-item-title>
-                <v-list-item-subtitle class="subtitle_recommand_1">{{item.author}}</v-list-item-subtitle>
-                <div class="recommand_book">{{item.book}}</div>
+                <v-list-item-title class="headline_2">{{item.title}}</v-list-item-title>
+                <v-list-item-subtitle class="subtitle_recommand_1">{{item.author_name}}</v-list-item-subtitle>
+                <div class="recommand_book">{{item.venue}}</div>
                 <div class="quote_recommand">
                   <div>
-                    <p class="font-weight-black">Number of citation：{{item.quote_num}}</p>
+                    <p class="font-weight-black">Number of citation：{{item.n_citation}}</p>
                   </div>
                 </div>
                 <div class="recommand_icon_fa">
@@ -102,25 +138,8 @@
                   <img src="@/assets/art_sc.png" class="recommand_icon_2" />
                 </div>
               </v-card>
-              <v-snackbar
-                v-model="showSnackBar"
-                :timeout="2000"
-                color="red accent-2"
-              >
-                论文列表加载失败
-                <template v-slot:action="{ attrs }">
-                  <v-btn
-                    color="blue"
-                    text
-                    v-bind="attrs"
-                    @click="snackbar = false"
-                  >
-                    Close
-                  </v-btn>
-                </template>
-              </v-snackbar>
             </div>
-            <div v-else-if="toggleThree === 1">
+            <div v-else-if="toggleThree == 1">
               <v-card
                 class="home_focus_card_2"
                 v-for="item in recommandPatent"
@@ -198,9 +217,13 @@ export default {
       page: 1,
       size: 10,
       scholarId: 0,
+      charId: "",
+      unlog: false,
       scholarName: "Azadeh Amin",
       intro: "",
+      userId: window.localStorage.getItem('user_id'),
       showEmail: true,
+      isMyPage: false,
       MainField: [
         {
           index: 1,
@@ -227,22 +250,7 @@ export default {
           title: "啦啦啦啦",
         },
       ],
-      recommandPaper: [
-        {
-          article_name: "Curvature-Adaptive Meta-Learning for Fast Adaptation to Manifold Data",
-          author: "Zhi Gao,Yuwei Wu,Mehrtash T Harandi,Yunde Jia",
-          book: "IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) （2022）",
-          quote_num: 0,
-          url: "",
-        },
-        {
-          article_name: "Variational Deep Image Restoration",
-          author: "Jae Woong Soh, Nam Ik Cho",
-          book: "Computer Science、CCF A",
-          quote_num: 0,
-          url: "",
-        }
-      ],
+      recommandPaper: [],
       recommandPatent: [
       {
           article_name: "Curvature-Adaptive Meta-Learning for Fast Adaptation to Manifold Data",
@@ -280,6 +288,7 @@ export default {
           this.Name = response.data.name1;
           this.Faculty = response.data.org;
           this.Email = response.data.e_mail;
+          this.charId = response.data.char_id;
           let iarr = response.data.interests.split(",");
           for(let i = 1; i <= 6; i++)
             this.MainField.push({
@@ -288,11 +297,32 @@ export default {
             })
           if (this.Email == null)
             this.showEmail = false;
+          this.loadScholarPapers()
         }
       )
       .catch(
         e => console.log(e)
       )
+    },
+    subscribeScholar() {
+      let user_name = window.localStorage.getItem('user_name')
+      if (user_name == 0 || user_name == null || user_name == "")
+        this.unlog = true
+      else
+        this.$axios({
+          method: "post",
+          url: "/subscribe_scholar",
+          data: qs.stringify({
+            username: user_name,
+            scholar_id: this.scholarId
+          })
+        })
+        .then(
+          res => console.log(res)
+        )
+        .catch(
+          e => console.log(e)
+        )
     },
     loadScholarIntro() {
       this.$axios({
@@ -309,48 +339,40 @@ export default {
         e => console.log(e)
       )
     },
-    loadScholarPapers(npage = 1) {
+    loadScholarPapers(npage = 0) {
       this.recommandPaper = [];
+      console.log(this.charId)
       this.$axios({
         method: "post",
-        url: "/get_p_number_of_scholar",
-        data: qs.stringify({
-          scholar_id: this.scholarId
-        })
-      })
-      .then(
-        response => {
-          this.PaginationLength = Math.ceil((this.toggleTwo === 0 ?
-            response.data.paper_number : response.data.paper_number_10) / 6
-          );
+        url: "/search",
+        data: {
+          "search_word": [this.charId],
+          "search_type": ["3"],
+          "search_logic": [],
+          "page": npage,
+          "size": 6,
+          "order_type": this.toggleOne + 1,
+          "order": this.toggleTwo
+        },
+        headers: {
+          "Content-Type": "application/json"
         }
-      )
-      .catch(e => console.log(e))
-      this.$axios({
-        method: "post",
-        url: "/search_paper",
-        data: qs.stringify({
-          search_word: [this.scholarId],
-          search_type: ["3"],
-          search_logic: [],
-          page: npage,
-          size: 6,
-          order_type: this.toggleOne + 1,
-          order: this.toggleTwo,
-        })
       })
       .then(
         response => {
           this.PaginationLength = response.data.n_page
-          let paperlist = response.data.papers
-          for (let x = 0; x < 6; x++)
-              this.recommandPaper.push({
-                article_name: paperlist[x].title,
-                author: this.to_string(paperlist[x].author),
-                book: paperlist[x].source,
-                quote_num: paperlist[x].citation,
-                url: paperlist[x].url,
-              });
+          let papers = response.data.papers
+          let len = Math.min(papers.length, 6)
+          for (let i = 0; i < len; i++) {
+            this.recommandPaper.push({
+              index: i,
+              title: papers[i].title,
+              author_name: this.to_string(papers[i].author_name),
+              n_citation: papers[i].n_citation,
+              venue: papers[i].venue
+            })
+          }
+          console.log(response.data.papers)
         }
       )
       .catch(
@@ -359,6 +381,7 @@ export default {
           console.log(error);
         }
       )
+      console.log(this.recommandPaper)
     },
     loadScholarPatent(npage = 1) {
       this.recommandPatent = [];
@@ -410,19 +433,20 @@ export default {
       )
     },
     to_string(strs) {
-      var retstr = "";
-      for (let str in strs) {
-        retstr += str;
+      let retstr = "";
+      let len = strs.length;
+      for (let i = 0; i < len; i++) {
+        retstr += strs[i];
         retstr += ",";
       }
-      return retstr;
+      return retstr.substring(0, retstr.length - 2);
     }
   },
   watch: {
     page: {
       handler(nval, oval) {
         console.log(oval + "->" + nval);
-        if (nval !== oval)
+        if (nval !== oval && this.charId != "")
           switch(this.toggleThree) {
               case '0':
                 loadScholarPapers(nval);
@@ -438,7 +462,7 @@ export default {
     toggleOne: {
       handler(nval, oval) {
         console.log(oval + "->" + nval)
-        if (nval !== oval)
+        if (nval !== oval && this.charId != "")
           switch(this.toggleThree) {
               case '0':
                 this.loadScholarPapers();
@@ -453,7 +477,7 @@ export default {
     },
     toggleTwo: {
       handler(nval, oval) {
-        if (nval !== oval)
+        if (nval !== oval && this.charId != "")
           switch(this.toggleThree) {
               case '0':
                 this.loadScholarPapers();
@@ -468,7 +492,7 @@ export default {
     },
     toggleThree: {
       handler(nval, oval) {
-        if (nval !== oval)
+        if (nval !== oval && this.charId != "")
           switch(nval) {
             case '0':
               console.log("change to paper")
@@ -488,22 +512,11 @@ export default {
     }
   },
   beforeMount() {
-    this.scholarId = parseInt(this.$route.params.scholar_id);
+    this.scholarId = parseInt(this.$route.query.id);
   },
   mounted() {
     this.loadScholarInfo();
     this.loadScholarIntro();
-    switch(this.toggleThree) {
-          case undefined:
-          case 0:
-            this.loadScholarPapers();
-            break;
-          case 1:
-            this.loadScholarPatent();
-            break;
-          case 2:
-            break;
-        }
   },
   components: { ScholarRelationVue },
 };

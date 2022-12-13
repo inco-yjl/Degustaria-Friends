@@ -31,7 +31,7 @@
     "webpack": "^5.74.0"
   },
   "devDependencies": {
-    "@mdi/font": "^7.0.96",
+    "@mdi/font": "^7.1.96",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",

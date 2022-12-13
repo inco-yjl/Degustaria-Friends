@@ -71,23 +71,23 @@
             symbolSize: (value, params) => {
               switch (params.data.category) {
                 case 0:
-                  return 30;
+                  return 21;
                 case 1:
                   return 15;
                 case 2:
-                  return 20;
+                  return 17;
                 case 3:
-                  return 25;
+                  return 19;
                 case 4:
-                  return 30;
+                  return 24;
                 case 5:
-                  return 35;
+                  return 25;
                 case 6:
-                  return 40;
+                  return 26;
                 case 7:
-                  return 10;
+                  return 20;
                 case 8:
-                  return 45;
+                  return 18;
               }
             },
             roam: true,
