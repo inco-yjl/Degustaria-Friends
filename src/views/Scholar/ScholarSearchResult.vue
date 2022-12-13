@@ -70,13 +70,18 @@
           </div>
         </div>
       </v-card>
+      <v-pagination
+      class="pagination"
+      v-model="scholarPage"
+      :total-visible="7"
+      :length="scholarPageCount"
+    ></v-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import qs from "qs";
 export default {
   data() {
     var input = this.$route.query.searchWord;
@@ -88,7 +93,39 @@ export default {
     };
   },
   methods: {
-    searchScholar() {},
+    searchScholar() {
+        if (!this.singleInput || !this.singleInput.length > 0) {
+        return;
+      }
+      this.scholarPage = 1
+      this.scholarPageCount = 1;
+      this.searchResult();
+      this.$router.push({
+        name: "scholarResult",
+        query: {
+          searchWord: this.singleInput,
+        },
+      });
+    },
+    searchResult() {
+        this.$axios({
+        method: "post",
+        url: "/search_scholar",
+        data: qs.stringify({
+          search_word: this.singleInput,
+          page: this.scholarPage,
+          size: 10,
+        }),
+      })
+        .then((res) => {
+          console.log(res.data);
+          this.scholarPageCount = res.data.amount;
+          this.result = res.data.list;
+        })
+        .catch((err) => {
+          console.log(err.errno);
+        });
+    }
   },
 };
 </script>
