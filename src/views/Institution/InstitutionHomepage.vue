@@ -3,11 +3,11 @@
         <div class="page-top">
             <div class="page-top-info">
                 <div class="title1">{{ institutionName }}</div>
-                <div v-if="wiki !== null" class="title3">
+                <div v-if="wiki !== null" class="title3" @click="clkWiki">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -6 24 22" width="20" fill="currentColor"><path d="M19.857.021H15.875V.708h.398c.311 0 .592.161.751.431a.88.88 0 0 1 .016.872l-4.283 7.93-1.95-4.69 1.836-3.402A2.165 2.165 0 0 1 14.548.708h.217V.02h-4.112V.708h.398c.311 0 .592.161.75.431a.88.88 0 0 1 .017.872l-1.333 2.467-1.188-2.856a.654.654 0 0 1 .059-.62A.642.642 0 0 1 9.9.708h.435V.02H5.467V.708h.194c.909 0 1.723.546 2.074 1.391L9.49 6.32 7.535 9.942l-3.46-8.32a.654.654 0 0 1 .059-.62.642.642 0 0 1 .544-.294H5.276V.02H0V.708h.439c.908 0 1.723.546 2.074 1.391l3.988 9.591a.446.446 0 0 0 .804.042l.52-.964 1.986-3.676 1.912 4.598a.446.446 0 0 0 .804.041l.52-.963 4.819-8.92A2.165 2.165 0 0 1 19.77.709h.217V.02h-.13z"></path></svg>
                      {{ wiki }} 
                 </div>
-                <div v-if="web !== null" class="title3">
+                <div v-if="web !== null" class="title3" @click="clkWeb">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 22" width="20" fill="currentColor"><path d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0 2C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10z"></path><path d="M10 18c.448 0 1.119-.568 1.747-1.823C12.532 14.607 13 12.392 13 10c0-2.392-.468-4.607-1.253-6.177C11.119 2.568 10.447 2 10 2c-.448 0-1.119.568-1.747 1.823C7.468 5.393 7 7.608 7 10c0 2.392.468 4.607 1.253 6.177C8.881 17.432 9.553 18 10 18zm0 2c-2.761 0-5-4.477-5-10S7.239 0 10 0s5 4.477 5 10-2.239 10-5 10z"></path><path d="M2 12h16v2H2v-2zm0-6h16v2H2V6z"></path></svg>
                      {{ web }} 
                 </div>
@@ -52,7 +52,7 @@
                 <div v-if="item.domains !== null" class="focus_research_area" style="display: flex">
                 研究领域：
                     <div v-for="domain in item.domains" :key="domain">
-                        <div class="focus_research_area_item">domain</div>
+                        <div class="focus_research_area_item">{{ domain }}</div>
                     </div>
                 </div>
             </v-card>
@@ -63,14 +63,15 @@
 import {defineComponent, reactive, ref} from 'vue';
 import * as echarts from 'echarts';
 import qs from "qs";
+import router from '@/router';
 export default defineComponent({
     data() {
         return {
-            institutionName: "Accident Research Centre",
-            institutionId: -7,
-            web: "IEEE Computer Graphics and Applications (2021)",
-            wiki: "IEEE Computer Graphics and Applications (2021)",
-            infoDetail: "",
+            institutionName: "",
+            institutionId: 192096,
+            web: null,
+            wiki: null,
+            infoDetail: null,
             scholars: [],
             focus_people: [
                 // {
@@ -115,7 +116,6 @@ export default defineComponent({
     methods: {
         initInfo() {
             this.searchOrg();
-            this.getScholarsByOrg();
             // this.getPAmountByOrg();
             // this.getMagazinesByOrg();
             // this.getPapersByOrg();
@@ -126,35 +126,45 @@ export default defineComponent({
             // console.log("searchOrg");
             this.$axios({
                 method: "post",
-                url: "/search_org",
+                url: "/get_org",
                 data: qs.stringify({
-                    search_word: this.institutionName,
-                    page: 1,
-                    size: 1,
+                    org_id: this.institutionId
                 }),
             })
             .then((res) => {
                 console.log(res);
-                this.institutionId = res.data[0].id;
-                this.institutionLocation = res.data[0].country;
-                if ( res.data[0].introduction === "null" ) {
-                    this.infoDetail = null;
+                this.institutionName = res.data.name;
+                this.institutionId = res.data.id;
+                // if ( res.data[0].introduction === "null" ) {
+                //     this.infoDetail = null;
+                // } else {
+                //     this.infoDetail = res.data[0].introduction;
+                // }
+                if ( res.data.wikipage === "null" ) {
+                    this.wiki = null;
                 } else {
-                    this.infoDetail = res.data[0].introduction;
+                    this.wiki = res.data.wikipage;
                 }
+                if ( res.data.url === "null" ) {
+                    this.web = null;
+                } else {
+                    this.web = res.data.url;
+                }
+
+                this.getScholarsByOrg(this.institutionName);
                 console.log("searchOrg");
             })
             .catch((err) => {
                 console.error(err);
             });
         },
-        getScholarsByOrg() {
+        getScholarsByOrg(name) {
             // console.log("getScholarsByOrg");
             this.$axios({
                 method: "post",
                 url: "/get_scholars_by_org",
                 data: qs.stringify({
-                    name: this.institutionName,
+                    name: name,
                     page: 1,
                     size: 100,
                 }),
@@ -162,7 +172,7 @@ export default defineComponent({
             .then((res) => {
                 console.log(res);
                 this.focus_people = [];
-                for (var i=0; i<res.data.length; i++) {
+                for (var i=0; i<res.data.length ; i++) {
                     var aScholar = {};
                     aScholar.author_name = res.data[i].name1;
                     aScholar.h_index = res.data[i].h_index;
@@ -175,7 +185,11 @@ export default defineComponent({
                     } else {
                         var strList = res.data[i].interests.split(",");
                         // console.log(strList)
-                        aScholar.domains = strList;
+                        aScholar.domains = [];
+                        for (var j=0; j<strList.length && j<5; j++) {
+                            aScholar.domains[j] = strList[j];
+                        }
+                        // aScholar.domains = strList;
                     }
 
                     this.focus_people.push(aScholar);
@@ -296,6 +310,15 @@ export default defineComponent({
                 console.error(err);
             });
         },
+
+        clkWiki() {
+            console.log(this.wiki)
+            window.open(this.wiki,"_blank");
+        },
+        clkWeb() {
+            console.log(this.web)
+            window.open(this.web,"_blank");
+        },
     }
 });
 </script>
@@ -412,6 +435,7 @@ export default defineComponent({
         // height:vh(2000);//改成自适应的
         //绝对，为了使顶部内容正常显示，不被search-bar遮挡
         width:vw(1720);
+        margin-bottom: vw(100);
     }
     .bottom-left {
         // border: 3px solid #89e91c;
@@ -485,6 +509,7 @@ export default defineComponent({
     .title3 {
         font-size: 20px;
         color: #646262;
+        cursor: pointer;
     }
     .text1 {
         vertical-align: bottom;
