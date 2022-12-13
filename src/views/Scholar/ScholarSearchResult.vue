@@ -60,18 +60,83 @@
         <div class="focus_research_area">
           <div class="research-area-title">研究领域：</div>
           <div class="search-item">
-          <div class="focus_research_area_item" v-if="item.interests != 'null'">
-            {{ item.interests }}
+            <div
+              class="focus_research_area_item"
+              v-if="item.interests != 'null'"
+            >
+              {{ item.interests }}
+            </div>
+            <div
+              class="focus_research_area_item_2"
+              v-if="item.interests == 'null'"
+            >
+              无
+            </div>
           </div>
-          <div
-            class="focus_research_area_item_2"
-            v-if="item.interests == 'null'"
-          >
-            无
-          </div>
-        </div>
         </div>
       </v-card>
+      <v-sheet class="pa-3" v-if="loaded === 0">
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="1200"
+            height="75"
+            type="list-item-avatar-three-line"
+          ></v-skeleton-loader>
+        </v-sheet>
       <v-pagination
         class="pagination"
         v-model="scholarPage"
@@ -93,6 +158,7 @@ export default {
       scholarPage: ref(1),
       scholarPageCount: ref(1),
       result: [],
+      loaded: ref(0)
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -107,12 +173,12 @@ export default {
   },
   methods: {
     ToScholar(item) {
-        this.$router.push({
-            name: 'ScholarShow',
-            query: {
-                id: item.id
-            }
-        })
+      this.$router.push({
+        name: "ScholarShow",
+        query: {
+          id: item.id,
+        },
+      });
     },
     searchScholar() {
       if (!this.singleInput || !this.singleInput.length > 0) {
@@ -129,6 +195,7 @@ export default {
       });
     },
     searchResult() {
+      this.loaded = 0;
       this.$axios({
         method: "post",
         url: "/search_scholar",
@@ -140,6 +207,7 @@ export default {
       })
         .then((res) => {
           console.log(res.data);
+          this.loaded = 1;
           this.scholarPageCount = res.data.amount;
           this.result = res.data.list;
         })
@@ -191,6 +259,7 @@ export default {
 .result-list {
   margin-top: vh(20);
   margin-left: vw(500);
+  padding-bottom: vh(50);
   width: vw(900);
 }
 .search-card {
@@ -230,8 +299,8 @@ export default {
   font-size: vw(18);
   margin-top: vh(20);
 }
-.search-item{
-    width: vw(700);
+.search-item {
+  width: vw(700);
 }
 .focus_research_area_item {
   margin-right: vw(10);
@@ -286,6 +355,15 @@ export default {
 }
 .page_index_1 {
   text-align: center;
+  margin-top: vh(10);
+}
+.pa-3 {
+  margin-left: vw(0.5);
+  width: vw(900);
+  height: vw(990);
+  // border: 1px solid #232f3d;
+}
+.mx-auto {
   margin-top: vh(10);
 }
 </style>
