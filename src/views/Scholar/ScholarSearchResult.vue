@@ -57,8 +57,9 @@
           </v-list-item-content>
         </v-list-item>
 
-        <div class="focus_research_area" style="display: flex">
-          研究领域：
+        <div class="focus_research_area">
+          <div class="research-area-title">研究领域：</div>
+          <div class="search-item">
           <div class="focus_research_area_item" v-if="item.interests != 'null'">
             {{ item.interests }}
           </div>
@@ -69,20 +70,21 @@
             无
           </div>
         </div>
+        </div>
       </v-card>
       <v-pagination
-      class="pagination"
-      v-model="scholarPage"
-      :total-visible="7"
-      :length="scholarPageCount"
-    ></v-pagination>
+        class="pagination"
+        v-model="scholarPage"
+        :total-visible="7"
+        :length="scholarPageCount"
+      ></v-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import qs from 'qs';
+import qs from "qs";
 export default {
   data() {
     var input = this.$route.query.searchWord;
@@ -104,11 +106,19 @@ export default {
     },
   },
   methods: {
+    ToScholar(item) {
+        this.$router.push({
+            name: 'ScholarShow',
+            query: {
+                id: item.id
+            }
+        })
+    },
     searchScholar() {
-        if (!this.singleInput || !this.singleInput.length > 0) {
+      if (!this.singleInput || !this.singleInput.length > 0) {
         return;
       }
-      this.scholarPage = 1
+      this.scholarPage = 1;
       this.scholarPageCount = 1;
       this.searchResult();
       this.$router.push({
@@ -119,7 +129,7 @@ export default {
       });
     },
     searchResult() {
-        this.$axios({
+      this.$axios({
         method: "post",
         url: "/search_scholar",
         data: qs.stringify({
@@ -136,7 +146,7 @@ export default {
         .catch((err) => {
           console.log(err.errno);
         });
-    }
+    },
   },
 };
 </script>
@@ -208,18 +218,25 @@ export default {
   color: #263238;
   font-family: "Source Han Sans CN Normal", sans-serif;
 }
+.research-area-title {
+  width: vw(100);
+}
 .focus_research_area {
+  display: flex;
+  flex-wrap: wrap;
   margin-left: vw(20);
   font-family: "SourceHanSerifCN", sans-serif;
   font-weight: 500;
   font-size: vw(18);
   margin-top: vh(20);
 }
+.search-item{
+    width: vw(700);
+}
 .focus_research_area_item {
   margin-right: vw(10);
   margin-left: vw(5);
   font-family: "optima", sans-serif;
-  width: vw(1050);
   margin-top: vh(1);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -231,7 +248,6 @@ export default {
   margin-right: vw(10);
   margin-left: vw(5);
   font-family: "SourceHanSerifCN", sans-serif;
-  width: vw(1050);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   overflow: hidden;
@@ -262,7 +278,7 @@ export default {
 }
 .icon-div {
   position: relative;
-  float:left;
+  float: left;
   width: 100%;
   height: 100%;
   justify-content: center;
