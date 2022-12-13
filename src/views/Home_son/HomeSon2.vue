@@ -99,6 +99,28 @@
       </div>
     </div>
     <div>
+      <v-card class="keywords_tab">
+        <v-tabs
+          background-color="#7b828b"
+          center-active
+          dark
+          class="key_tab_item"
+        >
+          <v-tab
+            @click="home_get_user_list_2()"
+          >
+          综合</v-tab>
+          <v-tab
+            v-for="item in keyword"
+            :key="item.id"
+            @click="search_one_key(item)"
+          >
+          {{item}}
+          </v-tab>
+        </v-tabs>
+      </v-card>
+    </div>
+    <div>
       <v-card
         class="home_focus_card_2"
         v-for="item in recommand_content"
@@ -313,6 +335,33 @@ export default {
         });
       }
     },
+    search_one_key(item) {
+      console.log("item", item);
+      this.$axios({
+        method: "post",
+        url: "search",
+        data: {
+          search_word: [item],
+          search_type: ["0"],
+          search_logic: [],
+          page: this.page,
+          size: 5,
+          order_type: 2,
+          order: 0,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          console.log("rcm_content", res.data);
+          this.page_all = res.data.n_page > 100 ? 100 : res.data.n_page;
+          this.recommand_content = res.data.papers;
+        })
+        .catch((err) => {
+          console.log("err5", err.errno);
+        });
+    },
     add_subscribe_keyword() {
       this.keyword.push(this.input_keyword);
       console.log("this.input_keyword", this.input_keyword);
@@ -414,6 +463,14 @@ export default {
   padding-bottom: 0.5px;
   padding-right: vw(20);
 }
+.keywords_tab {
+  margin-left: vw(110);
+  margin-top: vh(30);
+  width: vw(1190);
+}
+.key_tab_item {
+  font-family: Source Han Sans CN Light;
+}
 .headline_2 {
   margin-left: vw(20);
   font-size: vw(25);
@@ -494,7 +551,7 @@ export default {
   display: flex;
   font-family: "SourceHanSerifCN", sans-serif;
   font-size: vw(17);
-  margin-top: vh(48);
+  margin-top: vh(50);
 }
 .recommand_icon_fa {
   display: flex;
@@ -503,7 +560,7 @@ export default {
 .recommand_icon_2 {
   width: vw(36);
   margin-left: vw(40);
-  margin-bottom: vh(30);
+  margin-bottom: vh(32);
 }
 .recommand_icon_3 {
   margin-top: vh(17);
