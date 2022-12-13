@@ -1,56 +1,60 @@
 <template>
   <v-container class="paper-detail-page">
     <v-row>
-      <v-col cols="3" class="toc">
-        <p class="text-center text-h5 font-weight-bold toc-title">文章目录</p>
-        <pre class="toc-content">
-            {{ toc_content }}
-        </pre>
+      <v-col cols="2" class="toc">
       </v-col>
-      <v-col cols="9">
-        <p class="text-left font-weight-bold paper-title">{{ paper_title }}</p>
-        <p class="text-left paper-data">{{ paper_data }}</p>
+      <v-col cols="10">
+        <p class="text-left font-weight-bold paper-title">{{ paper.title }}</p>
+        <p class="text-left paper-data">{{ '来自 ' + paper.venue + '  |  引用量：' + paper.n_citation }}</p>
         <v-container class="paper-info">
           <v-row class="paper-info-row">
             <v-col cols="2" class="paper-info-title">作者：</v-col>
-            <v-col cols="10" class="paper-info-content" style="color: #185ABD">{{ author }}</v-col>
+            <v-col cols="10" class="paper-info-content" style="color: #185ABD">{{
+                paper.author_name.join(', ')
+              }}
+            </v-col>
           </v-row>
           <v-row class="paper-info-row">
             <v-col cols="2" class="paper-info-title">摘要：</v-col>
-            <v-col cols="10" class="paper-info-content">{{ abstract }}</v-col>
+            <v-col cols="10" class="paper-info-content">{{
+                paper.abstract === 'null' ? '暂无摘要信息' : paper.abstract
+              }}
+            </v-col>
           </v-row>
           <v-row class="paper-info-row">
             <v-col cols="2" class="paper-info-title">关键词：</v-col>
-            <v-col cols="10" class="paper-info-content" style="color: #185ABD">{{ keywords }}</v-col>
+            <v-col cols="10" class="paper-info-content" style="color: #185ABD">
+              {{ paper.keywords.length === 0 ? '暂无关键词信息' : paper.keywords.join(' ') }}
+            </v-col>
           </v-row>
           <v-row class="paper-info-row">
             <v-col cols="2" class="paper-info-title">年份：</v-col>
-            <v-col cols="10" class="paper-info-content">{{ year }}</v-col>
+            <v-col cols="10" class="paper-info-content">{{ paper.year }}</v-col>
           </v-row>
           <v-row class="paper-info-row">
             <v-col cols="2" class="paper-info-title">DOI：</v-col>
-            <v-col cols="10" class="paper-info-content">{{ doi }}</v-col>
+            <v-col cols="10" class="paper-info-content">{{ paper.doi === 'null' ? '暂无DOI信息' : paper.doi }}</v-col>
           </v-row>
         </v-container>
         <v-row class="paper-button-row">
           <v-col cols="2">
-            <div class="paper-button">收藏</div>
+            <button class="paper-button" @click="subscribe_paper">{{ this.subscribed === true ? '已收藏' : '收藏' }}</button>
           </v-col>
           <v-col cols="2">
-            <div class="paper-button">引用</div>
+            <button class="paper-button" @click="generate_reference">引用</button>
           </v-col>
           <v-col cols="2">
-            <div class="paper-button">报错</div>
+            <button class="paper-button" @click="report_error">报错</button>
           </v-col>
           <v-col cols="2">
-            <div class="paper-button">分享</div>
+            <button class="paper-button" @click="share_paper">分享</button>
           </v-col>
         </v-row>
         <div class="download-area">
           <div class="download-buttons">
-            <span class="download-button" style="background-color: #FF9C59">HTML阅读</span>
-            <span class="download-button" style="background-color: #3A85C6">CAJ下载</span>
-            <span class="download-button" style="background-color: #28B611">PDF下载</span>
+            <span class="download-button" style="background-color: #FF9C59;cursor: pointer" @click="redirect_html">HTML阅读</span>
+            <span class="download-button" style="background-color: #28B611;cursor: pointer"
+                  @click="redirect_pdf">PDF下载</span>
           </div>
         </div>
         <v-row class="divide-bar">
@@ -65,62 +69,39 @@
         <div class="recommendations">
           <v-tabs v-model="tab" fixed-tabs background-color="rgb(240,240,240)">
             <v-tab>相似文献</v-tab>
-            <v-tab>参考文献</v-tab>
-            <v-tab>引证文献</v-tab>
             <v-tab>相关学术成果</v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item>
               <div class="recommendation-tab">
                 <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
-                  <p class="similar-paper-title">{{ paper.title }}</p>
-                  <p class="similar-paper-abstract">{{ paper.abstract }}</p>
-                  <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
+                  <p class="similar-paper-title" @click="redirect_paper(paper.id)">{{ paper.title }}</p>
+                  <p class="similar-paper-abstract">{{ paper.abstract === 'null' ? '暂无摘要信息' : paper.abstract }}</p>
+                  <p class="similar-paper-author-and-source">
+                    {{
+                      (paper.author_name.length === 0 ? '暂无作者信息' : paper.author_name.join(', ') + ' - ') + (paper.venue === null ? '暂无来源信息' : paper.venue)
+                    }}</p>
                   <p class="similar-paper-citations-and-year">
-                    {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
+                    {{ '被引量：' + paper.n_citation + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
                   <v-divider class="recommendation-tab-item-divider"></v-divider>
                 </div>
               </div>
             </v-tab-item>
             <v-tab-item>
               <div class="recommendation-tab">
-                <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
-                  <p class="similar-paper-title">{{ paper.title }}</p>
-                  <p class="similar-paper-abstract">{{ paper.abstract }}</p>
-                  <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
+                <div class="recommendation-tab-item" v-for="paper in related_papers" :key="paper.id">
+                  <p class="similar-paper-title" @click="redirect_paper(paper.id)">{{ paper.title }}</p>
+                  <p class="similar-paper-abstract">{{ paper.abstract === 'null' ? '暂无摘要信息' : paper.abstract }}</p>
+                  <p class="similar-paper-author-and-source">
+                    {{
+                      (paper.author_name.length === 0 ? '暂无作者信息' : paper.author_name.join(', ') + ' - ') + (paper.venue === null ? '暂无来源信息' : paper.venue)
+                    }}</p>
                   <p class="similar-paper-citations-and-year">
-                    {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
+                    {{ '被引量：' + paper.n_citation + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
                   <v-divider class="recommendation-tab-item-divider"></v-divider>
                 </div>
               </div>
             </v-tab-item>
-            <v-tab-item>
-              <div class="recommendation-tab">
-                <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
-                  <p class="similar-paper-title">{{ paper.title }}</p>
-                  <p class="similar-paper-abstract">{{ paper.abstract }}</p>
-                  <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
-                  <p class="similar-paper-citations-and-year">
-                    {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
-                  <v-divider class="recommendation-tab-item-divider"></v-divider>
-                </div>
-              </div>
-            </v-tab-item>
-            <v-tab-item>
-              <div class="recommendation-tab">
-                <div class="recommendation-tab-item" v-for="paper in similar_papers" :key="paper.id">
-                  <p class="similar-paper-title">{{ paper.title }}</p>
-                  <p class="similar-paper-abstract">{{ paper.abstract }}</p>
-                  <p class="similar-paper-author-and-source">{{ paper.author + ' - ' + paper.source }}</p>
-                  <p class="similar-paper-citations-and-year">
-                    {{ '被引量：' + paper.citations + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '发表：' + paper.year }}</p>
-                  <v-divider class="recommendation-tab-item-divider"></v-divider>
-                </div>
-              </div>
-            </v-tab-item>
-            <v-tab-item>456</v-tab-item>
-            <v-tab-item>789</v-tab-item>
-            <v-tab-item>101112</v-tab-item>
           </v-tabs-items>
         </div>
       </v-col>
@@ -129,65 +110,221 @@
 </template>
 
 <script>
+import {ref} from 'vue'
+
 export default {
   name: 'PaperDetail',
   data() {
     return {
-      toc_content: `
-0 引言
-1 士豆、玉米的品种选择
-2 把士豆切成块状，并进行催芽
-3 适期播种，合理密植与套种
-  3.1 春士豆的种植
-  3.2 夏士豆的种植
-4 科学管理
-5 关键技术
-  5.1 种植地块的选择
-  5.2 种植士豆时要覆盖地膜
-  5.3 士豆打塘播种
-  5.4 玉米双行单株定向种植
-6 玉米套士豆种植时的注意事项
-7 结语
-`,
-      paper_title: '优势的重塑与跨越──乌盟"土豆立盟"战略实施纪实',
-      paper_data: '来自 维普期刊专业版  |  下载量：20  | 引用量：66',
-      author: '张三',
-      abstract: '1955年,针对乌盟地区"十年九旱,年年春旱,无霜期短"的自然条件,乌盟盟委,行署积极调整优化产业结构,提出了"土豆立盟"的发展思路.经过几年的实践.乌盟的土豆产业化迈出了较大的步伐,目前,全盟土豆种植面积达到500万亩,占全国土豆总播面积的1/10.土豆总产达到80亿斤,占全国土豆总产量的8.7%.可出售的商品薯达到60亿斤以上,商品率达到70%.农民从直接出售及加工土豆中,人均增收623元,占全部收入的40%,土豆,这一自然界带给人类的可食性植物,在乌盟对稳粮增收,加快脱贫致富步伐,起到了积极的支柱作用.(一)当我们回眸马铃薯产业化发展给乌盟人带来的实惠时,人们不会丢弃乌盟的过去.仿佛就在',
-      keywords: '战略实施 土豆 乌盟 产业化 种植土 发展思路 种植面积 脱毒种薯 脱贫致富 红格尔图',
-      year: '2022',
-      doi: '10.3969/j.issn.1000-1239.2022.01.001',
-      tab: null,
-      similar_papers: [
-        {
-          id: 1,
-          title: '跨越发展奔小康-—达茂联合旗实施"三集中"战略纪实',
-          abstract: '＜正＞落后旗县如何使经济发展驶入快车道,农牧民收入大提高?达茂旗的实践证明,有了超常规发展的思路,才会有跨越式发展的出路。2002年,达茂旗全社会固定资产投资…',
-          author: '张滨艳',
-          source: '《实践(思想理论版)》',
-          citations: 0,
-          year: 2003
-        },
-        {
-          id: 2,
-          title: '积极实施"六化"战略全力推进跨越发展——府谷县经济社会发展纪实',
-          abstract: '近年来,府谷县紧紧国绕打造国内一流的煤电化载能工业基地的目标,立足资源优势,坚持科学发展,大力实施新型工业化,农业产业化城乡一体化,民企集团化;环境大优化,民生优…',
-          author: '刘玲',
-          source: '《新西部(新闻版)》',
-          citations: 0,
-          year: 2010
-        },
-        {
-          id: 3,
-          title: '跨越 突破 搏击 -- 农二师实施大调整大转变战略纪实',
-          abstract: '新年伊始,记者来到农二师采访,深深地感受到这里在经济结构战略性大调整、发展方式战略性大转变过程中所展现出的勃勃生机,新的希望正在这里冉冉升腾。“要立足农业内涵…',
-          author: '高利，栗卫亚',
-          source: '《当代兵团》',
-          citations: 0,
-          year: 2010
-        }
-      ]
+      paper: ref(null),
+      tab: ref(null),
+      similar_papers: ref(null),
+      related_papers: ref(null),
+      subscribed: ref(false),
     }
-  }
+  },
+  methods: {
+    generate_reference() {
+      let reference = this.paper.author_name.join(', ') + '. ' + this.paper.title + '. ' + this.paper.venue + '. ' + this.paper.year + '.'
+      navigator.clipboard.writeText(reference)
+      window.alert('引用信息已复制到剪贴板')
+    },
+    report_error() {
+      window.alert('感谢您的反馈，我们会尽快处理')
+    },
+    share_paper() {
+      let currentUrl = window.location.href
+      navigator.clipboard.writeText(currentUrl)
+      window.alert('分享链接已复制到剪贴板')
+    },
+    redirect_paper(id) {
+      console.log(id)
+      this.get_paper_info(id)
+    },
+    redirect_html() {
+      if (this.paper.url === null) {
+        window.alert('暂时无法提供HTML阅读')
+      } else {
+        window.open(this.paper.url)
+      }
+    },
+    redirect_pdf() {
+      if (this.paper.url === null) {
+        window.alert('暂时无法提供PDF下载')
+      } else {
+        window.open(this.paper.url) // TODO: 下载pdf的接口（get_paper_file_by_id）好像不能用，只好用跳转paper.url替代
+      }
+    },
+    subscribe_paper: function () {
+      // let user_id = window.localStorage.getItem('user_id')
+      // if (user_id === null) {
+      //   window.alert('请先登录')
+      // } 
+      let user_id = 7 // TODO: 本地测试用，上线时需要改成上面被注释掉的代码
+      this.$axios({
+        method: 'post',
+        url: '/subscribe_paper',
+        data: {
+          user_id: user_id,
+          paper_id: this.paper.id
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        if (res.data.status === '成功收藏') {
+          this.subscribed = true
+          window.alert('已成功收藏')
+        } else {
+          this.subscribed = false
+          window.alert('已取消收藏')
+        }
+      })
+    },
+    check_subscribe: function () { // TODO: 由于后端没有提供检查是否收藏成功的接口，因此连续调用两次subscribe_paper接口，如果第二次返回的是'已收藏'，则说明收藏成功
+      // let user_id = window.localStorage.getItem('user_id')
+      // if (user_id === null) {
+      //   return
+      // }
+      let user_id = 7 // TODO: 本地测试用，上线时需要改成上面被注释掉的代码
+      this.$axios({
+        method: 'post',
+        url: '/subscribe_paper',
+        data: {
+          user_id: user_id,
+          paper_id: this.paper.id
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        this.$axios({
+          method: 'post',
+          url: '/subscribe_paper',
+          data: {
+            user_id: user_id,
+            paper_id: this.paper.id
+          }, headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(res => {
+          this.subscribed = res.data.status === '成功收藏'
+        })
+      })
+    },
+    get_paper_info: function (id) {
+      this.$axios({
+        method: 'get',
+        url: '/paper_info',
+        params: {
+          id: id
+        }
+      }).then(response => {
+        this.paper = response.data
+        this.check_subscribe()
+        this.get_similar_papers() // TODO: 在测试的时候，获取相似文献和相关文献的接口都存在比较严重的性能问题，导致页面刷新不及时，目前还没找到好的解决方法
+        this.get_related_papers()
+      })
+    },
+    get_similar_papers: function () { // 部分文献没有关键词，对于这些文献，将其标题拆分后作为搜索条件检索。下面的相关学术成果逻辑类似。
+      if (this.paper.keywords.length === 0) {
+        this.$axios({
+          method: 'post',
+          url: '/search',
+          data: {
+            search_word: this.paper.title.split(' '),
+            search_type: Array(this.paper.title.split(' ').length).fill().map(v => '2'),
+            page: 0,
+            size: 3,
+            search_logic: Array(this.paper.title.split(' ').length - 1).fill().map(v => '1'),
+            order_type: 0,
+            order: 0
+          },
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }).then(response => {
+          this.similar_papers = response.data.papers
+          console.log(this.similar_papers)
+        }).catch(error => {
+          console.log(error)
+        })
+      } else {
+        this.$axios({
+          method: 'post',
+          url: '/search',
+          data: {
+            search_word: this.paper.keywords,
+            search_type: Array(this.paper.keywords.length).fill().map(v => '2'),
+            page: 0,
+            size: 3,
+            search_logic: Array(this.paper.keywords.length - 1).fill().map(v => '1'),
+            order_type: 0,
+            order: 0
+          },
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }).then(response => {
+          this.similar_papers = response.data.papers
+          console.log(this.similar_papers)
+        }).catch(error => {
+          console.log(error)
+        })
+      }
+    },
+    get_related_papers: function () {
+      if (this.paper.author_name.length === 0) {
+        this.$axios({
+          method: 'post',
+          url: '/search',
+          data: {
+            search_word: this.paper.title.split(' '),
+            search_type: Array(this.paper.title.split(' ').length).fill().map(v => '2'),
+            page: 0,
+            size: 3,
+            search_logic: Array(this.paper.title.split(' ').length - 1).fill().map(v => '1'),
+            order_type: 0,
+            order: 0
+          },
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }).then(response => {
+          this.related_papers = response.data.papers
+          console.log(this.related_papers)
+        }).catch(error => {
+          console.log(error)
+        })
+      } else {
+        this.$axios({
+          method: 'post',
+          url: '/search',
+          data: {
+            search_word: this.paper.author_name,
+            search_type: Array(this.paper.author_name.length).fill().map(v => '1'),
+            page: 0,
+            size: 3,
+            search_logic: Array(this.paper.author_name.length - 1).fill().map(v => '1'),
+            order_type: 0,
+            order: 0
+          },
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }).then(response => {
+          this.related_papers = response.data.papers
+          console.log(this.related_papers)
+        }).catch(error => {
+          console.log(error)
+        })
+      }
+    }
+  },
+  mounted() {
+    // this.get_paper_info(this.$route.params.id)
+    this.get_paper_info('53a7290120f7420be8bc14ac')  // TODO: 本地测试用，上线时需要改成上面被注释掉的代码
+  },
 }
 </script>
 
@@ -199,7 +336,7 @@ export default {
 }
 
 .toc {
-  background-color: #fafafa;
+  //background-color: #fafafa;
 }
 
 .toc-title {
@@ -223,13 +360,13 @@ export default {
 }
 
 .paper-data {
-  margin-top: vh(45);
+  margin-top: vh(10);
   padding-left: vw(180);
   font-family: "黑体", sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: #7f7f7f;
-  margin-bottom: 0;
+  margin-bottom: vh(15);
 }
 
 .paper-info {
@@ -283,14 +420,14 @@ export default {
 }
 
 .download-buttons {
-  margin-left: vw(180);
+  margin-left: vw(405);
 }
 
 .download-button {
   color: white;
   height: 100%;
   width: vw(100);
-  margin: vh(5);
+  margin: vh(50);
   padding: vh(12) vh(30);
   font-size: 14px;
   border-radius: 5px;
@@ -315,6 +452,7 @@ export default {
 }
 
 .similar-paper-title {
+  cursor: pointer;
   font-size: 18px;
   margin-top: vh(15);
   margin-left: vw(10);
@@ -339,7 +477,7 @@ export default {
   color: #3366CC;
 }
 
-.similar-paper-citations-and-year{
+.similar-paper-citations-and-year {
   font-size: 12px;
   margin-top: vh(10);
   margin-left: vw(10);
