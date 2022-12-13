@@ -82,6 +82,7 @@
 
 <script>
 import { ref } from "vue";
+import qs from 'qs';
 export default {
   data() {
     var input = this.$route.query.searchWord;
@@ -91,6 +92,16 @@ export default {
       scholarPageCount: ref(1),
       result: [],
     };
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.searchResult();
+    });
+  },
+  watch: {
+    scholarPage(newVal) {
+      this.searchResult();
+    },
   },
   methods: {
     searchScholar() {
