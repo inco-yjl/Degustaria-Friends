@@ -500,7 +500,6 @@ export default {
     width: vw(1250);
     border-radius: vw(10);
     padding: vw(20);
-    box-shadow: 0 0 5px 2px white;
   }
   .display_botton_1 {
     text-align: center;
@@ -549,7 +548,6 @@ export default {
     margin-right: vw(20);
     padding: vw(10);
     border-radius: vw(10);
-    box-shadow: 0 0 5px 1px #232f3d;
     font-family: "optima", sans-serif;
     color: whitesmoke;
   }
