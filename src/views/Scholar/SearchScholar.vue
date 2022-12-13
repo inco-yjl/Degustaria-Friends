@@ -1,6 +1,19 @@
 <template>
   <div class="search-scholar-body">
     <div class="search-back">
+      <div class="alerts">
+        <transition name="fade">
+          <v-alert
+            class="alert"
+            dismissible
+            border="left"
+            elevation="2"
+            v-if="inputalert"
+            type="error"
+            >请输入搜索内容</v-alert
+          >
+        </transition>
+      </div>
       <div class="search-box">
         <div class="search-title">搜索学者</div>
         <div class="dividers"><img src="@/assets/divider2.png" /></div>
@@ -26,10 +39,26 @@ export default {
   data() {
     return {
       singleInput: ref(),
+      inputalert: false
     };
   },
   methods: {
-    searchScholar() {},
+    searchScholar() {
+      if (!this.singleInput || !this.singleInput.length > 0) {
+        this.inputalert = true;
+        console.log(1);
+        setTimeout(() => {
+          this.inputalert = false;
+        }, 1000);
+        return;
+      }
+      this.$router.push({
+        name: "scholarResult",
+        query: {
+          searchWord: this.singleInput,
+        },
+      });
+    },
   },
 };
 </script>
@@ -85,5 +114,27 @@ img {
 }
 .search-input {
   width: vw(800);
+}
+.alerts {
+  position: absolute;
+  margin-top: vh(40);
+  margin-left: vw(670);
+}
+.alert {
+  position: relative;
+  margin-top: vh(20);
+  width: vw(500);
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.1s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: opacity 0.1s;
 }
 </style>

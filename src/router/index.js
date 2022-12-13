@@ -108,6 +108,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/SearchScholar.vue'),
       },
       {
+        path: '/scholarResult',
+        name: 'scholarResult',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/ScholarSearchResult.vue'),
+      },
+      {
         path: '/institutionSearch',
         name: 'institutionSearch',
         component: () => import(/* webpackChunkName: "about" */ '../views/Institution/SearchInstitution.vue'),
