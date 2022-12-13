@@ -2,9 +2,12 @@
   <div>
     <div>
       <v-card class="search_result_card">
-        <v-list-item-title class="headline_2_2">{{paper.title}}</v-list-item-title>
+        <v-list-item-title class="headline_2_2">
+          <span class="title" @click="gotoPaper" v-if="mode===MODE_PAPER">{{paper.title}}</span>
+          <span v-if="mode!==MODE_PAPER">{{paper.title}}</span>
+        </v-list-item-title>
         <v-list-item-subtitle class="subtitle_recommand_1_2">
-            {{text_process("作者："+this.authors)}}
+          {{text_process(this.authors)}}
         </v-list-item-subtitle>
         <div class="recommand_book_1" v-if="this.mode==MODE_PAPER">
           <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>
@@ -12,43 +15,56 @@
           <div class="year_info">来源:{{text_process(paper.venue)}}</div>
         </div>
         <div class="recommand_book_1" v-if="this.mode==MODE_PATENT">
-          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>
-          <div class="year_info">申请时间：{{text_process(paper.apply_datetime)}}</div>
+<!--          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>-->
+          <div class="year_info">申请时间：{{text_process(paper.apply_datetime.slice(0,10))}}</div>
+        </div>
+        <div class="recommand_book_1" v-if="this.mode==MODE_PROJECT">
+          <!--          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>-->
+          <div class="year_info">计划起始时间：{{text_process(beg_end)}}</div>
+          <div class="year_info">资金：{{text_process(paper.money)}}</div>
+          <div class="year_info">资助机构：{{text_process(paper.financial_institution)}}</div>
+          <div class="year_info">执行机构：{{text_process(paper.undertaking_institution)}}</div>
+
+          <div class="year_info">参与方：{{text_process(paper.participant)}}</div>
         </div>
 
-        <v-list-item-action-text>
-          <div class="abstract_info" v-if="this.mode==MODE_PAPER">
+        <v-list-item-action-text v-if="this.mode==MODE_PAPER||this.mode==MODE_PROJECT">
+          <div class="abstract_info" >
             <span style="font-weight: bold">摘要：</span>
             {{text_process(this.abstract)}}
           </div>
-          <div class="abstract_info" v-if="this.mode==MODE_PROJECT">
-            <span style="font-weight: bold">项目简介：</span>
-            {{text_process(paper.introduction)}}
-          </div>
         </v-list-item-action-text>
 
-        <div class="keywords_info">
+        <div class="keywords_info" v-if="this.mode==MODE_PAPER">
           <span style="font-weight: bold">关键词：</span>
-          <span v-for="i in paper.keywords">{{text_process(text_process(i)+"; ")}}</span>
+          <span v-for="i in paper.keywords">{{text_process(text_process(i)+", ")}}</span>
         </div>
-        <div class="quote_recommand_2">
+        <div class="keywords_info" v-if="this.mode==MODE_PATENT">
+          <span style="font-weight: bold">关键词：</span>
+          <span >{{text_process(paper.keyword)}}</span>
+        </div>
+        <div class="quote_recommand_2" v-if="this.mode==MODE_PAPER">
           <div>
             <p class="font-weight-black">引用量：{{text_process(paper.n_citation)}}</p>
           </div>
         </div>
-        <div class="recommand_icon_fa_2">
+        <div class="quote_recommand_2" v-if="this.mode==MODE_PATENT">
+          <div>
+            <p class="font-weight-black">引用量：{{text_process(paper.citation)}}</p>
+          </div>
+        </div>
+        <div class="recommand_icon_fa_2" >
           <img src="@/assets/quote.png" class="recommand_icon_1_2" @click="open_dialog()"/>
           <img :src="saved?collected:uncollected" class="recommand_icon_2_2" @click="change_collect()"/>
-          <img :src="download_img" class="recommand_icon_2_2" @click="download()"/>
+          <img :src="download_img" v-if="this.mode==MODE_PAPER||this.mode==MODE_PROJECT"
+               class="recommand_icon_2_2" @click="download()"/>
         </div>
 
       </v-card>
     </div>
     <v-snackbar
         v-model="snackbar"
-        :bottom="y === 'bottom'"
         color="error"
-        :multi-line="mode === 'multi-line'"
         :timeout=3000
         :top=true
     >
@@ -68,6 +84,7 @@
     <v-dialog
         v-model="dialog_show"
         max-width="350"
+        v-if="this.mode==MODE_PAPER"
     >
       <v-card>
         <v-card-title class="headline">GB/T 7714-2015 格式引文</v-card-title>
@@ -126,7 +143,22 @@ export default {
           publisher:"北京大学",//出版单位
           apply_datetime:"2022-05-13",
           org:"中国福利院",
-          introduction:"这是项目的简介这是项目的简介这是项目的简介这是项目的简介这是项目的简介这是项目的简介这是项目的简介"
+          introduction:"这是项目的简介这是项目的简介这是项目的简介这是项目的简介这是项目的简介这是项目的简介这是项目的简介",
+          "open_id": 4255928,
+          "apply_id": 0,
+          "actual_id": null,
+          "keyword": "exhaust pipe,cover assembly\n",
+          "author": "W. Richard Jones,Albert Hartman Jr.,Earl Conrad,Harry J. Kraig\n",
+          "char_id": "DE220100284",
+          "type": "Discovery Early Career Researcher Award",
+          "money": "448020AUD",
+          "director": "ASHISH GOYAL",
+          "participant": "ASHISH GOYAL",
+          "undertaking_institution": "null",
+          "financial_institution": "Australian Research Council",
+          "begin": "2023-10-01",
+          "end": "2026-09-30",
+          "url_name": "Australian Research Council"
         }
       }
 
@@ -149,9 +181,6 @@ export default {
       dialog_show:false,
       MODE_PAPER,MODE_PROJECT,MODE_PATENT,
       snackbar:false,
-      // paper:{
-      //
-      // }
     }
   },
   computed:{
@@ -181,21 +210,51 @@ export default {
       }
       return this.paper.abstract.length
     },
+    beg_end(){
+      if(this.paper.end!=="-"){
+        return this.paper.begin+" ~ "+this.paper.end
+      }else {
+        return this.paper.begin+" ~ "+"完成"
+      }
+    },
     authors(){
-      if(this.paper.author_name===undefined||this.paper.author_name.length==0){
-        return "佚名"
-      }
-      let ret=""
-      for(let i=0;i<Math.min(3,this.paper.author_name.length);i++){
-        ret+=this.paper.author_name[i]
-        if(i!==Math.min(3,this.paper.author_name.length)-1){
-          ret+=", "
+      if(this.mode===MODE_PAPER){
+        if(this.paper.author_name===undefined||this.paper.author_name.length==0){
+          return "作者："+"佚名"
         }
+        let ret=""
+        for(let i=0;i<Math.min(3,this.paper.author_name.length);i++){
+          ret+=this.paper.author_name[i]
+          if(i!==Math.min(3,this.paper.author_name.length)-1){
+            ret+=", "
+          }
+        }
+        return "作者："+ret
       }
-      return ret
+      else if(this.mode===MODE_PATENT){
+        if(this.paper.author===undefined||this.paper.author.length===0){
+          return "作者："+"佚名"
+        }
+        return this.paper.author
+      }
+      else if(this.mode===MODE_PROJECT){
+        if(this.paper.director===undefined||this.paper.director.length===0){
+          return "负责人："+"佚名"
+        }
+        return "负责人："+this.paper.director
+      }
     }
   },
   methods: {
+    gotoPaper(){
+      let id=this.paper.id
+      this.$router.push({
+        name:'paperDetail',
+        query:{
+          id:id
+        }
+      })
+    },
     text_process(str){
       if(str===undefined||str==="null"||str.length===0){
         return "未知"
@@ -203,10 +262,18 @@ export default {
       return str
     },
     download(){
-      if(this.paper.url.length===0||this.paper.url[0]=='null'||this.paper.url[0].length==0){
-        this.snackbar=true
-      }else {
-        window.location.href=this.paper.url[0]
+      if(this.mode==MODE_PAPER){
+        if(this.paper.url.length===0||this.paper.url[0]=='null'||this.paper.url[0].length==0){
+          this.snackbar=true
+        }else {
+          window.location.href=this.paper.url[0]
+        }
+      }else if(this.mode==MODE_PROJECT){
+        if(this.paper.url===undefined||this.paper.url=='null'||this.paper.url.length==0){
+          this.snackbar=true
+        }else {
+          window.location.href=this.paper.url
+        }
       }
     },
     open_dialog(){
@@ -244,7 +311,7 @@ export default {
     }
   },
   mounted() {
-    this.update_collect()
+    console.log("SearchResult 挂载")
   },
 
 }
@@ -326,5 +393,13 @@ export default {
   margin-left: vw(20);
   margin-top: vh(10);
   font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.title:hover{
+  padding: 2%;
+  border: solid;
+  border-radius: 5px;
+  border-color:white ;
+  color: red;
+  background: rgba(33, 49, 42, 0.29);;
 }
 </style>

@@ -30,10 +30,14 @@ export default {
     }
     searchRequest(this.$store.getters.get_search_param).then(res=>{
       console.log(res.data)
-      this.$store.commit('mod_page_info',res.data)
+      let data=res.data
+      if(data===undefined&&data.res!==undefined){
+        data.papers=data.res
+      }
+      this.$store.commit('mod_page_info',data)
       console.log('Header完成搜索')
     }).then(()=>{
-      console.log("进入 searchResult")
+      console.log("进入 searchResultPage")
       this.$router.push('/searchResult')
 
     })
