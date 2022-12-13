@@ -2,17 +2,21 @@
   <div>
     <div style="display: flex;">
       <div class="focus_1">
-        <v-btn depressed large @click="into_another_son(1)">关注</v-btn>
+        <v-btn depressed large @click="into_another_son(1)" v-if="user_name != ''">关注</v-btn>
       </div>
-      <div class="focus_2">
+      <div class="focus_2_2" v-if="user_name == ''">
+        <v-btn depressed large color="blue-grey lighten-4" @click="into_another_son(2)">推荐</v-btn>
+      </div>
+      <div class="focus_2" v-if="user_name != ''">
         <v-btn depressed large color="blue-grey lighten-4" @click="into_another_son(2)">推荐</v-btn>
       </div>
       <div class="focus_3">
-        <v-btn depressed large @click="into_another_son(3)">收藏</v-btn>
+        <v-btn depressed large @click="into_another_son(3)" v-if="user_name != ''">收藏</v-btn>
       </div>
       <v-btn
         color="blue-grey darken-3"
         class="add_keyword_class"
+        v-if="user_name != ''"
         @click="overlay = !overlay"
       >
         管理订阅关键词
@@ -262,7 +266,7 @@ export default {
           this.recommand_content = res.data.papers;
         })
         .catch((err) => {
-          console.log(err.errno);
+          console.log("err1",err.errno);
         });
       }
       else {
@@ -288,14 +292,14 @@ export default {
           this.recommand_content = res.data.papers;
         })
         .catch((err) => {
-          console.log(err.errno);
+          console.log("err2",err.errno);
         });
       }
     },
     add_subscribe_keyword() {
       this.keyword.push(this.input_keyword);
       console.log("this.input_keyword", this.input_keyword);
-      console.log("this.keyword.length", this.keyword.length);
+      console.log("this.keyword", this.keyword);
       this.add_tmp_str = "";
       for (let i = 0; i < this.keyword.length; i++) {
         if(i != this.keyword.length-1)
@@ -304,6 +308,8 @@ export default {
         this.add_tmp_str = this.add_tmp_str + this.keyword[i];
       }
       console.log("this.add_tmp_str", this.add_tmp_str);
+      this.arr1.push("0");
+      this.arr2.push("1");
       this.$axios({
         method: "post",
         url: "/set_keywords_by_username",
@@ -313,18 +319,21 @@ export default {
         }),
       })
       .then((res) => {
+        this.home_get_user_list_2();
         console.log("add_keyword", res.data);
         this.input_keyword = "";
         this.setData({ input_keyword : "" });
       })
       .catch((err) => {
-        console.log(err.errno);
+        console.log("err3",err.errno);
       });
     },
     home_del_subscribe(tmp_item) {
       this.keyword.splice(this.keyword.indexOf(tmp_item), 1);
       console.log("tmp_item", tmp_item);
       console.log("this.keyword", this.keyword);
+      this.arr1.splice(0,1);
+      this.arr2.splice(0,1);
       this.del_tmp_str = "";
       for (let i = 0; i < this.keyword.length; i++) {
         if(i != this.keyword.length-1)
@@ -342,10 +351,11 @@ export default {
         }),
       })
       .then((res) => {
+        this.home_get_user_list_2();
         console.log("del_keyword", res.data);
       })
       .catch((err) => {
-        console.log(err.errno);
+        console.log("err4",rr.errno);
       });
     },
     into_detail(url_tmp) {
@@ -370,6 +380,10 @@ export default {
   }
   .focus_2 {
     margin-left: vw(20);
+    color: #232f3d;
+    margin-top: vh(20);
+  }
+  .focus_2_2 {
     color: #232f3d;
     margin-top: vh(20);
   }
@@ -473,6 +487,11 @@ export default {
   .add_keyword_class {
     color: white;
     margin-left: vw(30);
+    margin-top: vh(25);
+  }
+  .add_keyword_class_2 {
+    color: white;
+    margin-left: vw(20);
     margin-top: vh(25);
   }
   .display_box_1 {
