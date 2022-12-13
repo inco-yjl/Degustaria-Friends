@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
 
-Vue.use(Vuetify);
+
 // Translation provided by Vuetify (javascript)
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 import en from 'vuetify/es5/locale/en'
@@ -9,6 +9,7 @@ import en from 'vuetify/es5/locale/en'
 import pl from 'vuetify/src/locale/pl.ts'
 import colors from 'vuetify/lib/util/colors'
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
+Vue.use(Vuetify);
 export default new Vuetify({
     theme: {
       themes: {
