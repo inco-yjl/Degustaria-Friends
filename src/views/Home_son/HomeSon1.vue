@@ -6,14 +6,24 @@
           depressed
           large
           color="blue-grey lighten-4"
+          v-if="user_name"
           @click="into_another_son(1)"
           >关注</v-btn
         >
       </div>
-      <div class="focus_2">
+      <div class="focus_2" v-if="user_name">
         <v-btn depressed large @click="into_another_son(2)">推荐</v-btn>
       </div>
-      <div class="focus_3">
+      <div class="focus_2_2" v-else>
+        <v-btn
+          depressed
+          large
+          color="blue-grey lighten-4"
+          @click="into_another_son(2)"
+          >推荐</v-btn
+        >
+      </div>
+      <div class="focus_3" v-if="user_name">
         <v-btn depressed large @click="into_another_son(3)">收藏</v-btn>
       </div>
     </div>
@@ -195,6 +205,10 @@ export default {
 }
 .focus_2 {
   margin-left: vw(20);
+  color: #232f3d;
+  margin-top: vh(20);
+}
+.focus_2_2 {
   color: #232f3d;
   margin-top: vh(20);
 }
