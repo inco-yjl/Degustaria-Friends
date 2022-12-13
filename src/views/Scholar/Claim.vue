@@ -156,7 +156,7 @@
         >
         <span class="card2tit" style="display: block">
             <h3 style="display: inline-block">添加您撰写的文章</h3>
-            <span class="cntstyle">已选篇数：{{articlenum}}</span>
+            <span class="cntstyle">已选篇数：{{selected_articlesid.length}}</span>
         </span>
         <v-text-field
             v-model="searchmsg"
@@ -201,7 +201,7 @@
                           >
                             <template v-for="(item, index) in grouplist">
                               <v-list-item
-                                :key="item.paper_id"
+                                :key="item.id"
                                 style="width: 600px"
                               >
                                 <template v-slot:default="{ active }">
@@ -222,7 +222,7 @@
 
                                   <v-list-item-action>
                                     <v-icon
-                                    @click="addart(item.paper_id,active)"
+                                    @click="addart(item.id,active)"
                                       v-if="!active"
                                       color="blue-grey lighten-1"
                                     >
@@ -326,6 +326,7 @@ export default {
             },
             pagenum:1,
             page:1,
+            index:1,
             namenum:1,
             switch1:true,
             switch2:true,
@@ -375,7 +376,7 @@ export default {
       nextpage(){
         this.search();
       },
-      prevpage(){
+      prepage(){
         this.search();
       },
       search(){
@@ -426,9 +427,9 @@ export default {
             sw2="0";
           var str=this.selected_articlesid.toString();
            const formData = new FormData();
-        formData.append('name1', this.form.name);
-        formData.append('name2', this.form.name);
-        formData.append('name3', this.form.name);
+        formData.append('name1', this.form.name1);
+        formData.append('name2', this.form.name2);
+        formData.append('name3', this.form.name3);
         formData.append('org', this.form.work);
         formData.append('interests', this.form.area);
         formData.append('e_mail', this.form.email);
@@ -456,6 +457,7 @@ export default {
       })
         .then((res) => {
           console.log("认证成功", res.data);
+          window.alert('认证成功');
         })
         .catch((err) => {
           //请求若出现路由找不到等其它异常，则在终端输出错误信息

@@ -242,19 +242,14 @@ export default {
     console.log(JSON.stringify(data))
       this.$axios({
         url:'/search_scholar',
-	      method:'get',
-	      data: JSON.stringify(data), 
-	      header:{
-	      'Content-Type':'application/json'  //如果写成contentType会报错,如果不写这条也报错
-	//Content type 'application/x-www-form-urlencoded;charset=UTF-8'...
-	      }
-					
+	      method:'post',
+	      data: formData
       })
         .then((res) => {
             /* res 是 response 的缩写 */
             console.log('搜索成功');
             console.log(res.data);
-            this.grouplist=res.data.papers;
+            this.grouplist=res.data;
           })
           .catch((err) => {
             /* 请求若出现路由找不到等其它异常，则在终端输出错误信息 */
