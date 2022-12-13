@@ -28,12 +28,13 @@
     >
      认领成功
     </v-alert>
-    
       <v-stepper v-model="e1">
         <v-stepper-header>
+            <span>
           <v-stepper-step :complete="e1 > 1" step="1">
             查询学者
           </v-stepper-step>
+            </span>
 
           <v-divider></v-divider>
 
@@ -68,6 +69,7 @@
                             active-class="blue-grey lighten-4 blue-grey--text text--darken-4"
                             multiple
                             style="width: 750px;margin-top:20px"
+                            v-if="grouplist.length!=0"
                           >
                             <template v-for="(item, index) in grouplist">
                               <v-list-item
@@ -93,34 +95,34 @@
                                     <v-btn
                                      @click="addart(item.id,active)"
                                       v-if="!active"
-        class="ma-2"
-        color="primary"
-        dark
-      >
-        认证
-        <v-icon
-          dark
-          right
-        >
-          mdi-checkbox-marked-circle
-        </v-icon>
-      </v-btn>
+                                        class="ma-2"
+                                        color="primary"
+                                        dark
+                                     >
+                                        认证
+                                     <v-icon
+                                          dark
+                                          right
+                                     >
+                                          mdi-checkbox-marked-circle
+                                      </v-icon>
+                                     </v-btn>
                                 
-                                 <v-btn
-                                     @click="delart(item.id,active)"
-                                      v-if="active"
-        class="ma-2"
-        color="primary"
-        dark
-      >
-        取消认证
-        <v-icon
-          dark
-          right
-        >
-          mdi-checkbox-marked-circle
-        </v-icon>
-      </v-btn>
+                                     <v-btn
+                                      @click="delart(item.id,active)"
+                                       v-if="active"
+                                     class="ma-2"
+                                     color="primary"
+                                      dark
+                                     >
+                                     取消认证
+                                     <v-icon
+                                       dark
+                                          right
+                                     >
+                                          mdi-checkbox-marked-circle
+                                     </v-icon>
+                                     </v-btn>
                                   </v-list-item-action>
                                 </template>
                               </v-list-item>
@@ -131,6 +133,7 @@
                               ></v-divider>
                             </template>
                           </v-list-item-group>
+                           <h4  style="margin:auto;text-align:center" v-else>您还没有搜索任何学者哦(*^▽^*)~</h4>
                         </v-list>
                       </v-card>
                      <!-- 页脚 -->
@@ -152,6 +155,13 @@
                           >继续</v-btn
                         >
                       </v-row>
+                      <v-btn
+                        color="normal"
+                        style="display:inline-block;left:70%;margin:20px"
+                        @click="click2claim"
+                        >
+                    还没有在网站认证？  
+                    </v-btn>
                 </v-card>
               </div>
             </v-card>
@@ -231,7 +241,7 @@ export default {
             switch1:true,
             switch2:true,
             ifshow: 1,
-            searchmsg:'haha',
+            searchmsg:'',
             articlenum: 2,
             selected:[],
             tab:null,
@@ -240,18 +250,6 @@ export default {
             alert:true,
             alert2:true,
             grouplist:[
-                        {
-                            id: 1,
-                            char_id:'1',
-                            name1: 'name1',
-                            name2: '',
-                            name3: '',
-                            org: '',
-                            interests: '',
-                            citation: '',
-                            h_index: '',
-                            e_mail: '',
-                        },
                     ],
             valid:true,
             selected_articlesid:[],
@@ -273,6 +271,9 @@ export default {
             this.selected_articlesid.splice(index,1);
         }
         console.log('list:'+this.selected_articlesid);
+      },
+      click2claim(){
+        this.$router.push({name:'scholar'});
       },
       nextpage(){
         this.search();
