@@ -1,79 +1,220 @@
-const orgHeader = [
-    {
-      text: "姓名",
-      align: "start",
-      sortable: false,
-      value: "name",
+<template>
+  <div>
+    <v-row justify="center" align="center" class="base-header">
+      <v-system-bar
+        app
+        :color="
+          $route.name === 'scholarSearch' || $route.name === 'institutionSearch'
+            ? 'rgba(0,0,0,0)'
+            : '#232f3d'
+        "
+        dark
+        height="70"
+      >
+        <div class="d-flex align-center to-home-button" @click="ToHome">
+          <v-img
+            alt="Gusto Logo"
+            class="shrink mr-2"
+            contain
+            :src="logo"
+            transition="scale-transition"
+            width="60"
+            height="60"
+          />
+
+          <v-img
+            alt="Vuetify Name"
+            class="shrink mt-1 hidden-sm-and-down"
+            contain
+            min-width="100"
+            :src="gusto"
+            width="200"
+          />
+        </div>
+        <v-spacer /><v-spacer />
+        <div class="to-scholars" @click="toScholars()">学者</div>
+        <div class="index-span"></div>
+        <div class="to-institution" @click="toInstitution()">机构</div>
+        <div class="index-span"></div>
+        <div class="to-statistics" @click="toStatistics()">统计</div>
+        <v-spacer />
+        <v-avatar size="45" :class="`rounded${45}`" class="border-white">
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                depressed
+                class="user-button"
+                v-bind="attrs"
+                v-on="on"
+                height="42"
+                width="42"
+                text
+              >
+                <span class="user-name-icon" v-if="user_img"
+                  ><img :src="user_img"
+                /></span>
+                <span class="user-name-icon" v-else-if="hasLogin">{{
+                  user_name.charAt(0)
+                }}</span>
+                <span class="user-name-icon" v-else>游</span>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                key="1"
+                v-if="scholar_id != null"
+                @click="ToScholarPage()"
+              >
+                <v-list-item-title>学者主页 </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                key="2"
+                v-else-if="hasLogin"
+                @click="ToCertificate()"
+              >
+                <v-list-item-title>认证学者 </v-list-item-title>
+              </v-list-item>
+              <v-list-item key="3" v-else @click="Login()">
+                <v-list-item-title>登录 </v-list-item-title>
+              </v-list-item>
+              <v-list-item key="4" v-if="user_id" @click="Logout()">
+                <v-list-item-title>退出登录 </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-avatar>
+      </v-system-bar>
+    </v-row>
+    <router-view />
+  </div>
+</template>
+
+<script>
+import qs from "qs";
+export default {
+  name: "baseHeader",
+  data() {
+    return {
+      logo: require("@/assets/logo1.png"),
+      gusto: require("@/assets/gusto2.png"),
+      First_name: "",
+      user_img: "",
+      user_name: "",
+      user_id: ref(),
+      hasLogin: ref(false),
+      user_email: "",
+      scholar_id: ref(),
+    };
+  },
+  methods: {
+    toScholars() {
+      if (this.$route.name !== "scholarSearch") {
+        this.$router.push({ name: "scholarSearch" });
+      }
     },
-    { text: "2022自然指数", value: "index2022", filterable: false },
-    { text: "2022论文数", value: "count2022", filterable: false },
-    { text: "国家", value: "country", filterable: false },
-  ];
-  const orgDesserts = [
-    {
-        name: 'Max Planck Society',
-        country: 'Germany',
-        index2022: 782.72,
-        count2022: 2780
+    ToScholarPage() {
+      this.$router.push({ name: "login" });
     },
-    {
-        name: 'French National Centre for Scientific Research (CNRS)',
-        country: 'France',
-        index2022: 675.69,
-        count2022: 4399
+    Login() {
+      this.$router.push({ name: "login" });
     },
-    {
-        name: 'Helmholtz Association of German Research Centres',
-        country: 'Germany',
-        index2022: 565.07,
-        count2022: 2584
+    Logout() {
+      window.localStorage.setItem("user_email", null);
+      window.localStorage.setItem("user_name", null);
+      window.localStorage.setItem("user_headshot", null);
+      window.localStorage.setItem("user_id", null);
+      window.localStorage.setItem("scholar_id", null);
+      this.hasLogin = false;
+      window.location.reload();
     },
-    {
-        name: 'University of Oxford',
-        country: 'United Kingdom (UK)',
-        index2022: 452.28,
-        count2022: 1485
+    ToCertificate() {
+      this.$router.push({ name: "scholarold" });
     },
-    {
-        name: 'Swiss Federal Institute of Technology Zurich (ETH Zurich)',
-        country: 'Switzerland',
-        index2022: 395.67,
-        count2022: 1065
+    toInstitution() {
+      if (this.$route.name !== "institutionSearch") {
+        this.$router.push({ name: "institutionSearch" });
+      }
     },
-    {
-        name: 'Imperial College London (ICL),',
-        country: 'United Kingdom (UK)',
-        index2022: 248.3,
-        count2022: 963
+    toStatistics() {
+      if (
+        this.$route.name !== "statisticsRank" &&
+        this.$route.name !== "statisticsIllustration"
+      )
+        this.$router.push({ name: "statisticsRank" });
     },
-    {
-        name: 'Russian Academy of Sciences (RAS)',
-        country: 'Russia',
-        index2022: 242.05,
-        count2022: 914
+    ToHome() {
+      if (this.$route.name !== "home") this.$router.push({ path: "/home" });
     },
-    {
-        name: 'Swiss Federal Institute of Technology Lausanne (EPFL)',
-        country: 'Switzerland',
-        index2022: 228.37,
-        count2022: 619
+    updateUser() {
+      this.user_img = window.localStorage.getItem("user_headshot");
+      if (this.user_img) {
+        this.user_img = "http://120.46.201.113:6001/api" + this.user_img;
+      }
+      this.user_name = window.localStorage.getItem("user_name");
+      this.user_id = window.localStorage.getItem("user_id");
+      this.user_email = window.localStorage.getItem("user_email");
+      if (!this.user_id) return;
+      this.hasLogin = true;
+      this.$axios({
+        method: "post",
+        url: "/get_scholar_by_userid",
+        data: qs.stringify({
+          userid: this.user_id,
+        }),
+      })
+        .then((res) => {
+          if (
+            res.data.status === "您尚未认证为学者" ||
+            res.data.status === "用户不存在"
+          ) {
+            window.localStorage.setItem("scholar_id", null);
+            this.scholar_id = null;
+          } else {
+            window.localStorage.setItem("scholar_id", res.data.id);
+            this.scholar_id = res.data.id;
+          }
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err.errno);
+        });
     },
-    {
-        name: 'UCL',
-        country: 'United Kingdom (UK)',
-        index2022: 222.6,
-        count2022: 981
-    },
-    {
-        name: 'Spanish National Research Council (CSIC)',
-        country: 'Spain',
-        index2022: 209.15,
-        count2022: 1190
-    },
-    {
-        name: 'Leibniz Association',
-        country: 'Germany',
-        index2022: 200.12,
-        count2022: 1001
-    }
-  ];
+    toUser() {},
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.updateUser();
+    });
+  },
+};
+</script>
+
+<style scoped lang="scss">
+.border-white {
+  border: 3px solid white;
+  margin-right: 10px;
+}
+.user-name-icon {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+  img {
+    height: 45px;
+    width: 45px;
+  }
+}
+.to-home-button {
+  cursor: pointer;
+}
+.to-scholars {
+  cursor: pointer;
+}
+.to-institution {
+  cursor: pointer;
+}
+.index-span {
+  width: vw(80);
+}
+.to-statistics {
+  cursor: pointer;
+}
+</style>

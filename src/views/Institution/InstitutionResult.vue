@@ -23,13 +23,19 @@
         <div class="orgName">{{ org.name }}</div>
         <div v-if="org.cn_name" class="orgName-cn">翻译：{{ org.cn_name }}</div>
         <div class="official-url" v-if="org.url !== 'null'">
-          <img src="@/assets/icon/earth.png" /><a class="link-url" :href="org.url">{{ org.url }}</a>
+          <img src="@/assets/icon/earth.png" /><a
+            class="link-url"
+            :href="org.url"
+            >{{ org.url }}</a
+          >
         </div>
         <div class="last-line">
           <div class="wikipedia-url" v-if="org.wikipage !== 'null'">
-            <img src="@/assets/icon/wikipedia_icon.png" /><a class="link-url" :href="org.wikipage">{{
-              org.wikipage
-            }}</a>
+            <img src="@/assets/icon/wikipedia_icon.png" /><a
+              class="link-url"
+              :href="org.wikipage"
+              >{{ org.wikipage }}</a
+            >
           </div>
           <div
             class="location"
@@ -41,12 +47,12 @@
         </div>
       </v-card>
     </div>
-      <v-pagination
-        class="pagination"
-        v-model="orgpage"
-        :total-visible="7"
-        :length="orgpageCount"
-      ></v-pagination>
+    <v-pagination
+      class="pagination"
+      v-model="orgpage"
+      :total-visible="7"
+      :length="orgpageCount"
+    ></v-pagination>
   </div>
 </template>
 
@@ -123,20 +129,20 @@ export default {
   margin-top: 150px;
 }
 .left-side {
-    position: fixed;
-    top: -150px;
-    left: 0;
-    background-color: rgb(249,249,249);
-    height: vh(1480);
-    width: vw(440);
+  position: fixed;
+  top: -150px;
+  left: 0;
+  background-color: rgb(249, 249, 249);
+  height: vh(1480);
+  width: vw(440);
 }
 .right-side {
-    position: fixed;
-    top: -150px;
-    right: 0;
-    background-color: rgb(249,249,249);
-    height: vh(1480);
-    width: vw(440);
+  position: fixed;
+  top: -150px;
+  right: 0;
+  background-color: rgb(249, 249, 249);
+  height: vh(1480);
+  width: vw(440);
 }
 .search-box {
   display: flex;
@@ -166,7 +172,7 @@ export default {
   padding-bottom: vh(10);
 }
 .pagination {
-    padding-bottom: vh(50);
+  padding-bottom: vh(50);
 }
 .orgName {
   font-family: "Times New Roman", Times, serif;
@@ -205,7 +211,6 @@ export default {
 }
 .link-url {
   width: vw(600);
-
 }
 .wikipedia-url {
   img {
