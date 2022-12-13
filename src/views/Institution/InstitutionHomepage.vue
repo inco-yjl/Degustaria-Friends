@@ -124,11 +124,6 @@ export default defineComponent({
   methods: {
     initInfo() {
       this.searchOrg();
-      // this.getPAmountByOrg();
-      // this.getMagazinesByOrg();
-      // this.getPapersByOrg();
-      // this.getPatentsByOrg();
-      // this.getProjectsByOrg();
     },
     searchOrg() {
       // console.log("searchOrg");
