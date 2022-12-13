@@ -170,11 +170,11 @@ export default {
         this.$axios({
           method: "post",
           url: "collection_paper_list",
-          data: {
+          data: qs.stringify({
             uid: this.user_id,
             page: this.page,
-            size: 5,
-          },
+            size: 5
+          }),
         })
           .then((res) => {
             console.log("rcm_content", res.data);
