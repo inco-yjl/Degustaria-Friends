@@ -925,7 +925,7 @@ export default {
             //maskImage: maskImage,
             sizeRange: [
               15 * this.currentScaleRatio,
-              60 * this.currentScaleRatio,
+              65 * this.currentScaleRatio,
             ],
             rotationRange: [0, 0],
             rotationStep: 45,
@@ -955,22 +955,13 @@ export default {
 .illustration-content {
   font-weight: bold;
   width: vw(1300);
-  padding-top: vh(60);
+  padding-top: 92px;
   margin-left: vw(310);
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(13, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  gap: vw(20);
 }
 
-.div1 {
-  grid-area: 1 / 1 / 7 / 4;
-}
-.div2 {
-  grid-area: 1 / 4 / 7 / 7;
-}
-.div3 {
-  grid-area: 7 / 1 / 12 / 7; 
-}
 
 .div5-background {
   position: absolute;
@@ -1000,7 +991,7 @@ export default {
   flex-wrap: wrap;
   gap: 0;
   width: vw(620);
-  height: vh(480);
+  height: vh(420);
   padding: vh(10) vw(10);
   border-radius: 20px;
   background-color: #ffffff;
@@ -1053,6 +1044,7 @@ export default {
   display: flex;
   justify-items: center;
   gap: vw(20);
+  margin-bottom: 0;
 }
 .achievement-summary-chart {
   width: vw(123);
@@ -1097,7 +1089,7 @@ export default {
 }
 .search-word-summary {
   width: vw(620);
-  height: vh(480);
+  height: vh(420);
   justify-content: center;
   align-items: center;
   display: flex;
@@ -1131,7 +1123,7 @@ export default {
 
 #word-cloud {
   width: vw(620);
-  height: vh(460);
+  height: vh(400);
 }
 .distribution-title {
   margin-top: vh(20);
@@ -1198,17 +1190,15 @@ export default {
   text-overflow: ellipsis;
 }
 .time-chart-row {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  gap: vw(20);
+  width: vw(620);
+  height: vh(300);
+}
+#time-distribution {
+  width: vw(620);
+  height: vh(300);
 }
 #category-distribution {
   height: vh(320);
   width: vw(500);
-}
-#time-distribution {
-  height: vh(320);
-  width: vw(800);
 }
 </style>

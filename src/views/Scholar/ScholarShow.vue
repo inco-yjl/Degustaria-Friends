@@ -13,15 +13,18 @@
             </v-col>
             <v-col class="ml-2">
               <div class="name ma-1 text-h5">
-                <p class="text-left">&nbsp;&nbsp;{{ Name }}</p>
+                <p class="text-left name">&nbsp;&nbsp;{{ Name }}</p>
               </div>
               <div class="faculty ma-1 text-h6">
-                <p class="text-left">{{ Faculty }}</p>
+                <p class="text-left faculty">{{ Faculty }}</p>
               </div>
               <div class="intro ma-1 text-body-1">
-                <p class="text-left pa-1">
+                <p class="text-left pa-1 intro">
                   {{ intro }}
                 </p>
+              </div>
+              <div class="ma-1" v-if="showEmail">
+                <p class="text-left faculty">Email:&nbsp; {{Email}}</p>
               </div>
             </v-col>
           </v-row>
@@ -66,8 +69,8 @@
               </v-col>
               <v-col cols="12">
                 <v-btn-toggle v-model="toggleTwo" tile color="primary" group mandatory>
-                  <v-btn value="0" depressed elevation="1" small>全部</v-btn>
-                  <v-btn value="1" depressed elevation="1" small>最近</v-btn>
+                  <v-btn value="0" depressed elevation="1" small>升序</v-btn>
+                  <v-btn value="1" depressed elevation="1" small>降序</v-btn>
                 </v-btn-toggle>
               </v-col>
               <v-col cols="12">
@@ -188,15 +191,16 @@ export default {
   data() {
     return {
       SelfImage: "https://cdn.vuetifyjs.com/images/john.jpg",
-      Name: "Azadeh Amin",
+      Name: "",
       Faculty: "北京航空航天大学 软件学院",
       Email: "tjyfxiao@126.com",
       PaginationLength: 15,
       page: 1,
       size: 10,
-      scholarId: 65,
+      scholarId: 0,
       scholarName: "Azadeh Amin",
       intro: "",
+      showEmail: true,
       MainField: [
         {
           index: 1,
@@ -273,7 +277,7 @@ export default {
       .then(
         response => {
           this.MainField=[];
-          this.scholarName = response.data.name1;
+          this.Name = response.data.name1;
           this.Faculty = response.data.org;
           this.Email = response.data.e_mail;
           let iarr = response.data.interests.split(",");
@@ -282,6 +286,8 @@ export default {
               index: i,
               title: iarr[i - 1]
             })
+          if (this.Email == null)
+            this.showEmail = false;
         }
       )
       .catch(
@@ -305,8 +311,6 @@ export default {
     },
     loadScholarPapers(npage = 1) {
       this.recommandPaper = [];
-      let sort = (this.toggleTwo === 1) ? "year" : "citation";
-      let year = (this.toggleOne === 1) ? 0 : 1;
       this.$axios({
         method: "post",
         url: "/get_p_number_of_scholar",
@@ -324,24 +328,28 @@ export default {
       .catch(e => console.log(e))
       this.$axios({
         method: "post",
-        url: "/get_papers_by_scholar",
+        url: "/search_paper",
         data: qs.stringify({
-          scholar_id: this.scholarId,
+          search_word: [this.scholarId],
+          search_type: ["3"],
+          search_logic: [],
           page: npage,
           size: 6,
-          order: sort,
-          year: year,
+          order_type: this.toggleOne + 1,
+          order: this.toggleTwo,
         })
       })
       .then(
         response => {
-          for (let x in 6)
+          this.PaginationLength = response.data.n_page
+          let paperlist = response.data.papers
+          for (let x = 0; x < 6; x++)
               this.recommandPaper.push({
-                article_name: response.data.at(x).title,
-                author: response.data.at(x).author,
-                book: response.data.at(x).source,
-                quote_num: response.data.at(x).citation,
-                url: response.data.at(x).url,
+                article_name: paperlist[x].title,
+                author: this.to_string(paperlist[x].author),
+                book: paperlist[x].source,
+                quote_num: paperlist[x].citation,
+                url: paperlist[x].url,
               });
         }
       )
@@ -372,7 +380,7 @@ export default {
       )
       this.$axios({
         method: "post",
-        url: "/get_patent_by_scholar",
+        url: "/get_patents_by_scholar",
         data: qs.stringify({
           scholar_id: this.scholarId,
           page: npage,
@@ -386,11 +394,11 @@ export default {
           console.log("patent")
           for (let x = 0; x < 6; x++)
               this.recommandPatent.push({
-                article_name: response.data.at(x).title,
-                author: response.data.at(x).author,
-                book: response.data.at(x).source,
-                quote_num: response.data.at(x).citation,
-                url: response.data.at(x).url,
+                article_name: response.data[x].title,
+                author: response.data[x].author,
+                book: response.data[x].source,
+                quote_num: response.data[x].citation,
+                url: response.data[x].url,
               });
         }
       )
@@ -479,6 +487,9 @@ export default {
       }
     }
   },
+  beforeMount() {
+    this.scholarId = parseInt(this.$route.params.scholar_id);
+  },
   mounted() {
     this.loadScholarInfo();
     this.loadScholarIntro();
@@ -517,7 +528,8 @@ export default {
   font-family: "Times New Roman", "Source Han Sans CN Normal";
 }
 .faculty {
-  font-family: Serif, STZhongsong;
+  font-family: "Times New Roman", STZhongsong;
+  font-size: medium;
 }
 .intro {
   font-family: Georgia, "Source Han Sans CN Normal";

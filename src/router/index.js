@@ -72,7 +72,7 @@ const routes = [
             component:()=>import("../views/SearchResult/SearchResultPage")
           },
           {
-            path: '/scholarShow',
+            path: '/scholarShow/:scholar_id',
             name: 'ScholarShow',
             component: () => import('../views/Scholar/ScholarShow.vue')
           },
@@ -101,6 +101,21 @@ const routes = [
         children: [
         
         ]
+      },
+      {
+        path: '/scholarSearch',
+        name: 'scholarSearch',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/SearchScholar.vue'),
+      },
+      {
+        path: '/institutionSearch',
+        name: 'institutionSearch',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Institution/SearchInstitution.vue'),
+      },
+      {
+        path: '/institutionResult',
+        name: 'institutionResult',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Institution/InstitutionResult.vue'),
       },
       {
         path: '/paperDetail',

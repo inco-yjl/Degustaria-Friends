@@ -12,8 +12,6 @@
     </v-tabs>
 
     <v-tabs-items v-model="tab">
-
-
       <v-tab-item key="1">
         <div class="rank-content">
           <div class="field-filter">
@@ -58,7 +56,7 @@
                   :items="orgDesserts"
                   @page-count="orgpageCount = $event"
                   :page.sync="orgpage"
-                  :items-per-page="15"
+                  :items-per-page="10"
                   hide-default-footer
                   class="elevation-1"
                 >
@@ -112,7 +110,7 @@
                   :items="scholarDesserts"
                   @page-count="scholarpageCount = $event"
                   :page.sync="scholarpage"
-                  :items-per-page="15"
+                  :items-per-page="10"
                   hide-default-footer
                   class="elevation-1"
                 >
@@ -184,7 +182,7 @@
                   :items="conferenceDesserts"
                   @page-count="conferencepageCount = $event"
                   :page.sync="conferencePage"
-                  :items-per-page="15"
+                  :items-per-page="10"
                   hide-default-footer
                   class="elevation-1"
                 >
@@ -528,7 +526,7 @@ export default {
   position: relative;
   left: 0;
   height: auto;
-  top: 0;
+  margin-top: 69px;
   width: vw(1900);
 }
 .rank-tabs {
@@ -544,7 +542,7 @@ export default {
   position: relative;
   margin-right: vw(60);
   top: vh(39);
-  height: vh(900);
+  height: vh(850);
   left: 0;
 }
 .tree-filter {

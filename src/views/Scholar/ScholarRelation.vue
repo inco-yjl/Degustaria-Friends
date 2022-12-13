@@ -9,7 +9,7 @@
  export default {
   data() {
     return {
-      scholarId: "",
+      scholarId: 0,
       rdata: [],
       relation: []
     };
@@ -19,10 +19,9 @@
   },
   mounted() {
     this.scholarId = this.id
-    this.$nextTick(function() {
-      this.getRelationship();
-      this.initChart();
-    })
+    console.log(this.scholarId, this.id)
+    this.getRelationship();
+    this.initChart();
   },
  
   methods: {

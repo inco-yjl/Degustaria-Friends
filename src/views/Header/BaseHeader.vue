@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row justify="center" align="center" class="base-header" >
-      <v-system-bar app color="primary" dark height="70">
+      <v-system-bar app :color="$route.name==='scholarSearch'||$route.name==='institutionSearch'?'rgba(0,0,0,0)':'#232f3d'" dark height="70">
         <div class="d-flex align-center to-home-button" @click="ToHome">
           <v-img
             alt="Gusto Logo"
@@ -23,6 +23,10 @@
           />
         </div>
         <v-spacer /><v-spacer />
+        <div class="to-scholars" @click="toScholars()">学者</div>
+        <div class="index-span"></div>
+        <div class="to-institution" @click="toInstitution()">机构</div>
+        <div class="index-span"></div>
         <div class="to-statistics" @click="toStatistics()">统计</div>
         <v-spacer />
         <v-avatar size="45" :class="`rounded${45}`" class="border-white">
@@ -40,7 +44,7 @@
         </v-avatar>
       </v-system-bar>
     </v-row>
-    <router-view />
+    <router-view/>
   </div>
 </template>
 
@@ -55,10 +59,20 @@ export default {
       user_img: "",
       user_name: "",
       user_id: "",
-      user_email: "",
+      user_email: ""
     };
   },
   methods: {
+    toScholars() {
+      if (this.$route.name !== 'scholarSearch') {
+        this.$router.push({name: 'scholarSearch'});
+      }
+    },
+    toInstitution() {
+      if (this.$route.name !== 'institutionSearch') {
+        this.$router.push({name: 'institutionSearch'});
+      }
+    },
     toStatistics() {
       if (this.$route.name !== 'statisticsRank' && this.$route.name !== 'statisticsIllustration')
       this.$router.push({name: 'statisticsRank'});
@@ -90,6 +104,15 @@ export default {
 }
 .to-home-button {
   cursor: pointer;
+}
+.to-scholars {
+  cursor: pointer;
+}
+.to-institution {
+  cursor: pointer;
+}
+.index-span {
+  width: vw(80);
 }
 .to-statistics {
   cursor: pointer;
