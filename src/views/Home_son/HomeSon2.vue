@@ -2,11 +2,7 @@
   <div>
     <div style="display: flex">
       <div class="focus_1">
-        <v-btn
-          depressed
-          large
-          @click="into_another_son(1)"
-          v-if="user_name"
+        <v-btn depressed large @click="into_another_son(1)" v-if="user_name"
           >关注</v-btn
         >
       </div>
@@ -30,11 +26,7 @@
       </div>
 
       <div class="focus_3">
-        <v-btn
-          depressed
-          large
-          @click="into_another_son(3)"
-          v-if="user_name"
+        <v-btn depressed large @click="into_another_son(3)" v-if="user_name"
           >收藏</v-btn
         >
       </div>
@@ -106,60 +98,61 @@
           dark
           class="key_tab_item"
         >
-          <v-tab
-            @click="home_get_user_list_2()"
-          >
-          综合</v-tab>
+          <v-tab @click="home_get_user_list_2()"> 综合</v-tab>
           <v-tab
             v-for="item in keyword"
             :key="item.id"
             @click="search_one_key(item)"
           >
-          {{item}}
+            {{ item }}
           </v-tab>
         </v-tabs>
       </v-card>
     </div>
     <div>
-      <div v-if="recommand_content.length>0">
-      <v-card
-        class="home_focus_card_2"
-        v-for="item in recommand_content"
-        :key="item.id"
-      >
-        <v-list-item-title class="headline_2">{{
-          item.title
-        }}</v-list-item-title>
-        <div class="author_rcm">
-          <div
-            v-for="item2 in item.author_name"
-            :key="item2.id"
-            style="float: left"
-          >
-            <v-list-item-subtitle class="subtitle_recommand_1">{{
-              item2
-            }}</v-list-item-subtitle>
+      <div v-if="loaded !== 0">
+        <v-card
+          class="home_focus_card_2"
+          v-for="item in recommand_content"
+          :key="item.id"
+        >
+          <v-list-item-title class="headline_2">{{
+            item.title
+          }}</v-list-item-title>
+          <div class="author_rcm">
+            <div
+              v-for="item2 in item.author_name"
+              :key="item2.id"
+              style="float: left"
+            >
+              <v-list-item-subtitle class="subtitle_recommand_1">{{
+                item2
+              }}</v-list-item-subtitle>
+            </div>
           </div>
-        </div>
-        <v-list-item-subtitle class="subtitle_recommand_1">{{
-          item.year
-        }}</v-list-item-subtitle>
-        <div class="recommand_book" v-if="item.abstract !== 'null'">Abstract：</div>
-        <div class="recommand_book_2" v-if="item.abstract !== 'null'">
-          {{ item.abstract }}
-        </div>
-        <div style="display: flex">
-          <div class="quote_recommand_fa">
-            <p class="quote_recommand_0">引用量：</p>
-            <p class="quote_recommand">{{ item.n_citation }}</p>
+          <v-list-item-subtitle class="subtitle_recommand_1">{{
+            item.year
+          }}</v-list-item-subtitle>
+          <div class="recommand_book" v-if="item.abstract !== 'null'">
+            Abstract：
           </div>
-          <div class="recommand_icon_1" @click="into_detail(item.url[0])">
-            <v-icon color="#232f3d" class="recommand_icon_3" medium> mdi-earth </v-icon>
-            <a class="quote_recommand_1">原文链接</a>
+          <div class="recommand_book_2" v-if="item.abstract !== 'null'">
+            {{ item.abstract }}
           </div>
-        </div>
-      </v-card>
-    </div>
+          <div style="display: flex">
+            <div class="quote_recommand_fa">
+              <p class="quote_recommand_0">引用量：</p>
+              <p class="quote_recommand">{{ item.n_citation }}</p>
+            </div>
+            <div class="recommand_icon_1" @click="into_detail(item.url[0])">
+              <v-icon color="#232f3d" class="recommand_icon_3" medium>
+                mdi-earth
+              </v-icon>
+              <a class="quote_recommand_1">原文链接</a>
+            </div>
+          </div>
+        </v-card>
+      </div>
       <v-sheet class="pa-3" v-else>
         <v-skeleton-loader
           class="mx-auto"
@@ -229,6 +222,7 @@
   
 <script>
 import qs from "qs";
+import { ref } from "vue";
 export default {
   data() {
     return {
@@ -249,13 +243,14 @@ export default {
       timeout: 3000,
       x: null,
       y: "top",
-      keyword: ["AI", "a"],
+      keyword: [],
       arr1: [],
       arr2: [],
       arr_len: 2,
       input_keyword: "",
       add_tmp_str: "",
       del_tmp_str: "",
+      loaded: ref(0)
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -263,7 +258,6 @@ export default {
       vm.updateUser();
     });
   },
-  mounted() {},
   methods: {
     updateUser() {
       this.user_img = window.localStorage.getItem("user_headshot");
@@ -278,21 +272,24 @@ export default {
             username: this.user_name,
           }),
         })
-        .then((res) => {
-          console.log("add", res.data);
-          this.keyword = res.data.keywords;
-          this.arr_len = res.data.number;
-          for (let i = 0; i < this.arr_len; i++) {
-            this.arr1.push("0");
-            if (i != 0) this.arr2.push("1");
-          }
-          console.log("this.keyword", this.keyword);
-          this.home_get_user_list_2();
-          window.localStorage.setItem("user_keyword", res.data.keywords);
-        })
-        .catch((err) => {
-          console.log(err.errno);
-        });
+          .then((res) => {
+            console.log("add", res.data);
+            this.keyword = res.data.keywords;
+            this.arr_len = res.data.number;
+            for (let i = 0; i < this.arr_len; i++) {
+              this.arr1.push("0");
+              if (i != 0) this.arr2.push("1");
+            }
+            console.log("this.keyword", this.keyword);
+            if(!this.keyword){
+              this.keyword = '';
+            }
+            this.home_get_user_list_2();
+            window.localStorage.setItem("user_keyword", this.keyword);
+          })
+          .catch((err) => {
+            console.log(err.errno);
+          });
       } else {
         this.keyword = [];
         this.arr_len = 0;
@@ -318,7 +315,7 @@ export default {
       }
     },
     home_get_user_list_2() {
-      this.recommand_content = [];
+      this.loaded = 0;
       if (this.user_name != "") {
         this.$axios({
           method: "post",
@@ -340,12 +337,12 @@ export default {
             console.log("rcm_content", res.data);
             this.page_all = res.data.n_page > 100 ? 100 : res.data.n_page;
             this.recommand_content = res.data.papers;
+            this.loaded = 1;
           })
           .catch((err) => {
             console.log("err1", err.errno);
           });
-      }
-      else {
+      } else {
         this.$axios({
           method: "post",
           url: "search",
@@ -362,18 +359,19 @@ export default {
             "Content-Type": "application/json",
           },
         })
-        .then((res) => {
-          console.log("rcm_content2", res.data);
-          this.page_all = 100;
-          this.recommand_content = res.data.papers;
-        })
-        .catch((err) => {
-          console.log("err2", err.errno);
-        });
+          .then((res) => {
+            console.log("rcm_content2", res.data);
+            this.page_all = 100;
+            this.loaded = 1;
+            this.recommand_content = res.data.papers;
+          })
+          .catch((err) => {
+            console.log("err2", err.errno);
+          });
       }
     },
     search_one_key(item) {
-      this.recommand_content = [];
+      this.loaded = 0;
       console.log("item", item);
       this.$axios({
         method: "post",
@@ -395,6 +393,7 @@ export default {
           console.log("rcm_content", res.data);
           this.page_all = res.data.n_page > 100 ? 100 : res.data.n_page;
           this.recommand_content = res.data.papers;
+          this.loaded = 1;
         })
         .catch((err) => {
           console.log("err5", err.errno);
@@ -521,17 +520,17 @@ export default {
 .author_rcm {
   display: -webkit-box;
   -webkit-line-clamp: 1;
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
 }
 .subtitle_recommand_2 {
   margin-left: vw(20);
   font-family: "Source Han Sans CN Normal", sans-serif;
-  color: #90A4AE;
+  color: #90a4ae;
 }
 .recommand_book {
-  color: #455A64;
+  color: #455a64;
   margin-left: vw(20);
   margin-top: vh(15);
   margin-right: vw(20);
@@ -539,26 +538,26 @@ export default {
   font-family: "optima", sans-serif;
 }
 .recommand_book_2 {
-  color: #455A64;
+  color: #455a64;
   margin-left: vw(20);
   margin-top: vh(5);
   margin-right: vw(20);
   font-family: "optima", sans-serif;
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
 }
 .recommand_book_3 {
-  color: #455A64;
+  color: #455a64;
   margin-left: vw(20);
   margin-top: vh(5);
   margin-right: vw(20);
   font-family: "SourceHanSerifCN", sans-serif;
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
 }
@@ -614,7 +613,7 @@ export default {
   margin-top: vh(25);
 }
 .display_box_1 {
-  background-color: rgba(255,255,255,0.97);
+  background-color: rgba(255, 255, 255, 0.97);
   margin-bottom: vh(30);
   width: vw(1250);
   border-radius: vw(10);
@@ -635,7 +634,7 @@ export default {
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.008375rem;
-  color: #90A4AE;
+  color: #90a4ae;
   margin-left: vw(10);
   margin-top: vh(10);
   font-family: "Source Han Sans CN Normal", sans-serif;
@@ -652,7 +651,7 @@ export default {
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.008375rem;
-  color: #90A4AE;
+  color: #90a4ae;
   margin-left: vw(10);
   margin-top: vh(70);
   font-family: "Source Han Sans CN Normal", sans-serif;
@@ -684,12 +683,12 @@ export default {
   font-family: "Source Han Sans CN Normal", sans-serif;
 }
 .display_item_4:hover {
-  background-color: #37474F;
+  background-color: #37474f;
   margin-right: vw(20);
   color: white;
   padding: vw(10);
   border-radius: vw(10);
-  box-shadow: 0 0 5px 1px #37474F;
+  box-shadow: 0 0 5px 1px #37474f;
   margin-bottom: vh(20);
   font-family: "Source Han Sans CN Normal", sans-serif;
 }

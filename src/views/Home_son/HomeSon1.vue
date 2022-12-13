@@ -28,7 +28,7 @@
       </div>
     </div>
     <div>
-      <div v-if="focus_people.length > 0">
+      <div v-if="loaded !== 0">
         <v-card
           class="home_focus_card"
           v-for="item in focus_people"
@@ -143,6 +143,7 @@
   
 <script>
 import qs from "qs";
+import { ref } from "vue";
 export default {
   data() {
     return {
@@ -153,6 +154,7 @@ export default {
       user_email: "",
       page: 1,
       user_total: 0,
+      loaded: ref(0),
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -178,22 +180,7 @@ export default {
       if (!this.user_name) {
         this.into_another_son(2);
       }
-      this.$axios({
-        method: "post",
-        url: "/get_subscribed_scholar",
-        data: qs.stringify({
-          username: this.user_name,
-          page: this.page,
-          size: 5,
-        }),
-      })
-        .then((res) => {
-          console.log(res.data);
-          this.focus_people = res.data;
-        })
-        .catch((err) => {
-          console.log(err.errno);
-        });
+      this.home_get_user_list();
       this.$axios({
         method: "post",
         url: "/get_sub_num",
@@ -210,7 +197,7 @@ export default {
         });
     },
     home_get_user_list() {
-      this.focus_people = [];
+      this.loaded = 0;
       this.$axios({
         method: "post",
         url: "/get_subscribed_scholar",
@@ -223,6 +210,7 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.focus_people = res.data;
+          this.loaded = 1;
         })
         .catch((err) => {
           console.log(err.errno);
