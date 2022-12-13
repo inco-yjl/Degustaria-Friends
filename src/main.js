@@ -17,7 +17,6 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts
 
 
-
 new Vue({
   router,
   store,
