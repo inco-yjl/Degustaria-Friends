@@ -132,17 +132,8 @@
             <p class="quote_recommand">{{ item.n_citation }}</p>
           </div>
           <div class="recommand_icon_1" @click="into_detail(item.url[0])">
-            <v-badge
-              :value="hover"
-              color="#232f3d"
-              content="原文链接"
-              left
-              transition="slide-x-transition"
-            >
-              <v-hover v-model="hover">
-                <v-icon color="#232f3d" medium> mdi-earth </v-icon>
-              </v-hover>
-            </v-badge>
+            <v-icon color="#232f3d" class="recommand_icon_3" medium> mdi-earth </v-icon>
+            <p class="quote_recommand_1">原文链接</p>
           </div>
           <v-icon color="#232f3d" medium class="recommand_icon_2">
             mdi-star
@@ -229,21 +220,21 @@ export default {
             username: this.user_name,
           }),
         })
-          .then((res) => {
-            console.log("add", res.data);
-            this.keyword = res.data.keywords;
-            this.arr_len = res.data.number;
-            for (let i = 0; i < this.arr_len; i++) {
-              this.arr1.push("0");
-              if (i != 0) this.arr2.push("1");
-            }
-            console.log("this.keyword", this.keyword);
-            this.home_get_user_list_2();
-            window.localStorage.setItem("user_keyword", res.data.keywords);
-          })
-          .catch((err) => {
-            console.log(err.errno);
-          });
+        .then((res) => {
+          console.log("add", res.data);
+          this.keyword = res.data.keywords;
+          this.arr_len = res.data.number;
+          for (let i = 0; i < this.arr_len; i++) {
+            this.arr1.push("0");
+            if (i != 0) this.arr2.push("1");
+          }
+          console.log("this.keyword", this.keyword);
+          this.home_get_user_list_2();
+          window.localStorage.setItem("user_keyword", res.data.keywords);
+        })
+        .catch((err) => {
+          console.log(err.errno);
+        });
       } else {
         this.keyword = [];
         this.arr_len = 0;
@@ -294,7 +285,8 @@ export default {
           .catch((err) => {
             console.log("err1", err.errno);
           });
-      } else {
+      }
+      else {
         this.$axios({
           method: "post",
           url: "search",
@@ -302,8 +294,8 @@ export default {
             search_word: this.keyword,
             search_type: this.arr1,
             search_logic: this.arr2,
-            page: 1,
-            size: 1,
+            page: this.page,
+            size: 5,
             order_type: 2,
             order: 0,
           },
@@ -311,14 +303,14 @@ export default {
             "Content-Type": "application/json",
           },
         })
-          .then((res) => {
-            console.log("rcm_content2", res.data);
-            this.page_all = 1;
-            this.recommand_content = res.data.papers;
-          })
-          .catch((err) => {
-            console.log("err2", err.errno);
-          });
+        .then((res) => {
+          console.log("rcm_content2", res.data);
+          this.page_all = 100;
+          this.recommand_content = res.data.papers;
+        })
+        .catch((err) => {
+          console.log("err2", err.errno);
+        });
       }
     },
     add_subscribe_keyword() {
@@ -476,7 +468,7 @@ export default {
   -webkit-box-orient: vertical;
 }
 .quote_recommand_fa {
-  width: vw(1090);
+  width: vw(1010);
   margin-bottom: vh(10);
   margin-top: vh(20);
 }
@@ -497,14 +489,24 @@ export default {
   font-size: vw(19);
   float: left;
 }
+.quote_recommand_1 {
+  margin-left: vw(5);
+  display: flex;
+  font-family: "SourceHanSerifCN", sans-serif;
+  font-size: vw(17);
+  margin-top: vh(48);
+}
 .recommand_icon_fa {
   display: flex;
   margin-left: vw(1130);
 }
 .recommand_icon_2 {
   width: vw(36);
-  margin-left: vw(20);
+  margin-left: vw(40);
   margin-bottom: vh(30);
+}
+.recommand_icon_3 {
+  margin-top: vh(17);
 }
 .add_keyword_class {
   color: white;
@@ -608,7 +610,7 @@ export default {
   margin-top: vh(10);
 }
 .recommand_icon_1 {
-  margin-top: vh(48);
+  display: flex;
 }
 .recommand_icon_2 {
   margin-top: vh(49);
