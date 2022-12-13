@@ -671,6 +671,7 @@ export default {
     },
     getScholarRank() {
       var select_items = "";
+      this.scholarDesserts = [];
       for (var i = 0; i < this.fieldSelection.length; i++) {
         if (i != 0) select_items += ",";
         select_items += this.fieldSelection[i].name;
@@ -802,7 +803,7 @@ div::-webkit-scrollbar-track {
 .pa-3 {
   margin-left: vw(0.5);
   width: vw(1000);
-  height: vw(990);
+  height: vw(690);
   // border: 1px solid #232f3d;
 }
 .mx-auto {

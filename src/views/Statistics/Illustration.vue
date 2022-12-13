@@ -152,16 +152,18 @@ export default {
     const paperNum = 9827075;
     const patentNum = 331919;
     const orgNum = 252278;
-    const achievementSum = paperNum + patentNum;
+    const projectNum = 1061;
+    const achievementSum = paperNum + patentNum + projectNum;
     const paperPercent = ((paperNum / achievementSum)*100).toFixed(2);
     const patentPercent = ((patentNum / achievementSum)*100).toFixed(2);
+    const projectPercent = ((projectNum / achievementSum)*100).toFixed(2);
     return {
       title1: "收录",
-      scholarNum: 1326613,
+      scholarNum: 7175930,
       achievementSum,
       currentScaleRatio,
       paperPercent,
-      projectPercent: 0,
+      projectPercent,
       patentPercent,
       orgNum,
       distribution: [],

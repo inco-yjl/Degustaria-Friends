@@ -19,40 +19,44 @@
       ></v-text-field>
     </div>
     <div class="result-list">
-      <v-card
-        class="search-card"
-        v-for="(org, index) in result"
-        :key="index"
-        @click="ToInstitute(org)"
-      >
-        <div class="orgName">{{ org.name }}</div>
-        <div v-if="org.cn_name" class="orgName-cn">翻译：{{ org.cn_name }}</div>
-        <div class="official-url" v-if="org.url !== 'null'">
-          <img src="@/assets/icon/earth.png" /><a
-            class="link-url"
-            :href="org.url"
-            >{{ org.url }}</a
-          >
-        </div>
-        <div class="last-line">
-          <div class="wikipedia-url" v-if="org.wikipage !== 'null'">
-            <img src="@/assets/icon/wikipedia_icon.png" /><a
+      <div v-if="loaded !== 0">
+        <v-card
+          class="search-card"
+          v-for="(org, index) in result"
+          :key="index"
+          @click="ToInstitute(org)"
+        >
+          <div class="orgName">{{ org.name }}</div>
+          <div v-if="org.cn_name" class="orgName-cn">
+            翻译：{{ org.cn_name }}
+          </div>
+          <div class="official-url" v-if="org.url !== 'null'">
+            <img src="@/assets/icon/earth.png" /><a
               class="link-url"
-              :href="org.wikipage"
-              >{{ org.wikipage }}</a
+              :href="org.url"
+              >{{ org.url }}</a
             >
           </div>
-          <div
-            class="location"
-            v-if="org.longitude !== 'null' && org.latitude !== 'null'"
-          >
-            <v-icon>mdi-map-marker</v-icon>
-            ({{ org.longitude }},{{ org.latitude }})
+          <div class="last-line">
+            <div class="wikipedia-url" v-if="org.wikipage !== 'null'">
+              <img src="@/assets/icon/wikipedia_icon.png" /><a
+                class="link-url"
+                :href="org.wikipage"
+                >{{ org.wikipage }}</a
+              >
+            </div>
+            <div
+              class="location"
+              v-if="org.longitude !== 'null' && org.latitude !== 'null'"
+            >
+              <v-icon>mdi-map-marker</v-icon>
+              ({{ org.longitude }},{{ org.latitude }})
+            </div>
           </div>
-        </div>
-      </v-card>
+        </v-card>
+      </div>
       <!-- skeleton -->
-      <v-sheet class="pa-3" v-if="loaded === 0">
+      <v-sheet class="pa-3" v-else>
         <v-skeleton-loader
           class="mx-auto"
           max-width="1200"

@@ -19,124 +19,126 @@
       ></v-text-field>
     </div>
     <div class="result-list">
-      <v-card
-        class="search-card"
-        v-for="(item, index) in result"
-        :key="index"
-        @click="ToScholar(item)"
-      >
-        <v-list-item>
-          <div class="scholer_icon_1">
-            <div class="head_style_font" v-if="!item.icon">
-              {{ item.name1.charAt(0) }}
+      <div v-if="loaded !== 0">
+        <v-card
+          class="search-card"
+          v-for="(item, index) in result"
+          :key="index"
+          @click="ToScholar(item)"
+        >
+          <v-list-item>
+            <div class="scholer_icon_1">
+              <div class="head_style_font" v-if="!item.icon">
+                {{ item.name1.charAt(0) }}
+              </div>
+              <div class="icon-div" v-else><img :src="item.icon" /></div>
             </div>
-            <div class="icon-div" v-else><img :src="item.icon" /></div>
-          </div>
-          <v-list-item-content>
-            <v-list-item-title class="headline_fa">{{
-              item.name1
-            }}</v-list-item-title>
-            <div style="display: flex">
-              <v-list-item-subtitle class="headline_focus_1"
-                >H-index：{{ item.h_index }}</v-list-item-subtitle
-              >
-              <v-list-item-subtitle class="headline_focus_1"
-                >引用数：{{ item.citation }}</v-list-item-subtitle
-              >
-              <v-list-item-subtitle
-                class="headline_focus_1"
-                v-if="item.org != 'null'"
-                >机构：{{ item.org }}</v-list-item-subtitle
-              >
-              <v-list-item-subtitle
-                class="headline_focus_1"
-                v-if="item.org == 'null'"
-                >机构：-</v-list-item-subtitle
-              >
-            </div>
-          </v-list-item-content>
-        </v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="headline_fa">{{
+                item.name1
+              }}</v-list-item-title>
+              <div style="display: flex">
+                <v-list-item-subtitle class="headline_focus_1"
+                  >H-index：{{ item.h_index }}</v-list-item-subtitle
+                >
+                <v-list-item-subtitle class="headline_focus_1"
+                  >引用数：{{ item.citation }}</v-list-item-subtitle
+                >
+                <v-list-item-subtitle
+                  class="headline_focus_1"
+                  v-if="item.org != 'null'"
+                  >机构：{{ item.org }}</v-list-item-subtitle
+                >
+                <v-list-item-subtitle
+                  class="headline_focus_1"
+                  v-if="item.org == 'null'"
+                  >机构：-</v-list-item-subtitle
+                >
+              </div>
+            </v-list-item-content>
+          </v-list-item>
 
-        <div class="focus_research_area">
-          <div class="research-area-title">研究领域：</div>
-          <div class="search-item">
-            <div
-              class="focus_research_area_item"
-              v-if="item.interests != 'null'"
-            >
-              {{ item.interests }}
-            </div>
-            <div
-              class="focus_research_area_item_2"
-              v-if="item.interests == 'null'"
-            >
-              无
+          <div class="focus_research_area">
+            <div class="research-area-title">研究领域：</div>
+            <div class="search-item">
+              <div
+                class="focus_research_area_item"
+                v-if="item.interests != 'null'"
+              >
+                {{ item.interests }}
+              </div>
+              <div
+                class="focus_research_area_item_2"
+                v-if="item.interests == 'null'"
+              >
+                无
+              </div>
             </div>
           </div>
-        </div>
-      </v-card>
-      <v-sheet class="pa-3" v-if="loaded === 0">
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="mx-auto"
-            max-width="1200"
-            height="75"
-            type="list-item-avatar-three-line"
-          ></v-skeleton-loader>
-        </v-sheet>
+        </v-card>
+      </div>
+      <v-sheet class="pa-3" v-else>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+      </v-sheet>
       <v-pagination
         class="pagination"
         v-model="scholarPage"
@@ -158,7 +160,7 @@ export default {
       scholarPage: ref(1),
       scholarPageCount: ref(1),
       result: [],
-      loaded: ref(0)
+      loaded: ref(0),
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -360,7 +362,7 @@ export default {
 .pa-3 {
   margin-left: vw(0.5);
   width: vw(900);
-  height: vw(990);
+  height: vw(690);
   // border: 1px solid #232f3d;
 }
 .mx-auto {

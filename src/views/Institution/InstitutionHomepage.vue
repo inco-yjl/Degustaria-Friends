@@ -77,11 +77,12 @@
     <!-- <v-divider
         ></v-divider> -->
     <div class="page-bottom">
+      <div v-if="loadedBottom === 1">
       <v-card
         class="home_focus_card"
+        @click="ToScholar(item)"
         v-for="item in focus_people"
         :key="item.id"
-        v-if="loadedBottom === 1"
         >
         <v-list-item>
           <div class="scholer_icon_1">
@@ -128,12 +129,11 @@
           </div>
         </div>
       </v-card>
-
-      
+    </div>
 
       <v-sheet
         class="pa-4"
-        v-if="loadedBottom === 0"
+        v-else
       >
         <v-card class="aSklt">
 
@@ -360,6 +360,14 @@ export default defineComponent({
     initInfo() {
       this.searchOrg();
     },
+    ToScholar(item) {
+      this.$router.push({
+        name: "ScholarShow",
+        query: {
+          id: item.id,
+        },
+      });
+    },
     searchOrg() {
       // console.log("searchOrg");
       this.loadedTop = 0;
@@ -429,6 +437,7 @@ export default defineComponent({
             aScholar.article_num = "";
             aScholar.quote_num = res.data[i].citation;
             aScholar.interests = res.data[i].interests;
+            aScholar.org = res.data[i].org;
             this.focus_people.push(aScholar);
           }
           console.log("getScholarsByOrg");
