@@ -23,11 +23,11 @@
         <div class="orgName">{{ org.name }}</div>
         <div v-if="org.cn_name" class="orgName-cn">翻译：{{ org.cn_name }}</div>
         <div class="official-url" v-if="org.url !== 'null'">
-          <img src="@/assets/icon/earth.png" /><a>{{ org.url }}</a>
+          <img src="@/assets/icon/earth.png" /><a class="link-url" :href="org.url">{{ org.url }}</a>
         </div>
         <div class="last-line">
           <div class="wikipedia-url" v-if="org.wikipage !== 'null'">
-            <img src="@/assets/icon/wikipedia_icon.png" /><a>{{
+            <img src="@/assets/icon/wikipedia_icon.png" /><a class="link-url" :href="org.wikipage">{{
               org.wikipage
             }}</a>
           </div>
@@ -197,6 +197,15 @@ export default {
   }
   font-size: vh(16);
   line-height: vh(20);
+  display: -webkit-box; /*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical; /*伸缩盒子的子元素排列：从上到下*/
+}
+.link-url {
+  width: vw(600);
+
 }
 .wikipedia-url {
   img {
@@ -206,6 +215,11 @@ export default {
   }
   font-size: vh(16);
   line-height: vh(20);
+  display: -webkit-box; /*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical; /*伸缩盒子的子元素排列：从上到下*/
 }
 .location {
   position: absolute;

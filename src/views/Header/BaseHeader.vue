@@ -39,7 +39,8 @@
             width="42"
             text
           >
-            <span class="user-name-icon">{{user_name.charAt(0)}}</span>
+            <span class="user-name-icon" v-if="user_id">{{user_name.charAt(0)}}</span>
+            <span class="user-name-icon" v-else>游</span>
           </v-btn>
         </v-avatar>
       </v-system-bar>
@@ -87,7 +88,7 @@ export default {
     this.user_img = window.localStorage.getItem('user_headshot');
     this.user_name = window.localStorage.getItem('user_name')
     this.user_id = window.localStorage.getItem('user_id')
-    this.user_email = window.localStorage.getItem('user_email')
+    this.user_email = window.localStorage.getItem('user_email');
     console.log(this.user_name);
   }
 };
