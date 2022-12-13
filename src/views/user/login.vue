@@ -112,7 +112,7 @@
           window.localStorage.setItem("user_headshot", res.data.headshot);
           window.localStorage.setItem("user_id", res.data.id);
           if(res.data.errno == 0) {
-            setTimeout(() => { this.$router.push("/home/focus"); }, 1000);
+            setTimeout(() => { this.$router.push("/home"); }, 1000);
             this.snackbar = true;
             this.setData({ snackbar : true });
           }
