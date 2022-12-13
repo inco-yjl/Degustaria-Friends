@@ -121,6 +121,7 @@
       </v-card>
     </div>
     <div>
+      <div v-if="recommand_content.length>0">
       <v-card
         class="home_focus_card_2"
         v-for="item in recommand_content"
@@ -143,11 +144,10 @@
         <v-list-item-subtitle class="subtitle_recommand_1">{{
           item.year
         }}</v-list-item-subtitle>
-        <div class="recommand_book">Abstract：</div>
+        <div class="recommand_book" v-if="item.abstract !== 'null'">Abstract：</div>
         <div class="recommand_book_2" v-if="item.abstract !== 'null'">
           {{ item.abstract }}
         </div>
-        <div class="recommand_book_3" v-if="item.abstract === 'null'">-</div>
         <div style="display: flex">
           <div class="quote_recommand_fa">
             <p class="quote_recommand_0">引用量：</p>
@@ -155,13 +155,49 @@
           </div>
           <div class="recommand_icon_1" @click="into_detail(item.url[0])">
             <v-icon color="#232f3d" class="recommand_icon_3" medium> mdi-earth </v-icon>
-            <p class="quote_recommand_1">原文链接</p>
+            <a class="quote_recommand_1">原文链接</a>
           </div>
-          <v-icon color="#232f3d" medium class="recommand_icon_2">
-            mdi-star
-          </v-icon>
         </div>
       </v-card>
+    </div>
+      <v-sheet class="pa-3" v-else>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+      </v-sheet>
       <div class="page_index_2">
         <v-container>
           <v-row justify="center">
@@ -282,6 +318,7 @@ export default {
       }
     },
     home_get_user_list_2() {
+      this.recommand_content = [];
       if (this.user_name != "") {
         this.$axios({
           method: "post",
@@ -336,6 +373,7 @@ export default {
       }
     },
     search_one_key(item) {
+      this.recommand_content = [];
       console.log("item", item);
       this.$axios({
         method: "post",
@@ -428,7 +466,7 @@ export default {
         this.snackbar = true;
         this.setData({ snackbar: true });
       } else {
-        document.location.href = url_tmp;
+        window.open(url_tmp);
       }
     },
   },
@@ -551,7 +589,7 @@ export default {
   display: flex;
   font-family: "SourceHanSerifCN", sans-serif;
   font-size: vw(17);
-  margin-top: vh(50);
+  margin-top: vh(42);
 }
 .recommand_icon_fa {
   display: flex;
@@ -672,5 +710,14 @@ export default {
 .recommand_icon_2 {
   margin-top: vh(49);
   margin-left: vw(10);
+}
+.pa-3 {
+  margin-left: vw(100);
+  width: vw(1100);
+  height: vw(590);
+  // border: 1px solid #232f3d;
+}
+.mx-auto {
+  margin-top: vh(10);
 }
 </style>

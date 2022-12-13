@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <div class="page-top">
-      <div class="page-top-info">
+      <div class="page-top-info" v-if="loadedTop === 1">
         <div class="title1">{{ institutionName }}</div>
         <div v-if="wiki !== null" class="title3" @click="clkWiki">
           <svg
@@ -34,7 +34,7 @@
           {{ web }}
         </div>
       </div>
-      <div class="page-top-detail">
+      <!-- <div class="page-top-detail">
         <div
           v-if="infoDetail !== null"
           class="text1"
@@ -42,16 +42,48 @@
         >
           {{ infoDetail }}
         </div>
-      </div>
+      </div> -->
+
+      <v-sheet
+        class="pa-3"
+        v-if="loadedTop === 0"
+      >
+        <v-skeleton-loader
+          class="mx-auto1"
+          max-width="900"
+          height="45"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto2"
+          max-width="600"
+          height="25"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto3"
+          max-width="600"
+          height="25"
+          type="card"
+        ></v-skeleton-loader>
+      </v-sheet>
+
+
+
+
+
+
     </div>
     <!-- <v-divider
         ></v-divider> -->
     <div class="page-bottom">
+      <div v-if="loadedBottom === 1">
       <v-card
         class="home_focus_card"
         v-for="item in focus_people"
+        @click="ToScholar(item)"
         :key="item.id"
-      >
+        >
         <v-list-item>
           <div class="scholer_icon_1">
             <div class="head_style_font" v-if="!item.icon">
@@ -98,6 +130,207 @@
         </div>
       </v-card>
     </div>
+
+      <v-sheet
+        class="pa-4"
+        v-else
+      >
+        <v-card class="aSklt">
+
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="100"
+            height="100"
+            type="card"
+          ></v-skeleton-loader>
+
+
+          <v-skeleton-loader
+            class="mx-auto6"
+            max-width="400"
+            height="45"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto7"
+            max-width="1000"
+            height="20"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto8"
+            max-width="1170"
+            height="65"
+            type="list-item-two-line"
+          ></v-skeleton-loader>
+          <!-- <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader> -->
+        </v-card>
+        <v-card class="aSklt2">
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="100"
+            height="100"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto6"
+            max-width="400"
+            height="45"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto7"
+            max-width="1000"
+            height="20"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto8"
+            max-width="1170"
+            height="65"
+            type="list-item-two-line"
+          ></v-skeleton-loader>
+          <!-- <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader> -->
+        </v-card>
+        <v-card class="aSklt2">
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="100"
+            height="100"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto6"
+            max-width="400"
+            height="45"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto7"
+            max-width="1000"
+            height="20"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto8"
+            max-width="1170"
+            height="65"
+            type="list-item-two-line"
+          ></v-skeleton-loader>
+          <!-- <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader> -->
+        </v-card>
+        <v-card class="aSklt2">
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="100"
+            height="100"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto6"
+            max-width="400"
+            height="45"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto7"
+            max-width="1000"
+            height="20"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto8"
+            max-width="1170"
+            height="65"
+            type="list-item-two-line"
+          ></v-skeleton-loader>
+          <!-- <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto5"
+            max-width="1200"
+            height="150"
+            type="card"
+          ></v-skeleton-loader> -->
+        </v-card>
+        
+
+
+
+        <!-- <v-skeleton-loader
+          class="mx-auto4"
+          max-width="1180"
+          height="45"
+          type="card"
+        ></v-skeleton-loader> -->
+      </v-sheet>
+
+
+
+
+
+    </div>
   </div>
 </template>
 <script>
@@ -113,6 +346,8 @@ export default defineComponent({
       infoDetail: null,
       scholars: [],
       focus_people: [],
+      loadedTop: 0,
+      loadedBottom: 0,
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -125,8 +360,18 @@ export default defineComponent({
     initInfo() {
       this.searchOrg();
     },
+    ToScholar(item) {
+      console.log(item)
+      this.$router.push({
+        name: "ScholarShow",
+        query: {
+          id: item.id,
+        },
+      });
+    },
     searchOrg() {
       // console.log("searchOrg");
+      this.loadedTop = 0;
       this.institutionId = this.$route.query.id;
       this.$axios({
         method: "post",
@@ -137,6 +382,7 @@ export default defineComponent({
       })
         .then((res) => {
           console.log(res);
+          this.loadedTop = 1;
           this.institutionName = res.data.name;
           this.institutionId = res.data.id;
           // if ( res.data[0].introduction === "null" ) {
@@ -164,6 +410,7 @@ export default defineComponent({
     },
     getScholarsByOrg(name) {
       // console.log("getScholarsByOrg");
+      this.loadedBottom = 0;
       this.$axios({
         method: "post",
         url: "/get_scholars_by_org",
@@ -176,6 +423,7 @@ export default defineComponent({
         .then((res) => {
           console.log(res);
           this.focus_people = [];
+          this.loadedBottom = 1;
           for (var i = 0; i < res.data.length; i++) {
             var aScholar = {};
             aScholar.author_name = res.data[i].name1;
@@ -186,10 +434,11 @@ export default defineComponent({
               aScholar.icon =
                 "http://120.46.201.113:6001/api" + res.data[i].icon;
             }
-
+            aScholar.id = res.data[i].id;
             aScholar.article_num = "";
             aScholar.quote_num = res.data[i].citation;
             aScholar.interests = res.data[i].interests;
+            aScholar.org = res.data[i].org;
             this.focus_people.push(aScholar);
           }
           console.log("getScholarsByOrg");
@@ -343,7 +592,8 @@ export default defineComponent({
   margin-top: vh(20);
 }
 .home_focus_card {
-  margin-left: vw(110);
+  // border: 3px solid #1f22ff;
+  margin-left: vw(251);
   margin-top: vh(40);
   width: vw(1190);
   padding-bottom: vh(20);
@@ -450,14 +700,14 @@ export default defineComponent({
   width: vw(1200);
   padding-bottom: 20px;
   margin-left: vw(100);
-  border-bottom: 1px solid #d7d7d7;
+  // border-bottom: 1px solid #d7d7d7;
 }
 .page-top-info {
   // border: 3px solid #ff2fff;
   margin-left: vw(160);
   // height:vh(250);//改成自适应的
   //绝对，为了使顶部内容正常显示，不被search-bar遮挡
-  width: vw(800);
+  // width: vw(1000);
   // float: left;
   display: inline-block;
 }
@@ -476,6 +726,7 @@ export default defineComponent({
   //绝对，为了使顶部内容正常显示，不被search-bar遮挡
   width: vw(1720);
   margin-bottom: vw(100);
+  border-top: 1px solid #d7d7d7;
 }
 .bottom-left {
   // border: 3px solid #89e91c;
@@ -730,6 +981,75 @@ export default defineComponent({
   margin-bottom: vh(20);
   color: #7f7f7f;
 }
+.pa-3 {
+  margin-left: vw(0.5);
+  // width: vw(900);
+  // height: vw(690);
+  // border: 1px solid #232f3d;
+}
+.mx-auto1 {
+  margin-top: vh(-50);
+  margin-left: vw(149);
+  border-radius: 15px;
+  // border: 1px solid #232f3d;
+}
+.mx-auto2 {
+  margin-top: vh(10);
+  margin-left: vw(149);
+  border-radius: 10px;
+  // border: 1px solid #232f3d;
+}
+.mx-auto3 {
+  margin-top: vh(10);
+  margin-left: vw(149);
+  border-radius: 10px;
+  // border: 1px solid #232f3d;
+}
 // /
 // /
+.pa-4 {
+  margin-top: vh(72);
+  margin-left: vw(95);
+  // width: vw(900);
+  // height: vw(690);
+  // border: 1px solid #232f3d;
+}
+.mx-auto5 {
+  height: vh(100);
+  width: vw(100);
+  margin-top: vh(0);
+  margin-left: vw(17);
+  margin-bottom: vh(20);
+  // border: 1px solid #232f3d;
+}
+.mx-auto6 {
+  margin-top: vh(-108);
+  margin-left: vw(150);
+  // border: 1px solid #232f3d;
+}
+.mx-auto7 {
+  margin-top: vh(17);
+  margin-left: vw(150);
+  // border: 1px solid #232f3d;
+}
+.mx-auto4 {
+  margin-top: vh(40);
+  // border: 1px solid #232f3d;
+}
+.aSklt {
+  padding-top: vh(5);
+  margin-top: vh(-50);
+  margin-left: vw(149);
+  width: vw(1190);
+  // border: 1px solid #232f3d;
+  height: vh(195);
+}
+.aSklt2 {
+  padding-top: vh(5);
+  margin-top: vh(30);
+  margin-left: vw(149);
+  width: vw(1190);
+  // border: 1px solid #232f3d;
+  height: vh(195);
+}
 </style>
