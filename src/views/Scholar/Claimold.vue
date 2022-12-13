@@ -2,6 +2,33 @@
   <div id="Claimold">
     <base-header />
     <div class="wrapper">
+        <v-alert
+      outlined
+      type="error"
+      prominent
+      border="left"
+    width="800px"
+    style="margin:auto;margin-bottom:20px"
+    dismissible
+    v-if="resp==0"
+    v-model="alert2"
+    >
+     邮箱错误，认领失败
+    </v-alert>
+       <v-alert
+      outlined
+      type="success"
+      prominent
+      border="left"
+    width="800px"
+    style="margin:auto;margin-bottom:20px"
+    dismissible
+    v-if="resp==1"
+    v-model="alert"
+    >
+     认领成功
+    </v-alert>
+    
       <v-stepper v-model="e1">
         <v-stepper-header>
           <v-stepper-step :complete="e1 > 1" step="1">
@@ -32,67 +59,68 @@
         >
         </v-text-field>
         <v-btn style="display: inline-block; position: absolute;right: 30px;" rounded class="ma-2" color="primary" dark @click="search">搜索<v-icon dark right>mdi-magnify</v-icon></v-btn>
-        <div class="tabs">
+        <div class="tabs" style="margin-top:20px">
                      <v-card>
-                         <v-card class="mx-auto" max-width="650px">
-                        <v-list two-line class="liststyle">
+                         <v-card class="mx-auto" max-width="750px" style="margin-top:20px" >
+                        <v-list two-line class="liststyle" style="margin-top:20px">
                           <v-list-item-group
                             v-model="selected"
                             active-class="blue-grey lighten-4 blue-grey--text text--darken-4"
                             multiple
-                            style="width: 600px"
+                            style="width: 750px;margin-top:20px"
                           >
                             <template v-for="(item, index) in grouplist">
                               <v-list-item
-                                :key="item.id"
-                                style="width: 600px"
+                                :key="grouplist[index].id"
+                                style="width: 700px;margin-top:20px"
                               >
                                 <template v-slot:default="{ active }">
-                                  <v-list-item-content style="width: 600px">
-                                    <v-list-item-title v-text="listtxt.name" v-if="((item.name2==null) && (item.name3==null))">{{
-                                      item.name1
-                                    }}
-                                    </v-list-item-title>
-                                    <v-list-item-title v-text="listtxt.name" v-if="((item.name3==null) && (item.name2!=null))">{{
-                                        item.name1}} | {{item.name2}}
-                                    </v-list-item-title>
-                                    <v-list-item-title v-text="listtxt.name" v-else>
-                                        {{item.name1}} | {{item.name2}} |  {{item.name3}}
-                                    </v-list-item-title>
+                                  <v-list-item-content style="width: 700px " >
+                                    <v-list-item-title ><h3 style="display:inline">{{grouplist[index].name1}}</h3></v-list-item-title>
+                                    <v-list-item-title  v-if="grouplist[index].name2"><h3 style="display:inline"> | grouplist[index].name2 </h3></v-list-item-title>
+                                    <v-list-item-title  v-if="grouplist[index].name3"><h3 style="display:inline"> | grouplist[index].name3 </h3></v-list-item-title>
                                      <v-list-item-subtitle
-                                      class="text--primary"
-                                      v-text="listtxt.h_index"
-                                    >{{item.h_index}}</v-list-item-subtitle>   
+                                    ><h4 style="display:inline">{{listtxt.h_index}}:</h4>{{item.h_index}}</v-list-item-subtitle>   
                                 
+                                    <v-list-item-subtitle><h4 style="display:inline">{{listtxt.org}}:</h4>{{item.org}}</v-list-item-subtitle>
 
-                                    <v-list-item-subtitle
-                                      class="text--primary"
-                                      v-text="listtxt.org"
-                                    >{{item.org}}</v-list-item-subtitle>
-
-                                    <v-list-item-subtitle
-                                      v-text="listtxt.interests"
-                                    >{{item.interests}}</v-list-item-subtitle>
-                                    <v-list-item-subtitle
-                                      v-text="listtxt.citation"
-                                    >{{item.citation}}</v-list-item-subtitle>
-                                    <v-list-item-subtitle
-                                      v-text="listtxt.e_mail"
-                                    >{{item.e_mail}}</v-list-item-subtitle>
+                                    <v-list-item-subtitle><h4 style="display:inline">{{listtxt.interests}}:</h4>{{item.interests}}</v-list-item-subtitle>
+                                    <v-list-item-subtitle><h4 style="display:inline">{{listtxt.citation}}:</h4>{{item.citation}}</v-list-item-subtitle>
+                                    <v-list-item-subtitle><h4 style="display:inline">{{listtxt.e_mail}}:</h4>{{item.e_mail}}</v-list-item-subtitle>
                                   </v-list-item-content>
 
                                   <v-list-item-action>
-                                    <v-icon
-                                    @click="addart(item.id,active)"
+                                    <v-btn
+                                     @click="addart(item.id,active)"
                                       v-if="!active"
-                                      color="blue-grey lighten-1"
-                                    >
-                                      mdi-star-plus-outline
-                                    </v-icon>
-                                    <v-icon v-else color="blue-grey darken-4"
-                                    @click="delart(item.id,active)">
-                                      mdi-star-plus
-                                    </v-icon>
+        class="ma-2"
+        color="primary"
+        dark
+      >
+        认证
+        <v-icon
+          dark
+          right
+        >
+          mdi-checkbox-marked-circle
+        </v-icon>
+      </v-btn>
+                                
+                                 <v-btn
+                                     @click="delart(item.id,active)"
+                                      v-if="active"
+        class="ma-2"
+        color="primary"
+        dark
+      >
+        取消认证
+        <v-icon
+          dark
+          right
+        >
+          mdi-checkbox-marked-circle
+        </v-icon>
+      </v-btn>
                                   </v-list-item-action>
                                 </template>
                               </v-list-item>
@@ -105,9 +133,9 @@
                           </v-list-item-group>
                         </v-list>
                       </v-card>
-                      <!-- 页脚 -->
+                     <!-- 页脚 -->
                       <div class="text-center">
-                        <v-pagination v-model="page" :length="3"></v-pagination>
+                        <v-pagination v-model="page" :length="pagenum" @next="nextpage" @previous="prepage" @input="getpage"></v-pagination>
                       </div>
                       <!-- button panel -->
                       <v-row justify="space-around">
@@ -188,14 +216,16 @@ export default {
         
                 name:'学者名',
                 org: '组织',
-                interests: '感兴趣的领域',
+                interests: '领域',
                 citation: '首页',
                 h_index: 'h_index',
                 e_mail: '邮箱',
             },
+            pagenum:5,
             e1: 1,
-            email:"123@qq.com",
+            email:window.localStorage.getItem('user_email'),
             page:1,
+            resp:-1,
             index:1,
             namenum:1,
             switch1:true,
@@ -203,10 +233,12 @@ export default {
             ifshow: 1,
             searchmsg:'haha',
             articlenum: 2,
-            selected:[2],
+            selected:[],
             tab:null,
             id:'12106839',
             active:false,
+            alert:true,
+            alert2:true,
             grouplist:[
                         {
                             id: 1,
@@ -230,12 +262,9 @@ export default {
     },
     methods: {
       addart(el1,el2){
-        console.log(el1);
-        console.log(el2);
-        if(el2==false){
-          this.selected_articlesid.push(el1);
-          console.log('list:'+this.selected_articlesid);
-        }
+        this.id=el1;
+        this.e1=2;
+        this.selected.splice(0,this.selected.length);
       },
       delart(el1,el2){
         if(el2==true){
@@ -244,6 +273,16 @@ export default {
             this.selected_articlesid.splice(index,1);
         }
         console.log('list:'+this.selected_articlesid);
+      },
+      nextpage(){
+        this.search();
+      },
+      prepage(){
+        this.search();
+      },
+      getpage(){
+        // this.selected.splice(0,this.selected.length);
+        this.search();
       },
       search(){
          const formData = new FormData();
@@ -268,13 +307,14 @@ export default {
             console.log('搜索成功');
             console.log(res.data);
             this.grouplist=res.data;
-            console.log(res.data.length);
             // var i=0;
             // for(i=0;i<res.data.length;i++){
             //     this.grouplist.push(res.data[i]);
             // }
-            this.grouplist=res.data;
-            console.log('ori'+this.grouplist);
+            console.log('ori'+this.grouplist.length);
+            var i=0;
+            for(i=0;i<5;i++)
+            console.log(this.grouplist[i].id);
             // console.log('grouplist'+this.grouplist);
           })
           .catch((err) => {
@@ -305,7 +345,14 @@ export default {
       })
         .then((res) => {
           console.log("认领成功", res.data);
-          window.alert('认领成功!');
+          if(res.data.status){
+          this.resp=0;
+          this.alert2=true;
+          }
+          else{
+          this.resp=1;
+          this.alert=true;
+          }
         })
         .catch((err) => {
           //请求若出现路由找不到等其它异常，则在终端输出错误信息
@@ -331,12 +378,22 @@ export default {
 </script>
 
 <style>
+#Claimold{
+  position: absolute;
+  top: 20%;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 20%;
+  bottom: 20%;
+}
 .wrapper {
   width: 60%;
   margin: auto;
 }
 .mb-12 {
   padding: 20px;
+    margin: 20px;
+  margin-top:40px;
 }
 .cntstyle {
   display: inline-block;
@@ -345,7 +402,7 @@ export default {
 }
 .liststyle {
   margin: 20px;
-  width: 600px;
+  width: 700px;
   padding: 20px;
 }
 </style>

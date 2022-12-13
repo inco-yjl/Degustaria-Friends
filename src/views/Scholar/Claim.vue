@@ -1,6 +1,21 @@
 <template>
   <div id="Claim">
     <base-header />
+    <div width="900px">
+    <v-alert
+    v-model="alert"
+      outlined
+      type="warning"
+      prominent
+      border="left"
+      width="800px"
+       style="margin:auto;margin-bottom:20px"
+        dismissible
+       v-if="pagenum>=30"
+    >
+      搜索返回结果太多,仅显示前30页！可以试试更精确地关键词哦(*^▽^*)
+    </v-alert>
+    </div>
     <div class="wrapper">
       <v-stepper v-model="e1">
         <v-stepper-header>
@@ -25,7 +40,7 @@
                 您可以跟踪自己文章的引用情况。个人学术档案还会出现在学术搜索结果中
               </h3>
               <h4 style="display: inline-block; margin-right: 45px">
-                {{ email }}
+                {{email }}
               </h4>
               <v-btn
                 color="primary"
@@ -176,54 +191,53 @@
       <v-tabs-slider></v-tabs-slider>
 
                     <v-tab href="#tab-1" class="primary--text">
-                      文章组
+                      文章
                       <v-icon>mdi-file-document-multiple</v-icon>
                     </v-tab>
-
+<!-- 
                     <v-tab href="#tab-2" class="primary--text">
                       文章
                       <v-icon>mdi-file-document</v-icon>
-                    </v-tab>
+                    </v-tab> -->
                   </v-tabs>
 
                   <v-tabs-items v-model="tab">
-                    <v-tab-item v-for="i in 2" :key="i" :value="'tab-' + i">
+                    <v-tab-item v-for="i in 1" :key="i" :value="'tab-' + i">
                       <!-- <v-card flat>
           <v-card-text>{{ text }}</v-card-text>
         </v-card> -->
-                      <v-card class="mx-auto" max-width="650px">
+                      <v-card class="mx-auto" max-width="850px">
                         <v-list two-line class="liststyle">
                           <v-list-item-group
                             v-model="selected"
                             active-class="blue-grey lighten-4 blue-grey--text text--darken-4"
                             multiple
-                            style="width: 600px"
+                            style="width: 800px"
+                             v-if="grouplist.length!=0"
                           >
                             <template v-for="(item, index) in grouplist">
                               <v-list-item
                                 :key="item.id"
-                                style="width: 600px"
+                                style="width: 800px"
                               >
                                 <template v-slot:default="{ active }">
-                                  <v-list-item-content style="width: 600px">
-                                    <v-list-item-title v-text="item.title">{{
+                                  <v-list-item-content style="width: 800px">
+                                    <v-list-item-title><h3>{{
                                       item.title
-                                    }}</v-list-item-title>
+                                    }}</h3></v-list-item-title>
 
                                     <v-list-item-subtitle
                                       class="text--primary"
-                                      v-text="item.keyword"
-                                    ></v-list-item-subtitle>
+                                    ><h4 style="display:inline">关键词：</h4>{{item.keywords.toString()}}</v-list-item-subtitle>
 
                                     <v-list-item-subtitle
-                                      v-text="item.abstract"
-                                    ></v-list-item-subtitle>
+                                    ><h4 style="display:inline">摘要：</h4>{{item.abstract}}</v-list-item-subtitle>
                                   </v-list-item-content>
 
                                   <v-list-item-action>
                                     <v-icon
                                     @click="addart(item.id,active)"
-                                      v-if="!active"
+                                      v-if="active==false"
                                       color="blue-grey lighten-1"
                                     >
                                       mdi-star-plus-outline
@@ -242,22 +256,24 @@
                               ></v-divider>
                             </template>
                           </v-list-item-group>
+                          <h4 style="text-align:center" v-else>您还没有搜索任何文章哦~</h4>
                         </v-list>
                       </v-card>
+          
                       <!-- 页脚 -->
-                      <div class="text-center">
-                        <v-pagination v-model="page" :length="pagenum" @next="nextpage" @previous="prepage"></v-pagination>
+                      <div class="text-center" >
+                        <v-pagination  v-model="page" :length="pagenum" @next="nextpage" @previous="prepage" @input="getpage"></v-pagination>
                       </div>
                       <!-- button panel -->
                       <v-row justify="space-around">
                         <v-btn
-                          style="margin: 100px"
+                          style="margin: 50px"
                           color="primary"
                           @click="e1 = 1"
                           >返回</v-btn
                         >
                         <v-btn
-                          style="margin: 100px"
+                          style="margin: 50px"
                           color="primary"
                           @click="e1 = 3"
                           >继续</v-btn
@@ -267,9 +283,8 @@
                   </v-tabs-items>
                 </v-card>
               </div>
-            </v-card>
+            </v-card> 
           </v-stepper-content>
-
           <v-divider
             v-if="index < grouplist.length - 1"
             :key="index"
@@ -297,7 +312,7 @@
           <!-- button panel -->
       <v-row  justify="space-around">          
         <v-btn style="margin:100px" color="primary"  @click="e1=2">返回</v-btn>
-        <v-btn style="margin:100px" color="primary"  @click="submit">继续</v-btn>
+        <v-btn style="margin:100px" color="primary"  @click="submit">完成</v-btn>
     </v-row>
       </v-stepper-content>
     </v-stepper-items>
@@ -314,7 +329,8 @@ export default {
     data() {
         return {
             e1: 1,
-            email:"1195800097@qq.com",
+            email: '1195800097@qq.com',
+            alert:true,
             form:{
                 name1:'',
                 name2:'',
@@ -331,21 +347,21 @@ export default {
             switch1:true,
             switch2:true,
             ifshow: 1,
-            searchmsg:'haha',
+            searchmsg:'',
             articlenum: 2,
             tab:null,
             active:false,
             grouplist:[
-                        {
-                            id:1,
-                            keywords: ['Brunch this weekend?'],
-                            author:['ycp'],
-                            abstract: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-                            title: 'Ali Connors',
-                        },
+                        // {
+                        //     id:1,
+                        //     keywords: ['Brunch this weekend?'],
+                        //     author:['ycp'],
+                        //     abstract: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+                        //     title: 'Ali Connors',
+                        // },
                     ],
             valid:true,
-            selected:[2],
+            selected:[],
             selected_articlesid:[],
         }
     },
@@ -358,25 +374,32 @@ export default {
           this.namenum++;
       },
       addart(el1,el2){
-        console.log(el1);
-        console.log(el2);
-        if(el2==false){
+        if(!this.selected_articlesid.includes(el1)){
+          this.active=true;
+        console.log('selected'+this.selected);
           this.selected_articlesid.push(el1);
           console.log('list:'+this.selected_articlesid);
         }
       },
       delart(el1,el2){
-        if(el2==true){
+        if(this.selected_articlesid.includes(el1)){
+        this.active=false;
           const index=this.selected_articlesid.indexOf(el1);
           if(index!=-1)
             this.selected_articlesid.splice(index,1);
-        }
         console.log('list:'+this.selected_articlesid);
+        }
       },
       nextpage(){
         this.search();
+        this.selected.splice(0,this.selected.length);
+        
       },
       prepage(){
+        this.search();
+      },
+      getpage(){
+        // this.selected.splice(0,this.selected.length);
         this.search();
       },
       search(){
@@ -393,7 +416,8 @@ export default {
           order_type:0,
           order:0
 		}
-    console.log(JSON.stringify(data))
+    console.log(JSON.stringify(data));
+              console.log(window.localStorage.getItem('user_name'));
       this.$axios({
         url:'/search',
 	      method:'post',
@@ -408,6 +432,9 @@ export default {
             /* res 是 response 的缩写 */
             console.log('搜索成功');
             console.log(res.data);
+            if(res.data.n_page>30)
+            this.pagenum=30;
+            else
             this.pagenum=res.data.n_page;
             this.grouplist=res.data.papers;
             
@@ -416,6 +443,12 @@ export default {
             /* 请求若出现路由找不到等其它异常，则在终端输出错误信息 */
             console.log(err);
           });
+          this.selected.splice(0,this.selected.length);
+          var i=0;
+          for(i=0;i<5;i++){
+            if(this.selected_articlesid.includes(this.grouplist[i].id))
+            this.selected.push(i);
+          }
 
       },
         submit(){
@@ -485,22 +518,33 @@ export default {
 <style>
 #Claim {
   /* background-color: #ECEFF1; */
+  position: absolute;
+  top: 20%;
+  width: 95%;
+  height: 100%;
+  margin-bottom: 20%;
+  bottom: 20%;
 }
 .wrapper {
-  width: 60%;
+  width: 70%;
   margin: auto;
 }
 .mb-12 {
   padding: 20px;
+  width: 100%;
 }
 .cntstyle {
   display: inline-block;
   position: absolute;
   right: 30px;
+
+}
+.text-center{
+  margin:40px
 }
 .liststyle {
   margin: 20px;
-  width: 600px;
+  width: 80%;
   padding: 20px;
 }
 </style>
