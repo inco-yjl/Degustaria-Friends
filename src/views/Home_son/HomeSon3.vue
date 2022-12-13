@@ -2,11 +2,7 @@
   <div>
     <div style="display: flex">
       <div class="focus_1">
-        <v-btn
-          depressed
-          large
-          v-if="user_name"
-          @click="into_another_son(1)"
+        <v-btn depressed large v-if="user_name" @click="into_another_son(1)"
           >关注</v-btn
         >
       </div>
@@ -23,7 +19,13 @@
         >
       </div>
       <div class="focus_3" v-if="user_name">
-        <v-btn depressed large @click="into_another_son(3)" color="blue-grey lighten-4">收藏</v-btn>
+        <v-btn
+          depressed
+          large
+          @click="into_another_son(3)"
+          color="blue-grey lighten-4"
+          >收藏</v-btn
+        >
       </div>
     </div>
     <div>
@@ -60,7 +62,9 @@
             <p class="quote_recommand">{{ item.n_citation }}</p>
           </div>
           <div class="recommand_icon_1" @click="into_detail(item.url[0])">
-            <v-icon color="#232f3d" class="recommand_icon_3" medium> mdi-earth </v-icon>
+            <v-icon color="#232f3d" class="recommand_icon_3" medium>
+              mdi-earth
+            </v-icon>
             <p class="quote_recommand_1">原文链接</p>
           </div>
           <v-icon color="#232f3d" medium class="recommand_icon_2">
@@ -76,7 +80,7 @@
                 <v-pagination
                   v-model="page"
                   :length="page_all"
-                  @input="home_get_user_list_2()"
+                  @input="home_get_user_list_3()"
                 ></v-pagination>
               </v-container>
             </v-col>
@@ -140,36 +144,10 @@ export default {
       this.user_name = window.localStorage.getItem("user_name");
       this.user_id = window.localStorage.getItem("user_id");
       this.user_email = window.localStorage.getItem("user_email");
-      if (this.user_name != "") {
-        this.$axios({
-          method: "post",
-          url: "/get_keywords_by_username",
-          data: qs.stringify({
-            username: this.user_name,
-          }),
-        })
-        .then((res) => {
-          console.log("add", res.data);
-          this.keyword = res.data.keywords;
-          this.arr_len = res.data.number;
-          for (let i = 0; i < this.arr_len; i++) {
-            this.arr1.push("0");
-            if (i != 0) this.arr2.push("1");
-          }
-          console.log("this.keyword", this.keyword);
-          this.home_get_user_list_2();
-          window.localStorage.setItem("user_keyword", res.data.keywords);
-        })
-        .catch((err) => {
-          console.log(err.errno);
-        });
-      } else {
-        this.keyword = [];
-        this.arr_len = 0;
-        this.arr1 = [];
-        this.arr2 = [];
-        this.home_get_user_list_2();
-      }
+      if (!this.user_name) {
+        this.into_another_son(2);
+      }else 
+      this.home_get_user_list_3();
     },
     into_another_son(choose_num) {
       console.log(choose_num);
@@ -187,8 +165,26 @@ export default {
         });
       }
     },
-    home_get_user_list_2() {
+    home_get_user_list_3() {
       if (this.user_name != "") {
+        this.$axios({
+          method: "post",
+          url: "collection_paper_list",
+          data: {
+            uid: this.user_id,
+            page: this.page,
+            size: 5,
+          },
+        })
+          .then((res) => {
+            console.log("rcm_content", res.data);
+            this.page_all = res.data.n_page;
+            this.recommand_content = res.data.info;
+          })
+          .catch((err) => {
+            console.log("err1", err.errno);
+          });
+      } else {
         this.$axios({
           method: "post",
           url: "search",
@@ -206,100 +202,14 @@ export default {
           },
         })
           .then((res) => {
-            console.log("rcm_content", res.data);
-            this.page_all = res.data.n_page > 100 ? 100 : res.data.n_page;
+            console.log("rcm_content2", res.data);
+            this.page_all = 100;
             this.recommand_content = res.data.papers;
           })
           .catch((err) => {
-            console.log("err1", err.errno);
+            console.log("err2", err.errno);
           });
       }
-      else {
-        this.$axios({
-          method: "post",
-          url: "search",
-          data: {
-            search_word: this.keyword,
-            search_type: this.arr1,
-            search_logic: this.arr2,
-            page: this.page,
-            size: 5,
-            order_type: 2,
-            order: 0,
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => {
-          console.log("rcm_content2", res.data);
-          this.page_all = 100;
-          this.recommand_content = res.data.papers;
-        })
-        .catch((err) => {
-          console.log("err2", err.errno);
-        });
-      }
-    },
-    add_subscribe_keyword() {
-      this.keyword.push(this.input_keyword);
-      console.log("this.input_keyword", this.input_keyword);
-      console.log("this.keyword", this.keyword);
-      this.add_tmp_str = "";
-      for (let i = 0; i < this.keyword.length; i++) {
-        if (i != this.keyword.length - 1)
-          this.add_tmp_str = this.add_tmp_str + this.keyword[i] + ",";
-        else this.add_tmp_str = this.add_tmp_str + this.keyword[i];
-      }
-      console.log("this.add_tmp_str", this.add_tmp_str);
-      this.arr1.push("0");
-      this.arr2.push("1");
-      this.$axios({
-        method: "post",
-        url: "/set_keywords_by_username",
-        data: qs.stringify({
-          username: this.user_name,
-          new_keywords: this.add_tmp_str,
-        }),
-      })
-        .then((res) => {
-          this.home_get_user_list_2();
-          console.log("add_keyword", res.data);
-          this.input_keyword = "";
-          this.setData({ input_keyword: "" });
-        })
-        .catch((err) => {
-          console.log("err3", err.errno);
-        });
-    },
-    home_del_subscribe(tmp_item) {
-      this.keyword.splice(this.keyword.indexOf(tmp_item), 1);
-      console.log("tmp_item", tmp_item);
-      console.log("this.keyword", this.keyword);
-      this.arr1.splice(0, 1);
-      this.arr2.splice(0, 1);
-      this.del_tmp_str = "";
-      for (let i = 0; i < this.keyword.length; i++) {
-        if (i != this.keyword.length - 1)
-          this.del_tmp_str = this.del_tmp_str + this.keyword[i] + ",";
-        else this.del_tmp_str = this.del_tmp_str + this.keyword[i];
-      }
-      console.log("this.del_tmp_str", this.del_tmp_str);
-      this.$axios({
-        method: "post",
-        url: "/set_keywords_by_username",
-        data: qs.stringify({
-          username: this.user_name,
-          new_keywords: this.del_tmp_str,
-        }),
-      })
-        .then((res) => {
-          this.home_get_user_list_2();
-          console.log("del_keyword", res.data);
-        })
-        .catch((err) => {
-          console.log("err4", rr.errno);
-        });
     },
     into_detail(url_tmp) {
       console.log(url_tmp);
@@ -354,17 +264,17 @@ export default {
 .author_rcm {
   display: -webkit-box;
   -webkit-line-clamp: 1;
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
 }
 .subtitle_recommand_2 {
   margin-left: vw(20);
   font-family: "Source Han Sans CN Normal", sans-serif;
-  color: #90A4AE;
+  color: #90a4ae;
 }
 .recommand_book {
-  color: #455A64;
+  color: #455a64;
   margin-left: vw(20);
   margin-top: vh(15);
   margin-right: vw(20);
@@ -372,26 +282,26 @@ export default {
   font-family: "optima", sans-serif;
 }
 .recommand_book_2 {
-  color: #455A64;
+  color: #455a64;
   margin-left: vw(20);
   margin-top: vh(5);
   margin-right: vw(20);
   font-family: "optima", sans-serif;
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
 }
 .recommand_book_3 {
-  color: #455A64;
+  color: #455a64;
   margin-left: vw(20);
   margin-top: vh(5);
   margin-right: vw(20);
   font-family: "SourceHanSerifCN", sans-serif;
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
 }
@@ -447,7 +357,7 @@ export default {
   margin-top: vh(25);
 }
 .display_box_1 {
-  background-color: rgba(255,255,255,0.97);
+  background-color: rgba(255, 255, 255, 0.97);
   margin-bottom: vh(30);
   width: vw(1250);
   border-radius: vw(10);
@@ -468,7 +378,7 @@ export default {
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.008375rem;
-  color: #90A4AE;
+  color: #90a4ae;
   margin-left: vw(10);
   margin-top: vh(10);
   font-family: "Source Han Sans CN Normal", sans-serif;
@@ -485,7 +395,7 @@ export default {
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.008375rem;
-  color: #90A4AE;
+  color: #90a4ae;
   margin-left: vw(10);
   margin-top: vh(70);
   font-family: "Source Han Sans CN Normal", sans-serif;
@@ -517,12 +427,12 @@ export default {
   font-family: "Source Han Sans CN Normal", sans-serif;
 }
 .display_item_4:hover {
-  background-color: #37474F;
+  background-color: #37474f;
   margin-right: vw(20);
   color: white;
   padding: vw(10);
   border-radius: vw(10);
-  box-shadow: 0 0 5px 1px #37474F;
+  box-shadow: 0 0 5px 1px #37474f;
   margin-bottom: vh(20);
   font-family: "Source Han Sans CN Normal", sans-serif;
 }

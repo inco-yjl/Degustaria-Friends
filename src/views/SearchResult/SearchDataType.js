@@ -47,51 +47,11 @@ export const attributes = [
             name: "综合",
             value: "0",
         },
-        {
-            name: "主题",
-            value: "1",
-        },
-        {
-            name: "专利名",
-            value: "2",
-        },
-        {
-            name: "关键词",
-            value: "3",
-        },
-        {
-            name: "发明人",
-            value: "4",
-        },
     ],
     [
         {
             name: "综合",
             value: "0",
-        },
-        {
-            name: "主题",
-            value: "1",
-        },
-        {
-            name: "项目名称",
-            value: "2",
-        },
-        {
-            name: "简介",
-            value: "3",
-        },
-        {
-            name: "关键词",
-            value: "4",
-        },
-        {
-            name: "项目专家",
-            value: "5",
-        },
-        {
-            name: "承担机构",
-            value: "6",
         },
 
     ],

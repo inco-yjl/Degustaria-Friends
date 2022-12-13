@@ -108,6 +108,14 @@ const routes = [
         ]
       },
       {
+        path:'/scholarold',
+        name:'scholarold',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/Claimold.vue'),
+        children: [
+        
+        ]
+      },
+      {
         path: '/scholarSearch',
         name: 'scholarSearch',
         component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/SearchScholar.vue'),

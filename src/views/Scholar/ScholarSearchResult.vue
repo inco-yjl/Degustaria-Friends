@@ -19,57 +19,132 @@
       ></v-text-field>
     </div>
     <div class="result-list">
-      <v-card
-        class="search-card"
-        v-for="(item, index) in result"
-        :key="index"
-        @click="ToScholar(item)"
-      >
-        <v-list-item>
-          <div class="scholer_icon_1">
-            <div class="head_style_font" v-if="!item.icon">
-              {{ item.name1.charAt(0) }}
+      <div v-if="loaded !== 0">
+        <v-card
+          class="search-card"
+          v-for="(item, index) in result"
+          :key="index"
+          @click="ToScholar(item)"
+        >
+          <v-list-item>
+            <div class="scholer_icon_1">
+              <div class="head_style_font" v-if="!item.icon">
+                {{ item.name1.charAt(0) }}
+              </div>
+              <div class="icon-div" v-else><img :src="item.icon" /></div>
             </div>
-            <div class="icon-div" v-else><img :src="item.icon" /></div>
-          </div>
-          <v-list-item-content>
-            <v-list-item-title class="headline_fa">{{
-              item.name1
-            }}</v-list-item-title>
-            <div style="display: flex">
-              <v-list-item-subtitle class="headline_focus_1"
-                >H-index：{{ item.h_index }}</v-list-item-subtitle
-              >
-              <v-list-item-subtitle class="headline_focus_1"
-                >引用数：{{ item.citation }}</v-list-item-subtitle
-              >
-              <v-list-item-subtitle
-                class="headline_focus_1"
-                v-if="item.org != 'null'"
-                >机构：{{ item.org }}</v-list-item-subtitle
-              >
-              <v-list-item-subtitle
-                class="headline_focus_1"
-                v-if="item.org == 'null'"
-                >机构：-</v-list-item-subtitle
-              >
-            </div>
-          </v-list-item-content>
-        </v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="headline_fa">{{
+                item.name1
+              }}</v-list-item-title>
+              <div style="display: flex">
+                <v-list-item-subtitle class="headline_focus_1"
+                  >H-index：{{ item.h_index }}</v-list-item-subtitle
+                >
+                <v-list-item-subtitle class="headline_focus_1"
+                  >引用数：{{ item.citation }}</v-list-item-subtitle
+                >
+                <v-list-item-subtitle
+                  class="headline_focus_1"
+                  v-if="item.org != 'null'"
+                  >机构：{{ item.org }}</v-list-item-subtitle
+                >
+                <v-list-item-subtitle
+                  class="headline_focus_1"
+                  v-if="item.org == 'null'"
+                  >机构：-</v-list-item-subtitle
+                >
+              </div>
+            </v-list-item-content>
+          </v-list-item>
 
-        <div class="focus_research_area" style="display: flex">
-          研究领域：
-          <div class="focus_research_area_item" v-if="item.interests != 'null'">
-            {{ item.interests }}
+          <div class="focus_research_area">
+            <div class="research-area-title">研究领域：</div>
+            <div class="search-item">
+              <div
+                class="focus_research_area_item"
+                v-if="item.interests != 'null'"
+              >
+                {{ item.interests }}
+              </div>
+              <div
+                class="focus_research_area_item_2"
+                v-if="item.interests == 'null'"
+              >
+                无
+              </div>
+            </div>
           </div>
-          <div
-            class="focus_research_area_item_2"
-            v-if="item.interests == 'null'"
-          >
-            无
-          </div>
-        </div>
-      </v-card>
+        </v-card>
+      </div>
+      <v-sheet class="pa-3" v-else>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-avatar-three-line"
+        ></v-skeleton-loader>
+      </v-sheet>
+      <v-pagination
+        class="pagination"
+        v-model="scholarPage"
+        :total-visible="7"
+        :length="scholarPageCount"
+      ></v-pagination>
     </div>
   </div>
 </template>
@@ -85,10 +160,63 @@ export default {
       scholarPage: ref(1),
       scholarPageCount: ref(1),
       result: [],
+      loaded: ref(0),
     };
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.searchResult();
+    });
+  },
+  watch: {
+    scholarPage(newVal) {
+      this.searchResult();
+    },
+  },
   methods: {
-    searchScholar() {},
+    ToScholar(item) {
+      this.$router.push({
+        name: "ScholarShow",
+        query: {
+          id: item.id,
+        },
+      });
+    },
+    searchScholar() {
+      if (!this.singleInput || !this.singleInput.length > 0) {
+        return;
+      }
+      this.scholarPage = 1;
+      this.scholarPageCount = 1;
+      this.searchResult();
+      this.$router.push({
+        name: "scholarResult",
+        query: {
+          searchWord: this.singleInput,
+        },
+      });
+    },
+    searchResult() {
+      this.loaded = 0;
+      this.$axios({
+        method: "post",
+        url: "/search_scholar",
+        data: qs.stringify({
+          search_word: this.singleInput,
+          page: this.scholarPage,
+          size: 10,
+        }),
+      })
+        .then((res) => {
+          console.log(res.data);
+          this.loaded = 1;
+          this.scholarPageCount = res.data.amount;
+          this.result = res.data.list;
+        })
+        .catch((err) => {
+          console.log(err.errno);
+        });
+    },
   },
 };
 </script>
@@ -133,6 +261,7 @@ export default {
 .result-list {
   margin-top: vh(20);
   margin-left: vw(500);
+  padding-bottom: vh(50);
   width: vw(900);
 }
 .search-card {
@@ -160,18 +289,25 @@ export default {
   color: #263238;
   font-family: "Source Han Sans CN Normal", sans-serif;
 }
+.research-area-title {
+  width: vw(100);
+}
 .focus_research_area {
+  display: flex;
+  flex-wrap: wrap;
   margin-left: vw(20);
   font-family: "SourceHanSerifCN", sans-serif;
   font-weight: 500;
   font-size: vw(18);
   margin-top: vh(20);
 }
+.search-item {
+  width: vw(700);
+}
 .focus_research_area_item {
   margin-right: vw(10);
   margin-left: vw(5);
   font-family: "optima", sans-serif;
-  width: vw(1050);
   margin-top: vh(1);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -183,7 +319,6 @@ export default {
   margin-right: vw(10);
   margin-left: vw(5);
   font-family: "SourceHanSerifCN", sans-serif;
-  width: vw(1050);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   overflow: hidden;
@@ -214,7 +349,7 @@ export default {
 }
 .icon-div {
   position: relative;
-  float:left;
+  float: left;
   width: 100%;
   height: 100%;
   justify-content: center;
@@ -222,6 +357,15 @@ export default {
 }
 .page_index_1 {
   text-align: center;
+  margin-top: vh(10);
+}
+.pa-3 {
+  margin-left: vw(0.5);
+  width: vw(900);
+  height: vw(990);
+  // border: 1px solid #232f3d;
+}
+.mx-auto {
   margin-top: vh(10);
 }
 </style>
