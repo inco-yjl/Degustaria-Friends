@@ -271,6 +271,7 @@ export default {
 }
 .loading{
   width: vw(700)
+
 }
 .not_found{
   margin: vw(10);
