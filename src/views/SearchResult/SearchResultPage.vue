@@ -3,7 +3,7 @@
     <v-container>
       <v-row  no-gutters>
 <!--        侧边栏-->
-        <v-col >
+        <v-col v-if="is_search_paper">
           <div class="aside" >
             <v-row>
               <div class="aside-flitter">
@@ -31,7 +31,7 @@
 <!--        搜索结果-->
         <v-col>
           <div class="searchResult">
-            <v-row>
+            <v-row v-if="is_search_paper">
               <v-tabs>
                 <v-tab v-for="(item,index) in this.order_type" :key="index" @click="order_change(index)">
                   {{item.name}}
@@ -44,6 +44,7 @@
                 <search-result
                     v-for="paper in this.papers"
                     :paper="paper"
+                    :mode="cur_mode"
                 ></search-result>
             </v-row>
             <v-row v-if="!showPapers">
@@ -99,7 +100,7 @@ import SearchResult from "@/views/SearchResult/SearchResult";
 import {searchRequest} from "@/views/SearchResult/searchRequest";
 import { mdiArrowUp,mdiArrowDown,mdiArrowRight,mdiArrowLeft } from '@mdi/js';
 import { ref, computed } from 'vue'
-import {PAGE_SIZE} from "@/views/SearchResult/SearchDataType";
+import {MODE_PAPER, PAGE_SIZE} from "@/views/SearchResult/SearchDataType";
 export default {
   name: "SearchResultPage",
   components: {SearchResult, AsideArtributeFilter, AsideTimeFlitter, SearchHeader},
@@ -144,6 +145,10 @@ export default {
       return searchRequest(this.$store.getters.get_search_param).
       then((res)=>{
         let data=res.data
+        if(data.papers===undefined){
+          console.log("不是搜索论文")
+          data.papers=data.res
+        }
         console.log("搜索结果：")
         console.log(data)
         _this.$store.commit('mod_page_info',data)
@@ -177,6 +182,12 @@ export default {
 
   },
   computed:{
+    cur_mode(){
+      return this.$store.getters.get_search_param.mode
+    },
+    is_search_paper(){
+      return this.$store.getters.get_search_param.mode===MODE_PAPER
+    },
     n_page(){
       return this.$store.getters.get_page_info.n_page
     },
@@ -204,13 +215,20 @@ export default {
     },
   },
   created() {
-    this.papers=this.$store.getters.get_page_info.papers
-    this.field=this.$store.getters.get_page_info.field
-    this.source=this.$store.getters.get_page_info.source
-    this.org=this.$store.getters.get_page_info.org
-    this.time_start=this.$store.getters.get_page_info.time[0]
-    this.time_end=this.$store.getters.get_page_info.time[1]
-    this.status=true
+    console.log(this.$store.getters.get_page_info)
+    if(this.$store.getters.get_search_param.mode===MODE_PAPER){
+      this.papers=this.$store.getters.get_page_info.papers
+      this.field=this.$store.getters.get_page_info.field
+      this.source=this.$store.getters.get_page_info.source
+      this.org=this.$store.getters.get_page_info.org
+      this.time_start=this.$store.getters.get_page_info.time[0]
+      this.time_end=this.$store.getters.get_page_info.time[1]
+      this.status=true
+    }
+    else {
+      this.papers=this.$store.getters.get_page_info.res
+      this.status=true
+    }
   }
 
 }
@@ -220,6 +238,7 @@ export default {
 .layout{
   margin: vh(30);
   padding: 20px;
+  margin-top: vh(10);
 }
 .aside-flitter{
   width: vw(400);
@@ -228,15 +247,16 @@ export default {
 .searchResult{
   width: vw(1000);
   left: vw(00);
+  padding-top: vh(15);
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  margin: 0;
+  margin: auto;
   border: 0;
-  padding:0;
 
 }
 .aside{
+  margin-top: vh(20);
   width: vw(400);
 }
 .pagination{
@@ -251,6 +271,7 @@ export default {
 }
 .loading{
   width: vw(700)
+
 }
 .not_found{
   margin: vw(10);
