@@ -362,7 +362,7 @@ export default {
 .pa-3 {
   margin-left: vw(0.5);
   width: vw(900);
-  height: vw(690);
+  height: vw(990);
   // border: 1px solid #232f3d;
 }
 .mx-auto {

@@ -80,8 +80,8 @@
       <div v-if="loadedBottom === 1">
       <v-card
         class="home_focus_card"
-        @click="ToScholar(item)"
         v-for="item in focus_people"
+        @click="ToScholar(item)"
         :key="item.id"
         >
         <v-list-item>
