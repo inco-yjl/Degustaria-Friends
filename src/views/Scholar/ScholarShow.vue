@@ -3,6 +3,26 @@
     <div class="left-side"></div>
     <div class="right-side"></div>
     <div class="mid-part">
+      <v-alert
+        dense
+        class="alert"
+        dismissible
+        border="left"
+        elevation="2"
+        v-if="snackbar2"
+        type="success"
+        >{{ text2 }}</v-alert
+      >
+      <v-alert
+        dense
+        class="alert"
+        dismissible
+        border="left"
+        elevation="2"
+        v-if="snackbar3"
+        type="success"
+        >{{ text3 }}</v-alert
+      >
       <v-row no-gutters>
         <v-col id="pcard" cols="8">
           <div class="pcard ma-2 pa-1">
@@ -18,19 +38,20 @@
                 <v-row>
                   <v-col cols="10">
                     <div class="name ma-1 text-h5">
-                      <p class="text-left name">&nbsp;&nbsp;{{ Name }}</p>
+                      <p class="text-left name">{{ Name }}</p>
                     </div>
                   </v-col>
                   <v-col cols="1" v-if="!isMyPage && scholarId != userId">
                     <v-btn
-                      class="mx-2"
+                      class="scholar_icon_top"
                       fab
                       dark
                       small
                       color="primary"
                       @click="subscribeScholar()"
                     >
-                      <v-icon dark> mdi-account-plus </v-icon>
+                      <v-icon dark v-if="!is_focus"> mdi-account-plus </v-icon>
+                      <v-icon dark v-if="is_focus"> mdi-account-minus </v-icon>
                       <v-snackbar
                         v-model="unlog"
                         :timeout="2000"
@@ -39,7 +60,7 @@
                         用户未登录
                         <template v-slot:action="{ attrs }">
                           <v-btn
-                            color="blue"
+                            color="white"
                             text
                             v-bind="attrs"
                             @click="snackbar = false"
@@ -51,16 +72,18 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-                <div class="faculty ma-1 text-h6">
-                  <p class="text-left faculty">{{ Faculty }}</p>
+                <div class="faculty">
+                  <p class="text-left faculty">机构：{{ Faculty }}</p>
                 </div>
-                <div class="intro ma-1 text-body-1">
-                  <p class="text-left pa-1 intro">
-                    {{ intro }}
-                  </p>
-                </div>
-                <div class="ma-1" v-if="showEmail">
-                  <p class="text-left faculty">Email:&nbsp; {{ Email }}</p>
+                <div style="display: flex;">
+                  <p class="quote_scholar">引用量：{{citation}}</p>
+                  <p class="quote_scholar_2">H-index：{{h_index}}</p>
+                  <div class="sch_email" v-if="showEmail">
+                    <p >Email：{{ Email }}</p>
+                  </div>
+                  <div class="sch_email" v-if="!showEmail">
+                    <p >Email：无</p>
+                  </div>
                 </div>
               </v-col>
             </v-row>
@@ -72,15 +95,15 @@
               <v-divider vertical></v-divider>
             </v-col>
             <v-col>
-              <div class="mt-2 text-h6">
-                <p>·主要研究领域：</p>
+              <div class="main_research_head">
+                <p>主要研究领域：</p>
               </div>
-              <v-row class="mt-2" dense>
+              <v-row class="main_research_mid" dense>
                 <v-col
                   v-for="item in MainField"
                   :key="item.index"
                   cols="6"
-                  class="pa-auto"
+                  class="main_research_item"
                 >
                   <p class="item-title">{{ item.title }}</p>
                 </v-col>
@@ -92,7 +115,7 @@
       <v-row>
         <v-col cols="8">
           <v-card elevation="0" flat>
-            <v-card-title class="text-left"
+            <v-card-title class="scholar_article_head"
               >论文共{{ recommandPaper.length }}篇</v-card-title
             >
             <v-card-subtitle>
@@ -105,10 +128,10 @@
                     group
                     mandatory
                   >
-                    <v-btn value="0" depressed elevation="1" small
+                    <v-btn value=1 depressed elevation="1" small
                       >按时间排序</v-btn
                     >
-                    <v-btn value="1" depressed elevation="1" small
+                    <v-btn value=2 depressed elevation="1" small
                       >按引用量排序</v-btn
                     >
                   </v-btn-toggle>
@@ -121,8 +144,8 @@
                     group
                     mandatory
                   >
-                    <v-btn value="0" depressed elevation="1" small>升序</v-btn>
-                    <v-btn value="1" depressed elevation="1" small>降序</v-btn>
+                    <v-btn value=1 depressed elevation="1" small>升序</v-btn>
+                    <v-btn value=0 depressed elevation="1" small>降序</v-btn>
                   </v-btn-toggle>
                 </v-col>
                 <v-col cols="12">
@@ -143,7 +166,7 @@
             <v-card-text id="PaperList">
               <div v-if="toggleThree == 0">
                 <v-card
-                  class="home_focus_card_2"
+                  class="home_focus_card_2_2"
                   v-for="item in recommandPaper"
                   :key="item.index"
                 >
@@ -152,6 +175,9 @@
                   }}</v-list-item-title>
                   <v-list-item-subtitle class="subtitle_recommand_1">{{
                     item.author_name
+                  }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="subtitle_recommand_1_1">{{
+                    item.year
                   }}</v-list-item-subtitle>
                   <div class="recommand_book">Abstract：</div>
                   <div class="recommand_book_2" v-if="item.abstract !== 'null'">
@@ -182,7 +208,7 @@
               </div>
               <div v-else-if="toggleThree == 1">
                 <v-card
-                  class="home_focus_card_2"
+                  class="home_focus_card_2_2"
                   v-for="item in recommandPatent"
                   :key="item.id"
                 >
@@ -196,7 +222,7 @@
                   <div class="quote_recommand">
                     <div>
                       <p class="font-weight-black">
-                        Number of citation：{{ item.quote_num }}
+                        引用量：{{ item.quote_num }}
                       </p>
                     </div>
                   </div>
@@ -208,12 +234,12 @@
                 <v-snackbar
                   v-model="showSnackBar"
                   :timeout="2000"
-                  color="red accent-2"
+                  color="blue accent-2"
                 >
-                  专利列表加载失败
+                  尚无专利
                   <template v-slot:action="{ attrs }">
                     <v-btn
-                      color="blue"
+                      color="white"
                       text
                       v-bind="attrs"
                       @click="snackbar = false"
@@ -237,7 +263,7 @@
         </v-col>
         <v-col cols="4">
           <v-card min-height="420">
-            <v-card-title class="text-left">学者关系图：</v-card-title>
+            <v-card-title class="scholor_union_pic">学者关系图：</v-card-title>
             <v-card-text>
               <div style="height: 350px; width: 100%">
                 <scholar-relation-vue :id="scholarId" />
@@ -260,6 +286,8 @@ export default {
       SelfImage: "https://cdn.vuetifyjs.com/images/john.jpg",
       Name: "",
       Faculty: "北京航空航天大学 软件学院",
+      citation: "",
+      h_index: "",
       Email: "tjyfxiao@126.com",
       PaginationLength: 15,
       page: 1,
@@ -316,10 +344,20 @@ export default {
           url: "",
         },
       ],
-      toggleOne: 0,
+      toggleOne: 1,
       toggleTwo: 0,
       toggleThree: 0,
       showSnackBar: false,
+      color: "",
+      mode: "",
+      snackbar2: false,
+      text2: "订阅成功！",
+      snackbar3: false,
+      text3: "已取消订阅！",
+      x: null,
+      y: "top",
+      is_focus: 0,
+      username: ""
     };
   },
   methods: {
@@ -332,11 +370,14 @@ export default {
         }),
       })
         .then((response) => {
+          console.log("field", response.data);
           this.MainField = [];
           this.Name = response.data.name1;
           this.Faculty = response.data.org;
           this.Email = response.data.e_mail;
           this.charId = response.data.char_id;
+          this.citation = response.data.citation;
+          this.h_index = response.data.h_index;
           let iarr = response.data.interests.split(",");
           for (let i = 1; i <= 6; i++)
             this.MainField.push({
@@ -350,19 +391,55 @@ export default {
     },
     subscribeScholar() {
       let user_name = window.localStorage.getItem("user_name");
-      if (user_name == 0 || user_name == null || user_name == "")
+      if (user_name == 0 || user_name == null || user_name == "") {
         this.unlog = true;
-      else
-        this.$axios({
-          method: "post",
-          url: "/subscribe_scholar",
-          data: qs.stringify({
-            username: user_name,
-            scholar_id: this.scholarId,
-          }),
-        })
-          .then((res) => console.log(res))
-          .catch((e) => console.log(e));
+      }
+      else {
+        console.log("user_name", user_name);
+        console.log("scholarId", this.scholarId);
+        if(this.is_focus == 0) {
+          this.$axios({
+            method: "post",
+            url: "/subscribe_scholar",
+            data: qs.stringify({
+              username: user_name,
+              scholar_id: this.scholarId,
+            }),
+          })
+          .then((res) => {
+            console.log(res.data);
+            this.snackbar2 = true;
+            setTimeout(() => {
+                this.snackbar2 = false;
+              }, 1000);
+            this.is_focus = 1;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        }
+        else {
+          this.$axios({
+            method: "post",
+            url: "/not_subscribe",
+            data: qs.stringify({
+              username: user_name,
+              scholar_id: this.scholarId,
+            }),
+          })
+          .then((res) => {
+            console.log(res.data);
+            this.snackbar3 = true;
+            setTimeout(() => {
+                this.snackbar3 = false;
+            }, 1000);
+            this.is_focus = 0;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        }
+      }
     },
     loadScholarIntro() {
       this.$axios({
@@ -378,6 +455,9 @@ export default {
     loadScholarPapers(npage = 0) {
       this.recommandPaper = [];
       console.log(this.charId);
+      // let order_type_tmp = this.toggleOne;
+      // console.log("order_type_tmp", order_type_tmp);
+      // console.log("toggleTwo", this.toggleTwo);
       this.$axios({
         method: "post",
         url: "/search",
@@ -387,8 +467,8 @@ export default {
           search_logic: [],
           page: npage,
           size: 6,
-          order_type: this.toggleOne + 1,
-          order: this.toggleTwo,
+          order_type: this.toggleOne-'0',
+          order: this.toggleTwo-'0',
         },
         headers: {
           "Content-Type": "application/json",
@@ -405,6 +485,7 @@ export default {
               abstract: papers[i].abstract,
               title: papers[i].title,
               author_name: this.to_string(papers[i].author_name),
+              year: papers[i].year,
               n_citation: papers[i].n_citation,
               venue: papers[i].venue,
             });
@@ -419,8 +500,7 @@ export default {
     },
     loadScholarPatent(npage = 1) {
       this.recommandPatent = [];
-      let sort = this.toggleTwo === 1 ? "year" : "citation";
-      let year = this.toggleOne === 1 ? 0 : 1;
+      let sort = this.toggleOne === 1 ? "year" : "citation";
       this.$axios({
         method: "post",
         url: "/get_p_number_of_scholar",
@@ -442,24 +522,24 @@ export default {
           page: npage,
           size: 6,
           order: sort,
-          year: year,
+          year: 0,
         }),
       })
-        .then((response) => {
-          console.log("patent");
-          for (let x = 0; x < 6; x++)
-            this.recommandPatent.push({
-              article_name: response.data[x].title,
-              author: response.data[x].author,
-              book: response.data[x].source,
-              quote_num: response.data[x].citation,
-              url: response.data[x].url,
-            });
-        })
-        .catch((error) => {
-          this.showSnackBar = true;
-          console.log(error);
-        });
+      .then((res) => {
+        console.log("patent", res.data);
+        for (let x = 0; x < 6; x++)
+          this.recommandPatent.push({
+            article_name: res.data[x].title,
+            author: res.data[x].author,
+            book: res.data[x].source,
+            quote_num: res.data[x].citation,
+            url: res.data[x].url,
+          });
+      })
+      .catch((error) => {
+        this.showSnackBar = true;
+        console.log(error);
+      });
     },
     to_string(strs) {
       let retstr = "";
@@ -546,6 +626,23 @@ export default {
   mounted() {
     this.loadScholarInfo();
     this.loadScholarIntro();
+    this.username = window.localStorage.getItem("user_name");
+    let fd= new FormData;
+    fd.append('username',this.username)
+    fd.append('scholar_id',this.scholarId)
+    this.$axios({
+        method: "post",
+        url: '/judge_subscribe',
+        data: fd
+    }).then((res) => {
+      console.log("judge", res.data);
+      if(res.data.errno == 1) {
+        this.is_focus = 1;
+      }
+      else {
+        this.is_focus = 0; //未关注
+      }
+    });
   },
   components: { ScholarRelationVue },
 };
@@ -556,10 +653,14 @@ export default {
   height: vh(250);
 }
 #name {
-  margin-top: vw(50);
+  margin-top: vh(100);
 }
 #page {
   min-height: 100%;
+}
+.scholar_icon_top {
+  margin-top: vh(12);
+  margin-left: vw(30);
 }
 .left-side {
   position: fixed;
@@ -567,7 +668,7 @@ export default {
   left: 0;
   background-color: rgb(249, 249, 249);
   height: vh(1480);
-  width: vw(300);
+  width: vw(150);
 }
 .right-side {
   position: fixed;
@@ -575,54 +676,80 @@ export default {
   right: 0;
   background-color: rgb(249, 249, 249);
   height: vh(1480);
-  width: vw(300);
+  width: vw(150);
 }
 .mid-part {
-  padding-top: 40px;
-  width: vw(1300);
+  padding-top: vh(80);
+  width: vw(1500);
   padding-left: vw(20);
   padding-right: vw(20);
-  margin-left: vw(300);
+  margin-left: vw(170);
 }
 .name {
-  font-family: "Times New Roman", "Source Han Sans CN Normal";
+  font-family: "optima", "SourceHanSerifCN";
+  margin-top: vh(20);
 }
 .faculty {
-  font-family: "Times New Roman", STZhongsong;
+  font-family: "optima", SourceHanSerifCN;
   font-size: medium;
+  margin-right: vw(10);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  margin-top: vh(5);
+}
+.sch_email {
+  font-family: "optima", SourceHanSerifCN;
+  font-size: medium;
+  margin-right: vw(10);
+  margin-top: vh(0);
+  margin-left: vw(20);
+}
+.quote_scholar {
+  font-family: "optima", SourceHanSerifCN;
+  font-size: medium;
+  margin-right: vw(10);
+  margin-top: vh(0);
+}
+.quote_scholar_2 {
+  font-family: "optima", SourceHanSerifCN;
+  font-size: medium;
+  margin-right: vw(10);
+  margin-top: vh(0);
+  margin-left: vw(20);
 }
 .intro {
-  font-family: Georgia, "Source Han Sans CN Normal";
+  font-family: optima, "SourceHanSerifCN";
 }
-.item-title {
-  font-size: 18px;
-  font-family: "Courier New", Courier, "PingFang SC";
-}
-p.item-title:hover {
-  color: rgb(89, 126, 175);
-}
+
 .main-field-title {
   font-size: 23px;
   font-family: "Source Han Sans CN Medium";
 }
-.home_focus_card_2 {
+.home_focus_card_2_2 {
   margin-top: vh(40);
-  width: vw(1190);
-  padding-top: 10px;
+  width: vw(950);
+  padding-top: 15px;
   padding-bottom: 0.5px;
   padding-right: vw(20);
 }
 .headline_2 {
   margin-left: vw(20);
   font-size: vw(25);
-  font-family: "Source Han Sans CN Normal", sans-serif;
-}
-.headline_2:hover {
-  color: rgb(89, 126, 175);
+  font-family: "optima", sans-serif;
 }
 .subtitle_recommand_1 {
   margin-left: vw(20);
   font-family: "Source Han Sans CN Normal", sans-serif;
+  margin-top: vh(10);
+}
+.subtitle_recommand_1_1 {
+  margin-left: vw(20);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+  margin-top: vh(1);
+  color: #656d77;
 }
 .recommand_book {
   color: #455A64;
@@ -657,7 +784,7 @@ p.item-title:hover {
   -webkit-box-orient: vertical;
 }
 .quote_recommand_fa {
-  width: vw(610);
+  width: vw(735);
   margin-bottom: vh(10);
   margin-top: vh(20);
 }
@@ -675,7 +802,7 @@ p.item-title:hover {
   display: flex;
   font-family: "SourceHanSerifCN", sans-serif;
   font-weight: bolder;
-  font-size: vw(19);
+  font-size: vw(17);
   float: left;
 }
 .quote_recommand_1 {
@@ -696,15 +823,45 @@ p.item-title:hover {
 }
 .recommand_icon_2 {
   width: vw(36);
-  margin-top: vh(40);
-  margin-left: vw(40);
+  margin-top: vh(42);
+  margin-left: vw(5);
   margin-bottom: vh(30);
 }
 .recommand_icon_3 {
-  margin-top: vh(17);
+  margin-top: vh(14);
 }
 .scholar-relation {
   font-size: 23px;
   font-family: "Source Han Sans CN Medium";
+}
+.main_research_head {
+  font-family: SourceHanSerifCN-2;
+  font-size: vw(24);
+}
+.main_research_mid {
+  margin-left: vw(2);
+}
+.main_research_item {
+  font-family: "optima", Courier, "PingFang SC";
+  font-size: vw(21);
+}
+.main_research_item:hover {
+  color: #667d97;
+}
+.scholar_article_head {
+  font-family: SourceHanSerifCN-2;
+  margin-bottom: vh(10);
+  margin-left: vw(3);
+}
+.scholor_union_pic {
+  font-family: SourceHanSerifCN-2;
+  z-index: 9999;
+}
+.alert {
+  position: fixed;
+  top: vh(270);
+  width: vw(500);
+  left: vw(560);
+  z-index: 9999;
 }
 </style>
