@@ -362,7 +362,7 @@ export default {
 }
 .login_tips {
   font-family: PingFang SC;
-  margin-top: vh(30);
+  margin-top: vh(60);
   margin-left: vw(40);
   font-size: 1.2rem;
   text-align: left;
@@ -396,13 +396,13 @@ export default {
 .login_logo_1 {
   width: vw(140);
   height: vw(140);
-  margin-top: vh(30);
+  margin-top: vh(60);
   margin-left: vw(100);
 }
 .login_logo_3 {
   width: vw(250);
   height: vw(55);
-  margin-top: vh(80);
+  margin-top: vh(160);
   margin-left: vw(10);
 }
 .login_logo_2 {
