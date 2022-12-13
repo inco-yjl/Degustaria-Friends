@@ -107,7 +107,7 @@ export default defineComponent({
   data() {
     return {
       institutionName: "",
-      institutionId: 192096,
+      institutionId: ref(),
       web: null,
       wiki: null,
       infoDetail: null,
@@ -115,19 +115,12 @@ export default defineComponent({
       focus_people: [],
     };
   },
-  mounted() {
-    // 自动刷新数据
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.initInfo();
-      }, 500);
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.initInfo();
     });
-    window.onresize = () => {
-      return (() => {
-        this.$nextTick(() => {});
-      })();
-    };
   },
+
   methods: {
     initInfo() {
       this.searchOrg();
@@ -139,6 +132,7 @@ export default defineComponent({
     },
     searchOrg() {
       // console.log("searchOrg");
+      this.institutionId = this.$route.query.id;
       this.$axios({
         method: "post",
         url: "/get_org",
@@ -191,15 +185,16 @@ export default defineComponent({
             var aScholar = {};
             aScholar.author_name = res.data[i].name1;
             aScholar.h_index = res.data[i].h_index;
-            if(!res.data[i].icon) {
-                aScholar.icon = null;
+            if (!res.data[i].icon) {
+              aScholar.icon = null;
             } else {
-                aScholar.icon="http://120.46.201.113:6001/api" + res.data[i].icon;
+              aScholar.icon =
+                "http://120.46.201.113:6001/api" + res.data[i].icon;
             }
-            
+
             aScholar.article_num = "";
             aScholar.quote_num = res.data[i].citation;
-            aScholar.interests = res.data[i].interests ;
+            aScholar.interests = res.data[i].interests;
             this.focus_people.push(aScholar);
           }
           console.log("getScholarsByOrg");
