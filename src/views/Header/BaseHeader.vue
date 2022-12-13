@@ -39,7 +39,7 @@
         <div class="to-statistics" @click="toStatistics()">统计</div>
         <v-spacer />
         <v-avatar size="45" :class="`rounded${45}`" class="border-white">
-          <v-menu offset-y>
+          <v-menu offset-y class=action-menu>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 depressed
@@ -59,7 +59,7 @@
                 <span class="user-name-icon" v-else>游</span>
               </v-btn>
             </template>
-            <v-list>
+            <v-list class="action-list"  dense>
               <v-list-item
                 key="1"
                 v-if="scholar_id != null"
@@ -119,11 +119,11 @@ export default {
       this.$router.push({ name: "login" });
     },
     Logout() {
-      window.localStorage.setItem("user_email", null);
-      window.localStorage.setItem("user_name", null);
-      window.localStorage.setItem("user_headshot", null);
-      window.localStorage.setItem("user_id", null);
-      window.localStorage.setItem("scholar_id", null);
+      window.localStorage.setItem("user_email", "");
+      window.localStorage.setItem("user_name", "");
+      window.localStorage.setItem("user_headshot", "");
+      window.localStorage.setItem("user_id", "");
+      window.localStorage.setItem("scholar_id", "");
       this.hasLogin = false;
       this.user_id = null;
       this.user_email = null;
@@ -152,8 +152,10 @@ export default {
     },
     updateUser() {
       this.user_img = window.localStorage.getItem("user_headshot");
-      if (this.user_img) {
+      if (this.user_img && this.user_img !== "null") {
         this.user_img = "http://120.46.201.113:6001/api" + this.user_img;
+      } else {
+        this.user_img = null;
       }
       this.user_name = window.localStorage.getItem("user_name");
       this.user_id = window.localStorage.getItem("user_id");
@@ -172,7 +174,7 @@ export default {
             res.data.status === "您尚未认证为学者" ||
             res.data.status === "用户不存在"
           ) {
-            window.localStorage.setItem("scholar_id", null);
+            window.localStorage.setItem("scholar_id", "");
             this.scholar_id = null;
           } else {
             window.localStorage.setItem("scholar_id", res.data.id);
@@ -197,7 +199,7 @@ export default {
 <style scoped lang="scss">
 .border-white {
   border: 3px solid white;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .user-name-icon {
   font-family: "Times New Roman", Times, serif;
@@ -222,4 +224,6 @@ export default {
 .to-statistics {
   cursor: pointer;
 }
+
+
 </style>

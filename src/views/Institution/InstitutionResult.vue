@@ -19,7 +19,7 @@
       ></v-text-field>
     </div>
     <div class="result-list">
-      <v-card class="search-card" v-for="(org, index) in result" :key="index">
+      <v-card class="search-card" v-for="(org, index) in result" :key="index" @click="ToInstitute(org)">
         <div class="orgName">{{ org.name }}</div>
         <div v-if="org.cn_name" class="orgName-cn">翻译：{{ org.cn_name }}</div>
         <div class="official-url" v-if="org.url !== 'null'">
@@ -69,6 +69,7 @@ export default {
       result: [],
     };
   },
+
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.searchResult();
@@ -80,6 +81,14 @@ export default {
     },
   },
   methods: {
+    ToInstitute(org) {
+    this.$router.push({
+      name: 'institutionHomepage',
+      query: {
+        id: org.id
+      }
+    })
+  },
     searchInstitution() {
       if (!this.singleInput || !this.singleInput.length > 0) {
         this.inputalert = true;
