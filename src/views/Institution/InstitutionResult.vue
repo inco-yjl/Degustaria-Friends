@@ -19,17 +19,23 @@
       ></v-text-field>
     </div>
     <div class="result-list">
-      <v-card class="search-card" v-for="(org, index) in result" :key="index">
+      <v-card class="search-card" v-for="(org, index) in result" :key="index" @click="ToInstitute(org)">
         <div class="orgName">{{ org.name }}</div>
         <div v-if="org.cn_name" class="orgName-cn">翻译：{{ org.cn_name }}</div>
         <div class="official-url" v-if="org.url !== 'null'">
-          <img src="@/assets/icon/earth.png" /><a>{{ org.url }}</a>
+          <img src="@/assets/icon/earth.png" /><a
+            class="link-url"
+            :href="org.url"
+            >{{ org.url }}</a
+          >
         </div>
         <div class="last-line">
           <div class="wikipedia-url" v-if="org.wikipage !== 'null'">
-            <img src="@/assets/icon/wikipedia_icon.png" /><a>{{
-              org.wikipage
-            }}</a>
+            <img src="@/assets/icon/wikipedia_icon.png" /><a
+              class="link-url"
+              :href="org.wikipage"
+              >{{ org.wikipage }}</a
+            >
           </div>
           <div
             class="location"
@@ -41,12 +47,12 @@
         </div>
       </v-card>
     </div>
-      <v-pagination
-        class="pagination"
-        v-model="orgpage"
-        :total-visible="7"
-        :length="orgpageCount"
-      ></v-pagination>
+    <v-pagination
+      class="pagination"
+      v-model="orgpage"
+      :total-visible="7"
+      :length="orgpageCount"
+    ></v-pagination>
   </div>
 </template>
 
@@ -63,6 +69,7 @@ export default {
       result: [],
     };
   },
+
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.searchResult();
@@ -74,6 +81,14 @@ export default {
     },
   },
   methods: {
+    ToInstitute(org) {
+    this.$router.push({
+      name: 'institutionHomepage',
+      query: {
+        id: org.id
+      }
+    })
+  },
     searchInstitution() {
       if (!this.singleInput || !this.singleInput.length > 0) {
         this.inputalert = true;
@@ -123,20 +138,20 @@ export default {
   margin-top: 150px;
 }
 .left-side {
-    position: fixed;
-    top: -150px;
-    left: 0;
-    background-color: rgb(249,249,249);
-    height: vh(1480);
-    width: vw(440);
+  position: fixed;
+  top: -150px;
+  left: 0;
+  background-color: rgb(249, 249, 249);
+  height: vh(1480);
+  width: vw(440);
 }
 .right-side {
-    position: fixed;
-    top: -150px;
-    right: 0;
-    background-color: rgb(249,249,249);
-    height: vh(1480);
-    width: vw(440);
+  position: fixed;
+  top: -150px;
+  right: 0;
+  background-color: rgb(249, 249, 249);
+  height: vh(1480);
+  width: vw(440);
 }
 .search-box {
   display: flex;
@@ -166,7 +181,7 @@ export default {
   padding-bottom: vh(10);
 }
 .pagination {
-    padding-bottom: vh(50);
+  padding-bottom: vh(50);
 }
 .orgName {
   font-family: "Times New Roman", Times, serif;
@@ -197,6 +212,14 @@ export default {
   }
   font-size: vh(16);
   line-height: vh(20);
+  display: -webkit-box; /*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical; /*伸缩盒子的子元素排列：从上到下*/
+}
+.link-url {
+  width: vw(600);
 }
 .wikipedia-url {
   img {
@@ -206,6 +229,11 @@ export default {
   }
   font-size: vh(16);
   line-height: vh(20);
+  display: -webkit-box; /*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical; /*伸缩盒子的子元素排列：从上到下*/
 }
 .location {
   position: absolute;
