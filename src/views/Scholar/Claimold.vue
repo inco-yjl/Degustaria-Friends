@@ -1,6 +1,5 @@
 <template>
   <div id="Claimold">
-    <base-header />
     <div class="wrapper">
         <v-alert
       outlined
