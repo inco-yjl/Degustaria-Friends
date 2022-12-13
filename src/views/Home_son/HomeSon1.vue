@@ -6,14 +6,24 @@
           depressed
           large
           color="blue-grey lighten-4"
+          v-if="user_name"
           @click="into_another_son(1)"
           >关注</v-btn
         >
       </div>
-      <div class="focus_2">
+      <div class="focus_2" v-if="user_name">
         <v-btn depressed large @click="into_another_son(2)">推荐</v-btn>
       </div>
-      <div class="focus_3">
+      <div class="focus_2_2" v-else>
+        <v-btn
+          depressed
+          large
+          color="blue-grey lighten-4"
+          @click="into_another_son(2)"
+          >推荐</v-btn
+        >
+      </div>
+      <div class="focus_3" v-if="user_name">
         <v-btn depressed large @click="into_another_son(3)">收藏</v-btn>
       </div>
     </div>
@@ -55,7 +65,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <div class="focus_research_area" style="display: flex">
+        <div class="focus_research_area" style="display: flex;">
           研究领域：
           <div class="focus_research_area_item" v-if="item.interests != 'null'">
             {{ item.interests }}
@@ -101,12 +111,23 @@ export default {
       user_total: 0,
     };
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.updateUser();
+    });
+  },
   mounted() {
-    this.$nextTick(() => {
+
+  },
+  methods: {
+    updateUser(){
       this.user_img = window.localStorage.getItem("user_headshot");
       this.user_name = window.localStorage.getItem("user_name");
       this.user_id = window.localStorage.getItem("user_id");
       this.user_email = window.localStorage.getItem("user_email");
+      if(!this.user_name) {
+        this.into_another_son(2)
+      }
       this.$axios({
         method: "post",
         url: "/get_subscribed_scholar",
@@ -137,9 +158,7 @@ export default {
         .catch((err) => {
           console.log(err.errno);
         });
-    });
-  },
-  methods: {
+    },
     home_get_user_list() {
       this.$axios({
         method: "post",
@@ -186,6 +205,10 @@ export default {
 }
 .focus_2 {
   margin-left: vw(20);
+  color: #232f3d;
+  margin-top: vh(20);
+}
+.focus_2_2 {
   color: #232f3d;
   margin-top: vh(20);
 }

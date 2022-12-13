@@ -11,7 +11,7 @@
                 v-for="(item, index) in topOrg"
                 v-bind:key="index"
               >
-                ·{{ item.name }}
+                {{ item.name }}
               </div>
             </v-card-text>
             <v-card-actions>
@@ -28,7 +28,7 @@
                 v-for="(item, index) in topCon"
                 v-bind:key="index"
               >
-              ·{{ item.name }}
+              {{ item.name }}
               </div>
             </v-card-text>
             <v-card-actions>
@@ -45,7 +45,7 @@
                 v-for="(item, index) in topJour"
                 v-bind:key="index"
               >
-              ·{{ item.name }}
+              {{ item.name }}
               </div>
             </v-card-text>
             <v-card-actions>
@@ -233,30 +233,31 @@ export default {
 .card_1 {
   width: vw(350);
   margin-left: vw(110);
-  margin-top: vw(50);
+  margin-top: vw(70);
 }
 .card_2 {
   width: vw(350);
   margin-left: vw(80);
-  margin-top: vw(50);
+  margin-top: vw(70);
 }
 .card_3 {
   width: vw(350);
   margin-left: vw(80);
-  margin-top: vw(50);
+  margin-top: vw(70);
 }
 .card_title_1 {
   font-size: vw(30);
   font-weight: bold;
-  font-family: "Source Han Sans CN Normal", sans-serif;
+  font-family: "SourceHanSerifCN-2", sans-serif;
   color: #232f3d;
   margin-bottom: vw(20);
+  margin-top: vh(10);
 }
 .card_content_1 {
   font-size: 1.1rem;
   color: rgba(0, 0, 0, 0.8);
   text-justify: auto;
-  font-family: "Source Han Sans CN Normal", sans-serif;
+  font-family: "Baskerville", sans-serif;
   font-weight: 400;
   letter-spacing: 0.009375rem;
   line-height: 28px;
@@ -268,7 +269,7 @@ export default {
 }
 
 .card_home_right {
-  margin-top: vw(50);
+  margin-top: vw(70);
   width: vw(400);
   margin-left: vw(90);
   padding-top: 10px;
@@ -287,7 +288,7 @@ export default {
   font-weight: vw(400);
   color: #232f3d;
   margin-top: 3px;
-  font-family: "Source Han Sans CN Normal", sans-serif;
+  font-family: "SourceHanSerifCN", sans-serif;
 }
 .home_hot_field {
   margin-right: 5px;
@@ -300,7 +301,7 @@ export default {
   font-weight: bold;
   color: #232f3d;
   margin-top: 30px;
-  font-family: "Source Han Sans CN Normal", sans-serif;
+  font-family: "SourceHanSerifCN-2", sans-serif;
   font-size: 1.6rem;
 }
 </style>
