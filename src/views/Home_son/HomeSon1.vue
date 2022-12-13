@@ -55,7 +55,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <div class="focus_research_area" style="display: flex">
+        <div class="focus_research_area" style="display: flex;">
           研究领域：
           <div class="focus_research_area_item" v-if="item.interests != 'null'">
             {{ item.interests }}

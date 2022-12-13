@@ -118,29 +118,32 @@ export default {
           password: this.input_password,
         }),
       })
-        .then((res) => {
-          console.log(res.data);
-          window.localStorage.setItem("user_email", res.data.email);
-          window.localStorage.setItem("user_name", res.data.username);
-          window.localStorage.setItem("user_headshot", res.data.headshot);
-          window.localStorage.setItem("user_id", res.data.id);
+      .then((res) => {
+        console.log(res.data);
+        window.localStorage.setItem("user_email", res.data.email);
+        window.localStorage.setItem("user_name", res.data.username);
+        window.localStorage.setItem("user_headshot", res.data.headshot);
+        window.localStorage.setItem("user_id", res.data.id);
+        if(res.data.errno == 0) {
           if (res.data.errno == 0) {
             this.snackbar = true;
             setTimeout(() => {
               this.snackbar = false;
               this.$router.push("/");
             }, 1000);
-          } else {
+          }
+          else {
             console.log("login:", res.data);
             this.snackbar2 = true;
             setTimeout(() => {
               this.snackbar2 = false;
             }, 1000);
           }
-        })
-        .catch((err) => {
-          console.log(err.errno);
-        });
+        }
+      })
+      .catch((err) => {
+        console.log(err.errno);
+      });
     },
     go_register() {
       this.$router.push({
