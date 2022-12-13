@@ -6,11 +6,11 @@
           depressed
           large
           @click="into_another_son(1)"
-          v-if="user_name != ''"
+          v-if="user_name"
           >关注</v-btn
         >
       </div>
-      <div class="focus_2_2" v-if="user_name == ''">
+      <div class="focus_2" v-if="user_name">
         <v-btn
           depressed
           large
@@ -19,7 +19,7 @@
           >推荐</v-btn
         >
       </div>
-      <div class="focus_2" v-if="user_name != ''">
+      <div class="focus_2_2" v-else>
         <v-btn
           depressed
           large
@@ -28,19 +28,20 @@
           >推荐</v-btn
         >
       </div>
+
       <div class="focus_3">
         <v-btn
           depressed
           large
           @click="into_another_son(3)"
-          v-if="user_name != ''"
+          v-if="user_name"
           >收藏</v-btn
         >
       </div>
       <v-btn
         color="blue-grey darken-3"
         class="add_keyword_class"
-        v-if="user_name != ''"
+        v-if="user_name"
         @click="overlay = !overlay"
       >
         管理订阅关键词

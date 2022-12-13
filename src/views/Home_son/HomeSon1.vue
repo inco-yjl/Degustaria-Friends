@@ -101,12 +101,23 @@ export default {
       user_total: 0,
     };
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.updateUser();
+    });
+  },
   mounted() {
-    this.$nextTick(() => {
+
+  },
+  methods: {
+    updateUser(){
       this.user_img = window.localStorage.getItem("user_headshot");
       this.user_name = window.localStorage.getItem("user_name");
       this.user_id = window.localStorage.getItem("user_id");
       this.user_email = window.localStorage.getItem("user_email");
+      if(!this.user_name) {
+        this.into_another_son(2)
+      }
       this.$axios({
         method: "post",
         url: "/get_subscribed_scholar",
@@ -137,9 +148,7 @@ export default {
         .catch((err) => {
           console.log(err.errno);
         });
-    });
-  },
-  methods: {
+    },
     home_get_user_list() {
       this.$axios({
         method: "post",
