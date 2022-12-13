@@ -24,6 +24,7 @@
     "sass-loader": "^8.0.0",
     "vue": "^2.6.14",
     "vue-countup-v2": "^4.0.0",
+    "vue-i18n": "^8.22.2",
     "vue-router": "^3.5.1",
     "vuetify": "^2.6.11",
     "vuex": "^3.6.2",
@@ -37,6 +38,7 @@
     "@vue/cli-service": "~5.0.0",
     "sass": "~1.32.0",
     "vue-cli-plugin-vuetify": "~2.5.8",
+    "vue-particles": "^1.0.9",
     "vue-template-compiler": "^2.6.14",
     "vuetify-loader": "^1.7.0"
   },

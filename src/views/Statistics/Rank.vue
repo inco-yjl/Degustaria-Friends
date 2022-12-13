@@ -6,78 +6,13 @@
       v-model="tab"
       class="rank-tabs"
     >
-      <v-tab key="1">学者</v-tab>
-      <v-tab key="2">机构</v-tab>
-      <!--<v-tab key="3">期刊会议</v-tab>-->
+    <v-tab key="1">机构</v-tab>
+      <v-tab key="2">学者</v-tab>
+      <v-tab key="3">期刊会议</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
       <v-tab-item key="1">
-        <div class="rank-content">
-          <div class="field-filter">
-            <v-card class="d-block mx-auto rounded-lg" flat>
-              <div class="tree-filter">
-                <v-treeview
-                  selectable
-                  dense
-                  selected-color="indigo"
-                  v-model="fieldSelection"
-                  :items="fieldOptions"
-                  selection-type="leaf"
-                  return-object
-                  open-all
-                ></v-treeview>
-              </div>
-            </v-card>
-          </div>
-          <div class="rank-main-content">
-            <div class="table-filters">
-              <v-text-field
-                v-model="scholarSearch"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
-            </div>
-            <div class="table">
-              <div class="main-table">
-                <v-data-table
-                  :search="scholarSearch"
-                  :headers="scholarHeader"
-                  :items="scholarDesserts"
-                  @page-count="scholarpageCount = $event"
-                  :page.sync="scholarpage"
-                  :items-per-page="15"
-                  hide-default-footer
-                  class="elevation-1"
-                >
-                  <template v-slot:item.name1="{ item }">
-                    <div>
-                      <b>{{ item.name1 }}</b>
-                    </div>
-                    <div>org: {{ handleSubString(item.org) }}</div>
-                    <div>area: {{ handleSubString(item.interests) }}</div>
-                  </template>
-                </v-data-table>
-                <v-pagination
-                  class="pagination"
-                  v-model="scholarpage"
-                  :length="scholarpageCount"
-                ></v-pagination>
-              </div>
-              <!--
-              <div class="selected-info">
-                <card><div></div></card>
-                <card><div></div></card>
-              </div>
-              -->
-            </div>
-          </div>
-        </div>
-      </v-tab-item>
-
-      <v-tab-item key="2">
         <div class="rank-content">
           <div class="field-filter">
             <v-card class="d-block mx-auto rounded-lg" flat>
@@ -121,7 +56,7 @@
                   :items="orgDesserts"
                   @page-count="orgpageCount = $event"
                   :page.sync="orgpage"
-                  :items-per-page="15"
+                  :items-per-page="10"
                   hide-default-footer
                   class="elevation-1"
                 >
@@ -139,7 +74,129 @@
           </div>
         </div>
       </v-tab-item>
-      <v-tab-item key="3"> 3 </v-tab-item>
+      <v-tab-item key="2">
+        <div class="rank-content">
+          <div class="field-filter">
+            <v-card class="d-block mx-auto rounded-lg" flat>
+              <div class="tree-filter">
+                <v-treeview
+                  selectable
+                  dense
+                  selected-color="indigo"
+                  v-model="fieldSelection"
+                  :items="fieldOptions"
+                  selection-type="leaf"
+                  return-object
+                  open-all
+                ></v-treeview>
+              </div>
+            </v-card>
+          </div>
+          <div class="rank-main-content">
+            <div class="table-filters">
+              <v-text-field
+                v-model="scholarSearch"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </div>
+            <div class="table">
+              <div class="main-table">
+                <v-data-table
+                  :search="scholarSearch"
+                  :headers="scholarHeader"
+                  :items="scholarDesserts"
+                  @page-count="scholarpageCount = $event"
+                  :page.sync="scholarpage"
+                  :items-per-page="10"
+                  hide-default-footer
+                  class="elevation-1"
+                >
+                  <template v-slot:item.name1="{ item }">
+                    <div>
+                      <b>{{ item.name1 }}</b>
+                    </div>
+                    <div>org: {{ handleSubString(item.org) }}</div>
+                    <div>area: {{ handleSubString(item.interests) }}</div>
+                  </template>
+                </v-data-table>
+                <v-pagination
+                  class="pagination"
+                  v-model="scholarpage"
+                  :length="scholarpageCount"
+                ></v-pagination>
+              </div>
+              <!--
+              <div class="selected-info">
+                <card><div></div></card>
+                <card><div></div></card>
+              </div>
+              -->
+            </div>
+          </div>
+        </div>
+      </v-tab-item>
+      <v-tab-item key="3"> 
+        <div class="rank-content">
+          <div class="field-filter">
+            <v-card class="d-block mx-auto rounded-lg" flat>
+              <div class="tree-filter">
+                <v-radio-group v-model="conChoice" class="org-field-tree">
+                  <v-radio :key="7" label="all" :value="7"> </v-radio>
+                  <div
+                    class="org-field-class"
+                    v-for="group in conferenceFieldOptions"
+                    :key="group.name"
+                  >
+                    {{ group.name }}:
+                    <div class="org-field-selections">
+                      <v-radio
+                        v-for="field in group.children"
+                        :key="field.id"
+                        :label="field.name"
+                        :value="field.id"
+                      ></v-radio>
+                    </div>
+                  </div>
+                </v-radio-group>
+              </div>
+            </v-card>
+          </div>
+          <div class="rank-main-content">
+            <div class="table-filters">
+              <v-text-field
+                v-model="conferenceSearch"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </div>
+            <div class="table">
+              <div class="main-table">
+                <v-data-table
+                  :search="conferenceSearch"
+                  :headers="conferenceHeader"
+                  :items="conferenceDesserts"
+                  @page-count="conferencepageCount = $event"
+                  :page.sync="conferencePage"
+                  :items-per-page="10"
+                  hide-default-footer
+                  class="elevation-1"
+                >
+                </v-data-table>
+                <v-pagination
+                  class="pagination"
+                  v-model="conferencePage"
+                  :length="conferencepageCount"
+                ></v-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-tab-item>
     </v-tabs-items>
   </div>
 </template>
@@ -158,7 +215,6 @@ export default {
         value: "name1"
       },
       { text: "h指数", value: "h_index", filterable: false, width: 120 },
-      { text: "论文数", value: "paperNum", filterable: false, width: 120 },
       { text: "引用数", value: "citation", filterable: false, width: 120 },
     ];
 
@@ -179,6 +235,17 @@ export default {
       },
       { text: "学术成果数量", value: "count", filterable: false, width: 20 },
       { text: "自然指数", value: "share", filterable: false, width: 20 },
+    ];
+    const conferenceHeader = [
+      {
+        text: "姓名",
+        align: "start",
+        sortable: false,
+        value: "name",
+        width: 40,
+      },
+      { text: "h5指数", value: "h5Value", filterable: false, width: 20 },
+      { text: "h5中位数", value: "h5MidValue", filterable: false, width: 20 },
     ];
     const orgFieldOptions = [
       {
@@ -212,19 +279,64 @@ export default {
         ],
       },
     ];
-
+    const conferenceFieldOptions = [
+      {
+        name: "学科",
+        children: [
+          {
+            name: "Business,Economics & Management",
+            id: 10,
+          },
+          {
+            name: "Chemical & Material Sciences",
+            id: 8,
+          },
+          {
+            name: "Engineering & Computer Science",
+            id: 9,
+          },
+          {
+            name: "Health & Medical Sciences",
+            id: 11
+          },
+          {
+            name: "Humanities, Literature & Arts",
+            id: 12,
+          },
+          {
+            name: "Life Sciences & Earth Sciences",
+            id: 13
+          },
+          {
+            name: "Physics & Mathematics",
+            id: 14
+          },
+          {
+            name: "Social Sciences",
+            id: 15
+          }
+        ],
+      },
+    ];
     return {
+      conferenceHeader,
+      conferenceFieldOptions,
+      conChoice: 7,
       radioGroup: 1,
       orgFieldOptions,
       get_fields: require("@/assets/json/get_fields.json"),
       scholarSearch: "",
       fieldSelection: [],
       orgSearch: "",
+      conferenceSearch: "",
       scholarpageCount: 0,
+      conferencepageCount: 0,
       orgpageCount: 0,
       orgDesserts: [],
+      conferenceDesserts: [],
       orgHeader,
       orgpage: 1,
+      conferencePage: 1,
       scholarpage: 1,
       tab: null,
       fieldOptions,
@@ -240,6 +352,9 @@ export default {
     },
     radioGroup(newVal) {
       this.getOrgRank();
+    },
+    conChoice(newVal){
+      this.getConfRank();
     }
   },
 
@@ -345,7 +460,23 @@ export default {
       })
         .then((res) => {
           this.orgDesserts = res.data;
-          console.log("Org:getFields", res.data);
+        })
+        .catch((err) => {
+          //请求若出现路由找不到等其它异常，则在终端输出错误信息
+          console.log(err);
+        });
+    },
+    getConfRank() {
+      this.$axios({
+        method: "post",
+        url: "/get_rank",
+        data: qs.stringify({
+          type: this.conChoice
+        }),
+      })
+        .then((res) => {
+          this.conferenceDesserts = res.data;
+          console.log("Con:getFields", res.data);
         })
         .catch((err) => {
           //请求若出现路由找不到等其它异常，则在终端输出错误信息
@@ -383,6 +514,7 @@ export default {
       this.getScholarFields();
       this.getScholarRank();
       this.getOrgRank();
+      this.getConfRank();
     });
   },
 };
@@ -394,7 +526,7 @@ export default {
   position: relative;
   left: 0;
   height: auto;
-  top: 0;
+  margin-top: 69px;
   width: vw(1900);
 }
 .rank-tabs {
@@ -410,7 +542,7 @@ export default {
   position: relative;
   margin-right: vw(60);
   top: vh(39);
-  height: vh(900);
+  height: vh(850);
   left: 0;
 }
 .tree-filter {

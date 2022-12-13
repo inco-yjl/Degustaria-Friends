@@ -435,7 +435,7 @@ export default {
         formData.append('e_mail', this.form.email);
         formData.append('email_privacy', sw1);
         formData.append('home_privacy', sw2);
-        formData.append('username', "panyuyi");
+        formData.append('username',  window.localStorage.getItem('user_name'));
         formData.append('paper_ids', str);
           var params = {
             name1:this.form.name1,
@@ -446,7 +446,7 @@ export default {
             e_mail:this.form.email,
             email_privacy:sw1,
             home_privacy:sw2,
-            username:"panyuyi",
+            username:window.localStorage.getItem('user_name'),
             paper_ids:str,
           };
           console.log('params',params);

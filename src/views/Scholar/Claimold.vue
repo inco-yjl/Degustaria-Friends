@@ -44,35 +44,53 @@
                           >
                             <template v-for="(item, index) in grouplist">
                               <v-list-item
-                                :key="item.paper_id"
+                                :key="item.id"
                                 style="width: 600px"
                               >
                                 <template v-slot:default="{ active }">
                                   <v-list-item-content style="width: 600px">
-                                    <v-list-item-title v-text="item.title">{{
-                                      item.title
-                                    }}</v-list-item-title>
+                                    <v-list-item-title v-text="listtxt.name" v-if="((item.name2==null) && (item.name3==null))">{{
+                                      item.name1
+                                    }}
+                                    </v-list-item-title>
+                                    <v-list-item-title v-text="listtxt.name" v-if="((item.name3==null) && (item.name2!=null))">{{
+                                        item.name1}} | {{item.name2}}
+                                    </v-list-item-title>
+                                    <v-list-item-title v-text="listtxt.name" v-else>
+                                        {{item.name1}} | {{item.name2}} |  {{item.name3}}
+                                    </v-list-item-title>
+                                     <v-list-item-subtitle
+                                      class="text--primary"
+                                      v-text="listtxt.h_index"
+                                    >{{item.h_index}}</v-list-item-subtitle>   
+                                
 
                                     <v-list-item-subtitle
                                       class="text--primary"
-                                      v-text="item.keyword"
-                                    ></v-list-item-subtitle>
+                                      v-text="listtxt.org"
+                                    >{{item.org}}</v-list-item-subtitle>
 
                                     <v-list-item-subtitle
-                                      v-text="item.abstract"
-                                    ></v-list-item-subtitle>
+                                      v-text="listtxt.interests"
+                                    >{{item.interests}}</v-list-item-subtitle>
+                                    <v-list-item-subtitle
+                                      v-text="listtxt.citation"
+                                    >{{item.citation}}</v-list-item-subtitle>
+                                    <v-list-item-subtitle
+                                      v-text="listtxt.e_mail"
+                                    >{{item.e_mail}}</v-list-item-subtitle>
                                   </v-list-item-content>
 
                                   <v-list-item-action>
                                     <v-icon
-                                    @click="addart(item.paper_id,active)"
+                                    @click="addart(item.id,active)"
                                       v-if="!active"
                                       color="blue-grey lighten-1"
                                     >
                                       mdi-star-plus-outline
                                     </v-icon>
                                     <v-icon v-else color="blue-grey darken-4"
-                                    @click="delart(item.paper_id,active)">
+                                    @click="delart(item.id,active)">
                                       mdi-star-plus
                                     </v-icon>
                                   </v-list-item-action>
@@ -166,6 +184,15 @@ export default {
     name:'Claimold',
     data() {
         return {
+            listtxt:{
+        
+                name:'学者名',
+                org: '组织',
+                interests: '感兴趣的领域',
+                citation: '首页',
+                h_index: 'h_index',
+                e_mail: '邮箱',
+            },
             e1: 1,
             email:"123@qq.com",
             page:1,
@@ -182,19 +209,9 @@ export default {
             active:false,
             grouplist:[
                         {
-                            id: '1',
+                            id: 1,
+                            char_id:'1',
                             name1: 'name1',
-                            name2: '',
-                            name3: '',
-                            org: '',
-                            interests: '',
-                            citation: '',
-                            h_index: '',
-                            e_mail: '',
-                        },
-                        {
-                            id: '2',
-                            name1: 'name2',
                             name2: '',
                             name3: '',
                             org: '',
@@ -239,6 +256,7 @@ export default {
           page:this.page,
           size:5
 		}
+          console.log('ori'+this.grouplist);
     console.log(JSON.stringify(data))
       this.$axios({
         url:'/search_scholar',
@@ -250,6 +268,14 @@ export default {
             console.log('搜索成功');
             console.log(res.data);
             this.grouplist=res.data;
+            console.log(res.data.length);
+            // var i=0;
+            // for(i=0;i<res.data.length;i++){
+            //     this.grouplist.push(res.data[i]);
+            // }
+            this.grouplist=res.data;
+            console.log('ori'+this.grouplist);
+            // console.log('grouplist'+this.grouplist);
           })
           .catch((err) => {
             /* 请求若出现路由找不到等其它异常，则在终端输出错误信息 */
@@ -271,7 +297,7 @@ export default {
         formData.append('e_mail', this.email);
         formData.append('email_privacy', sw1);
         formData.append('home_privacy', sw2);
-        formData.append('username', "panyuyi");
+        formData.append('username', window.localStorage.getItem('user_name'));
           this.$axios({
         method: "post",
         url: '/claim_scholar',

@@ -9,26 +9,25 @@
  export default {
   data() {
     return {
-      scholarId: "",
+      scholarId: 0,
       rdata: [],
       relation: []
     };
   },
   props: {
-    id: {type: String}
+    id: {type: Number}
   },
   mounted() {
     this.scholarId = this.id
-    this.$nextTick(function() {
-      this.getRelationship();
-      this.initChart();
-    })
+    console.log(this.scholarId, this.id)
+    this.getRelationship();
+    this.initChart();
   },
  
   methods: {
     getRelationship() {
       this.$axios({
-        method: "get",
+        method: "post",
         url: '/get_relationships_by_scholar_id',
         data: qs.stringify({
           id: this.scholarId
@@ -36,7 +35,8 @@
       })
       .then(
         res => {
-          for (r in res) {
+          console.log(res.data)
+          for (let r in res.data) {
             this.rdata.push({
               name: r.target,
               category: Math.floor(Math.random() * 9)
@@ -122,19 +122,19 @@
               },
               {
                 name: "zxc",
-                category: 1,
+                category: 3,
               },
               {
                 name: "pyy",
-                category: 2,
+                category: 5,
               },
               {
                 name: "yxy",
-                category: 1,
+                category: 7,
               },
               {
                 name: "zjr",
-                category: 1,
+                category: 8,
               }
             ],
             links: [

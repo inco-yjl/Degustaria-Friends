@@ -219,8 +219,6 @@ export default {
 <style scoped lang="scss">
 .home-page {
   background-color: white;
-  padding-top: 40px;
-  //绝对，为了使顶部内容正常显示，不被search-bar遮挡
   width: vw(1920);
   display: flex;
 }
@@ -235,17 +233,17 @@ export default {
 .card_1 {
   width: vw(350);
   margin-left: vw(110);
-  margin-top: vw(50);
+  margin-top: vw(70);
 }
 .card_2 {
   width: vw(350);
   margin-left: vw(80);
-  margin-top: vw(50);
+  margin-top: vw(70);
 }
 .card_3 {
   width: vw(350);
   margin-left: vw(80);
-  margin-top: vw(50);
+  margin-top: vw(70);
 }
 .card_title_1 {
   font-size: vw(30);
@@ -253,6 +251,7 @@ export default {
   font-family: "Source Han Sans CN Normal", sans-serif;
   color: #232f3d;
   margin-bottom: vw(20);
+  margin-top: vh(10);
 }
 .card_content_1 {
   font-size: 1.1rem;
@@ -270,7 +269,7 @@ export default {
 }
 
 .card_home_right {
-  margin-top: vw(50);
+  margin-top: vw(70);
   width: vw(400);
   margin-left: vw(90);
   padding-top: 10px;
