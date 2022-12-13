@@ -19,7 +19,7 @@
       ></v-text-field>
     </div>
     <div class="result-list">
-      <v-card class="search-card" v-for="(org, index) in result" :key="index" @click="ToInstitute(org)">
+      <v-card class="search-card" v-if="loaded === 1" v-for="(org, index) in result" :key="index" @click="ToInstitute(org)">
         <div class="orgName">{{ org.name }}</div>
         <div v-if="org.cn_name" class="orgName-cn">翻译：{{ org.cn_name }}</div>
         <div class="official-url" v-if="org.url !== 'null'">
@@ -46,8 +46,78 @@
           </div>
         </div>
       </v-card>
+
+      <!-- skeleton -->
+      <v-sheet
+        class="pa-3"
+        v-if="loaded === 0"
+      >
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="card"
+        ></v-skeleton-loader>
+      </v-sheet>
     </div>
+
+
     <v-pagination
+      v-if="loaded === 1"
       class="pagination"
       v-model="orgpage"
       :total-visible="7"
@@ -67,6 +137,7 @@ export default {
       orgpage: ref(1),
       orgpageCount: ref(1),
       result: [],
+      loaded: 0,
     };
   },
 
@@ -110,6 +181,7 @@ export default {
     },
     searchResult() {
       console.log("!!!");
+      this.loaded = 0;
       this.$axios({
         method: "post",
         url: "/search_org",
@@ -120,6 +192,7 @@ export default {
         }),
       })
         .then((res) => {
+          this.loaded = 1;
           console.log(res.data);
           this.orgpageCount = res.data.amount;
           this.result = res.data.list;
@@ -239,5 +312,14 @@ export default {
   position: absolute;
   bottom: vh(10);
   right: vw(20);
+}
+.pa-3 {
+  margin-left: vw(0.5);
+  width: vw(900);
+  height: vw(690);
+  // border: 1px solid #232f3d;
+}
+.mx-auto {
+  margin-top: vh(10);
 }
 </style>
