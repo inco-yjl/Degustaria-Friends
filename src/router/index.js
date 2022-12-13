@@ -2,18 +2,21 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
-/*
-避免冗余导航
- */
-const originalPush = VueRouter.prototype.push
 
-VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
 const routes = [
   {
     path: '/',
-    redirect: '/home/focus'
+    redirect: '/home'
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/user/login.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import(/* webpackChunkName: "about" */ '../views/user/register.vue'),
   },
   {
     path: '/',
@@ -29,7 +32,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Header/SearchHeader.vue'),
         children: [
           {
-            path: '/home',
+            path: '/fakehome',
             name: 'home',
             // route level code-splitting
             // this generates a separate chunk (about.[hash].js) for this route
@@ -37,7 +40,7 @@ const routes = [
             component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
             children: [
               {
-                path: '/home/focus',
+                path: '/home',
                 name: 'home_focus',
                 // route level code-splitting
                 // this generates a separate chunk (about.[hash].js) for this route
@@ -103,6 +106,26 @@ const routes = [
         children: [
         
         ]
+      },
+      {
+        path: '/scholarSearch',
+        name: 'scholarSearch',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/SearchScholar.vue'),
+      },
+      {
+        path: '/scholarResult',
+        name: 'scholarResult',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/ScholarSearchResult.vue'),
+      },
+      {
+        path: '/institutionSearch',
+        name: 'institutionSearch',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Institution/SearchInstitution.vue'),
+      },
+      {
+        path: '/institutionResult',
+        name: 'institutionResult',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Institution/InstitutionResult.vue'),
       },
       {
         path: '/paperDetail',

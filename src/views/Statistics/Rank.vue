@@ -6,13 +6,75 @@
       v-model="tab"
       class="rank-tabs"
     >
-      <v-tab key="1">学者</v-tab>
-      <v-tab key="2">机构</v-tab>
+    <v-tab key="1">机构</v-tab>
+      <v-tab key="2">学者</v-tab>
       <v-tab key="3">期刊会议</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
       <v-tab-item key="1">
+        <div class="rank-content">
+          <div class="field-filter">
+            <v-card class="d-block mx-auto rounded-lg" flat>
+              <div class="tree-filter">
+                <v-radio-group v-model="radioGroup" class="org-field-tree">
+                  <v-radio :key="1" label="all" :value="1"> </v-radio>
+                  <div
+                    class="org-field-class"
+                    v-for="group in orgFieldOptions"
+                    :key="group.name"
+                  >
+                    {{ group.name }}:
+                    <div class="org-field-selections">
+                      <v-radio
+                        v-for="field in group.children"
+                        :key="field.id"
+                        :label="field.name"
+                        :value="field.id"
+                      ></v-radio>
+                    </div>
+                  </div>
+                </v-radio-group>
+              </div>
+            </v-card>
+          </div>
+          <div class="rank-main-content">
+            <div class="table-filters">
+              <v-text-field
+                v-model="orgSearch"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </div>
+            <div class="table">
+              <div class="main-table">
+                <v-data-table
+                  :search="orgSearch"
+                  :headers="orgHeader"
+                  :items="orgDesserts"
+                  @page-count="orgpageCount = $event"
+                  :page.sync="orgpage"
+                  :items-per-page="10"
+                  hide-default-footer
+                  class="elevation-1"
+                >
+                  <template v-slot:item.share="{ item }">
+                    <div v-html="numFilter(item.share)"></div>
+                  </template>
+                </v-data-table>
+                <v-pagination
+                  class="pagination"
+                  v-model="orgpage"
+                  :length="orgpageCount"
+                ></v-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-tab-item>
+      <v-tab-item key="2">
         <div class="rank-content">
           <div class="field-filter">
             <v-card class="d-block mx-auto rounded-lg" flat>
@@ -48,13 +110,15 @@
                   :items="scholarDesserts"
                   @page-count="scholarpageCount = $event"
                   :page.sync="scholarpage"
-                  :items-per-page="15"
+                  :items-per-page="10"
                   hide-default-footer
                   class="elevation-1"
                 >
                   <template v-slot:item.name1="{ item }">
-                    <div><b>{{ item.name1 }}</b></div>
-                    <div>org:  {{ handleSubString(item.org) }}</div>
+                    <div>
+                      <b>{{ item.name1 }}</b>
+                    </div>
+                    <div>org: {{ handleSubString(item.org) }}</div>
                     <div>area: {{ handleSubString(item.interests) }}</div>
                   </template>
                 </v-data-table>
@@ -74,26 +138,36 @@
           </div>
         </div>
       </v-tab-item>
-
-      <v-tab-item key="2">
+      <v-tab-item key="3"> 
         <div class="rank-content">
           <div class="field-filter">
             <v-card class="d-block mx-auto rounded-lg" flat>
               <div class="tree-filter">
-                <v-treeview
-                  :open="[1]"
-                  selectable
-                  dense
-                  selected-color="indigo"
-                  :items="fieldOptions"
-                ></v-treeview>
+                <v-radio-group v-model="conChoice" class="org-field-tree">
+                  <v-radio :key="7" label="all" :value="7"> </v-radio>
+                  <div
+                    class="org-field-class"
+                    v-for="group in conferenceFieldOptions"
+                    :key="group.name"
+                  >
+                    {{ group.name }}:
+                    <div class="org-field-selections">
+                      <v-radio
+                        v-for="field in group.children"
+                        :key="field.id"
+                        :label="field.name"
+                        :value="field.id"
+                      ></v-radio>
+                    </div>
+                  </div>
+                </v-radio-group>
               </div>
             </v-card>
           </div>
           <div class="rank-main-content">
             <div class="table-filters">
               <v-text-field
-                v-model="orgSearch"
+                v-model="conferenceSearch"
                 append-icon="mdi-magnify"
                 label="Search"
                 single-line
@@ -103,32 +177,26 @@
             <div class="table">
               <div class="main-table">
                 <v-data-table
-                  :search="orgSearch"
-                  :headers="orgHeader"
-                  :items="orgDesserts"
-                  @page-count="orgpageCount = $event"
-                  :page.sync="orgpage"
-                  :items-per-page="15"
+                  :search="conferenceSearch"
+                  :headers="conferenceHeader"
+                  :items="conferenceDesserts"
+                  @page-count="conferencepageCount = $event"
+                  :page.sync="conferencePage"
+                  :items-per-page="10"
                   hide-default-footer
                   class="elevation-1"
                 >
-                  <template v-slot:item.name="{ item }">
-                    <div>{{ item.name }}</div>
-                    <div>{{ item.org }}</div>
-                    <div>{{ item.interests }}</div>
-                  </template>
                 </v-data-table>
                 <v-pagination
                   class="pagination"
-                  v-model="orgpage"
-                  :length="orgpageCount"
+                  v-model="conferencePage"
+                  :length="conferencepageCount"
                 ></v-pagination>
               </div>
             </div>
           </div>
         </div>
       </v-tab-item>
-      <v-tab-item key="3"> 3 </v-tab-item>
     </v-tabs-items>
   </div>
 </template>
@@ -144,11 +212,9 @@ export default {
         text: "姓名",
         align: "start",
         sortable: false,
-        value: "name1",
-        width: 600,
+        value: "name1"
       },
       { text: "h指数", value: "h_index", filterable: false, width: 120 },
-      { text: "论文数", value: "paperNum", filterable: false, width: 120 },
       { text: "引用数", value: "citation", filterable: false, width: 120 },
     ];
 
@@ -158,89 +224,119 @@ export default {
         align: "start",
         sortable: false,
         value: "name",
+        width: 40,
       },
-      { text: "国家", value: "country", filterable: false, sortable: false },
-      { text: "2022自然指数", value: "index2022", filterable: false },
-      { text: "2022论文数", value: "count2022", filterable: false },
+      {
+        text: "国家",
+        value: "country",
+        filterable: false,
+        sortable: false,
+        width: 30,
+      },
+      { text: "学术成果数量", value: "count", filterable: false, width: 20 },
+      { text: "自然指数", value: "share", filterable: false, width: 20 },
     ];
-    const orgDesserts = [
+    const conferenceHeader = [
       {
-        name: "Max Planck Society",
-        country: "Germany",
-        index2022: 782.72,
-        count2022: 2780,
+        text: "姓名",
+        align: "start",
+        sortable: false,
+        value: "name",
+        width: 40,
+      },
+      { text: "h5指数", value: "h5Value", filterable: false, width: 20 },
+      { text: "h5中位数", value: "h5MidValue", filterable: false, width: 20 },
+    ];
+    const orgFieldOptions = [
+      {
+        name: "主题",
+        children: [
+          {
+            name: "Chemistry",
+            id: 2,
+          },
+          {
+            name: "Earth & Environmental",
+            id: 3,
+          },
+          {
+            name: "Life Sciences",
+            id: 4,
+          },
+          {
+            name: "Physical Sciences",
+            id: 6,
+          },
+        ],
       },
       {
-        name: "French National Centre for Scientific Research (CNRS)",
-        country: "France",
-        index2022: 675.69,
-        count2022: 4399,
+        name: "期刊",
+        children: [
+          {
+            name: "Nature & Science",
+            id: 5,
+          },
+        ],
       },
+    ];
+    const conferenceFieldOptions = [
       {
-        name: "Helmholtz Association of German Research Centres",
-        country: "Germany",
-        index2022: 565.07,
-        count2022: 2584,
-      },
-      {
-        name: "University of Oxford",
-        country: "United Kingdom (UK)",
-        index2022: 452.28,
-        count2022: 1485,
-      },
-      {
-        name: "Swiss Federal Institute of Technology Zurich (ETH Zurich)",
-        country: "Switzerland",
-        index2022: 395.67,
-        count2022: 1065,
-      },
-      {
-        name: "Imperial College London (ICL),",
-        country: "United Kingdom (UK)",
-        index2022: 248.3,
-        count2022: 963,
-      },
-      {
-        name: "Russian Academy of Sciences (RAS)",
-        country: "Russia",
-        index2022: 242.05,
-        count2022: 914,
-      },
-      {
-        name: "Swiss Federal Institute of Technology Lausanne (EPFL)",
-        country: "Switzerland",
-        index2022: 228.37,
-        count2022: 619,
-      },
-      {
-        name: "UCL",
-        country: "United Kingdom (UK)",
-        index2022: 222.6,
-        count2022: 981,
-      },
-      {
-        name: "Spanish National Research Council (CSIC)",
-        country: "Spain",
-        index2022: 209.15,
-        count2022: 1190,
-      },
-      {
-        name: "Leibniz Association",
-        country: "Germany",
-        index2022: 200.12,
-        count2022: 1001,
+        name: "学科",
+        children: [
+          {
+            name: "Business,Economics & Management",
+            id: 10,
+          },
+          {
+            name: "Chemical & Material Sciences",
+            id: 8,
+          },
+          {
+            name: "Engineering & Computer Science",
+            id: 9,
+          },
+          {
+            name: "Health & Medical Sciences",
+            id: 11
+          },
+          {
+            name: "Humanities, Literature & Arts",
+            id: 12,
+          },
+          {
+            name: "Life Sciences & Earth Sciences",
+            id: 13
+          },
+          {
+            name: "Physics & Mathematics",
+            id: 14
+          },
+          {
+            name: "Social Sciences",
+            id: 15
+          }
+        ],
       },
     ];
     return {
+      conferenceHeader,
+      conferenceFieldOptions,
+      conChoice: 7,
+      radioGroup: 1,
+      orgFieldOptions,
       get_fields: require("@/assets/json/get_fields.json"),
       scholarSearch: "",
       fieldSelection: [],
       orgSearch: "",
+      conferenceSearch: "",
       scholarpageCount: 0,
+      conferencepageCount: 0,
       orgpageCount: 0,
-      orgDesserts,
+      orgDesserts: [],
+      conferenceDesserts: [],
       orgHeader,
       orgpage: 1,
+      conferencePage: 1,
       scholarpage: 1,
       tab: null,
       fieldOptions,
@@ -254,9 +350,20 @@ export default {
       console.log(1);
       this.getScholarRank();
     },
+    radioGroup(newVal) {
+      this.getOrgRank();
+    },
+    conChoice(newVal){
+      this.getConfRank();
+    }
   },
 
   methods: {
+    numFilter(value) {
+      value = Number(value)
+      var realVal = value.toFixed(2);
+      return realVal;
+    },
     getScholarFields() {
       /*
       this.$axios({
@@ -339,10 +446,42 @@ export default {
       return array;
     },
     handleSubString(string) {
-      if(string.length>60) {
-        return string.substring(0,60)+"…";
-      }
-      else return string
+      if (string.length > 60) {
+        return string.substring(0, 60) + "…";
+      } else return string;
+    },
+    getOrgRank() {
+      this.$axios({
+        method: "post",
+        url: "/get_rank",
+        data: qs.stringify({
+          type: this.radioGroup,
+        }),
+      })
+        .then((res) => {
+          this.orgDesserts = res.data;
+        })
+        .catch((err) => {
+          //请求若出现路由找不到等其它异常，则在终端输出错误信息
+          console.log(err);
+        });
+    },
+    getConfRank() {
+      this.$axios({
+        method: "post",
+        url: "/get_rank",
+        data: qs.stringify({
+          type: this.conChoice
+        }),
+      })
+        .then((res) => {
+          this.conferenceDesserts = res.data;
+          console.log("Con:getFields", res.data);
+        })
+        .catch((err) => {
+          //请求若出现路由找不到等其它异常，则在终端输出错误信息
+          console.log(err);
+        });
     },
     getScholarRank() {
       var select_items = "";
@@ -374,6 +513,8 @@ export default {
     this.$nextTick(() => {
       this.getScholarFields();
       this.getScholarRank();
+      this.getOrgRank();
+      this.getConfRank();
     });
   },
 };
@@ -385,11 +526,11 @@ export default {
   position: relative;
   left: 0;
   height: auto;
-  top: 0;
+  margin-top: 69px;
   width: vw(1900);
 }
 .rank-tabs {
-  padding-left: vw(600);
+  padding-left: vw(680);
 }
 .rank-content {
   width: vw(1600);
@@ -401,7 +542,7 @@ export default {
   position: relative;
   margin-right: vw(60);
   top: vh(39);
-  height: vh(900);
+  height: vh(850);
   left: 0;
 }
 .tree-filter {
@@ -414,6 +555,19 @@ export default {
   width: vw(430);
   height: vh(700);
   overflow: auto;
+}
+.org-field-tree {
+  margin-top: 0;
+  margin-left: vw(20);
+  font-family: "思源黑体";
+  font-size: vw(20);
+  line-height: vh(36);
+}
+.org-field-class {
+  margin-bottom: vh(24);
+}
+.org-field-selections {
+  margin-left: vw(15);
 }
 .rank-main-content {
   width: 100%;
@@ -430,7 +584,7 @@ export default {
   padding-top: vh(20);
   padding-left: vw(10);
   padding-right: vw(20);
-  width: 100%;
+  width: vw(1100);
 }
 .pagination {
   margin-top: vh(20);
