@@ -113,7 +113,12 @@ export default {
       }
     },
     ToScholarPage() {
-      this.$router.push({ name: "login" });
+      this.$router.push({
+        name: "ScholarShow",
+        query: {
+          id: this.scholar_id
+        }
+     });
     },
     Login() {
       this.$router.push({ name: "login" });
