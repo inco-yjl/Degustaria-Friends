@@ -122,10 +122,10 @@
           item.year
         }}</v-list-item-subtitle>
         <div class="recommand_book">Abstract：</div>
-        <div class="recommand_book_2" v-if="item.abstract != 'null'">
+        <div class="recommand_book_2" v-if="item.abstract !== 'null'">
           {{ item.abstract }}
         </div>
-        <div class="recommand_book_3" v-if="item.abstract == 'null'">-</div>
+        <div class="recommand_book_3" v-if="item.abstract === 'null'">-</div>
         <div style="display: flex">
           <div class="quote_recommand_fa">
             <p class="quote_recommand_0">引用量：</p>
