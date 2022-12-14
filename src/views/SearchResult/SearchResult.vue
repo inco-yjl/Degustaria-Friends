@@ -49,20 +49,17 @@
             <p class="font-weight-black">引用量：{{text_process(paper.n_citation)}}</p>
           </div>
         </div>
-        <div class="quote_recommand_2" v-if="this.mode==MODE_PATENT">
-          <div>
-            <p class="font-weight-black">引用量：{{text_process(paper.citation)}}</p>
+        <div class="recommand_icon_1" @click="into_detail(item.url[0])">
+          <div @click="download()" style="display: flex;">
+            <v-icon color="#232f3d" class="recommand_icon_3" medium>
+              mdi-earth
+            </v-icon>
+            <a class="quote_recommand_1">原文链接</a>
           </div>
+          <v-icon color="#232f3d" class="recommand_icon_4" medium @click="open_dialog()">
+            mdi-comment-quote
+          </v-icon>
         </div>
-        <div class="recommand_icon_fa_2" >
-          <img src="@/assets/quote.png"
-               v-if="this.mode===MODE_PAPER"
-               class="recommand_icon_1_2" @click="open_dialog()"/>
-          <img :src="saved?collected:uncollected" class="recommand_icon_2_2" @click="change_collect()"/>
-          <img :src="download_img" v-if="this.mode==MODE_PAPER||this.mode==MODE_PROJECT"
-               class="recommand_icon_2_2" @click="download()"/>
-        </div>
-
       </v-card>
     </div>
     <v-snackbar
@@ -356,10 +353,12 @@ export default {
 }
 
 .search_result_card {
-  margin: vw(10);
+  margin-left: vw(10);
+  margin-right: vw(10);
+  margin-bottom: vw(10);
+  margin-top: vw(20);
   padding: vh(10);
   width: vw(1000);
-
 }
 .headline_2_2 {
   margin-left: vw(20);
@@ -443,6 +442,11 @@ export default {
   color: red;
   background: rgba(33, 49, 42, 0.29);;
 }
+.quote_recommand_fa {
+  width: vw(1050);
+  margin-bottom: vh(10);
+  margin-top: vh(20);
+}
 .quote_recommand {
   margin-left: vw(5);
   margin-top: vh(17);
@@ -465,6 +469,29 @@ export default {
   display: flex;
   font-family: "SourceHanSerifCN", sans-serif;
   font-size: vw(17);
-  margin-top: vh(42);
+  margin-top: vh(20);
+}
+.recommand_icon_fa {
+  display: flex;
+  margin-left: vw(1130);
+}
+.recommand_icon_2 {
+  width: vw(36);
+  margin-left: vw(40);
+  margin-bottom: vh(32);
+}
+.recommand_icon_3 {
+  margin-top: vh(17);
+}
+.recommand_icon_4 {
+  margin-top: vh(22);
+  margin-left: vw(20);
+}
+
+.recommand_icon_1 {
+  display: flex;
+  margin-top: 0;
+  margin-bottom: vh(20);
+  margin-left: vw(800);
 }
 </style>
