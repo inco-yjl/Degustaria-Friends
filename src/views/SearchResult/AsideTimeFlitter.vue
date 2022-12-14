@@ -15,6 +15,7 @@
             persistent-hint
             allow-overflow="false"
             label="开始时间"
+
             background-color="#ffffff"
             dense
             light
@@ -32,7 +33,6 @@
             v-model="endTime"
             :items="endTimes"
             persistent-hint
-
             label="结束时间"
             background-color="#ffffff"
             dense
@@ -47,21 +47,21 @@
   <v-row>
     <v-col>
       <div class="button">
-        <v-btn>
+        <v-btn @click="recent_year(1)">
           近一年
         </v-btn>
       </div>
     </v-col>
     <v-col>
       <div class="button">
-        <v-btn>
+        <v-btn @click="recent_year(5)">
           近五年
         </v-btn>
       </div>
     </v-col>
     <v-col>
       <div class="button">
-        <v-btn>
+        <v-btn @click="recent_year(10)">
           近十年
         </v-btn>
       </div>
@@ -74,18 +74,67 @@
 <script>
 export default {
   name: "AsideTimeFlitter",
+  props:{
+    time_start:{
+      type:Number,
+      default:1950
+    },
+    time_end:{
+      type:Number,
+      default: 2022
+    }
+  },
   data () {
     return {
-      startTime:2022,
+      startTime:1970,
       endTime:2022,
       endTimes: [
-        2022,2021,2020,2019
       ],
       startTimes: [
-        2022,2021,2020,2019
       ],
     }
   },
+  methods:{
+    update(){
+      let param=this.$store.getters.get_search_param
+
+      param.filter_time=[]
+      param.filter_time.push(this.startTime)
+      param.filter_time.push(this.endTime)
+      this.$store.commit("mod_search_param",param)
+      console.log("in time aside",this.$store.getters.get_search_param)
+      this.$emit('update')
+    },
+    recent_year(i){
+      let date=new Date()
+      this.endTime=date.getFullYear()
+      this.startTime=this.endTime-i
+      this.update()
+    }
+  },
+  mounted() {
+    let page_info=this.$store.getters.get_page_info
+    this.startTime=page_info.time[0]
+    this.endTime=page_info.time[1]
+    for(let i=this.endTime;i>=this.startTime;i--){
+      this.endTimes.push(i)
+    }
+    for(let i=this.startTime;i<=this.endTime;i++){
+      this.startTimes.push(i)
+    }
+  },
+  watch:{
+    startTime(newVal,oldVal){
+      if(newVal!=oldVal){
+        this.update()
+      }
+    },
+    endTime(newVal,oldVal){
+      if(newVal!=oldVal){
+        this.update()
+      }
+    },
+  }
 }
 </script>
 
@@ -105,5 +154,8 @@ export default {
 .button{
   width: vw(60);
   height: vh(60);
+}
+.facus{
+  color: red;
 }
 </style>

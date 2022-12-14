@@ -39,7 +39,7 @@
         <div class="to-statistics" @click="toStatistics()">统计</div>
         <v-spacer />
         <v-avatar size="45" :class="`rounded${45}`" class="border-white">
-          <v-menu offset-y class=action-menu>
+          <v-menu offset-y class="action-menu">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 depressed
@@ -59,7 +59,7 @@
                 <span class="user-name-icon" v-else>游</span>
               </v-btn>
             </template>
-            <v-list class="action-list"  dense>
+            <v-list class="action-list" dense>
               <v-list-item
                 key="1"
                 v-if="scholar_id != null"
@@ -67,13 +67,14 @@
               >
                 <v-list-item-title>学者主页 </v-list-item-title>
               </v-list-item>
-              <v-list-item
-                key="2"
-                v-else-if="hasLogin"
-                @click="ToCertificate()"
-              >
-                <v-list-item-title>认证学者 </v-list-item-title>
-              </v-list-item>
+              <template v-else-if="hasLogin">
+                <v-list-item key="2" @click="ToCertificate()">
+                  <v-list-item-title>认证成为学者 </v-list-item-title>
+                </v-list-item>
+                <v-list-item key="5" @click="ToClaim()">
+                  <v-list-item-title>认领学者 </v-list-item-title>
+                </v-list-item>
+              </template>
               <v-list-item key="3" v-else @click="Login()">
                 <v-list-item-title>登录 </v-list-item-title>
               </v-list-item>
@@ -113,7 +114,12 @@ export default {
       }
     },
     ToScholarPage() {
-      this.$router.push({ name: "login" });
+      this.$router.push({
+        name: "ScholarShow",
+        query: {
+          id: this.scholar_id,
+        },
+      });
     },
     Login() {
       this.$router.push({ name: "login" });
@@ -132,8 +138,12 @@ export default {
       this.scholar_id = null;
       window.location.reload();
     },
-    ToCertificate() {
+    ToClaim() {
       this.$router.push({ name: "scholarold" });
+      
+    },
+    ToCertificate() {
+      this.$router.push({ name: "scholar" });
     },
     toInstitution() {
       if (this.$route.name !== "institutionSearch") {
@@ -175,6 +185,7 @@ export default {
             res.data.status === "用户不存在"
           ) {
             window.localStorage.setItem("scholar_id", "");
+            console.log(this.hasLogin)
             this.scholar_id = null;
           } else {
             window.localStorage.setItem("scholar_id", res.data.id);
@@ -224,6 +235,4 @@ export default {
 .to-statistics {
   cursor: pointer;
 }
-
-
 </style>

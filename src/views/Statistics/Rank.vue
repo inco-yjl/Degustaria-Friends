@@ -6,7 +6,7 @@
       v-model="tab"
       class="rank-tabs"
     >
-    <v-tab key="1">机构</v-tab>
+      <v-tab key="1">机构</v-tab>
       <v-tab key="2">学者</v-tab>
       <v-tab key="3">期刊会议</v-tab>
     </v-tabs>
@@ -49,7 +49,69 @@
               ></v-text-field>
             </div>
             <div class="table">
-              <div class="main-table">
+              <v-sheet class="pa-3" v-if="orgDesserts.length === 0">
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+              </v-sheet>
+              <div class="main-table" v-else>
                 <v-data-table
                   :search="orgSearch"
                   :headers="orgHeader"
@@ -103,7 +165,69 @@
               ></v-text-field>
             </div>
             <div class="table">
-              <div class="main-table">
+              <v-sheet class="pa-3" v-if="scholarDesserts.length === 0">
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+              </v-sheet>
+              <div class="main-table" v-else>
                 <v-data-table
                   :search="scholarSearch"
                   :headers="scholarHeader"
@@ -138,7 +262,7 @@
           </div>
         </div>
       </v-tab-item>
-      <v-tab-item key="3"> 
+      <v-tab-item key="3">
         <div class="rank-content">
           <div class="field-filter">
             <v-card class="d-block mx-auto rounded-lg" flat>
@@ -175,7 +299,69 @@
               ></v-text-field>
             </div>
             <div class="table">
-              <div class="main-table">
+              <v-sheet class="pa-3" v-if="conferenceDesserts.length === 0">
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+                <v-skeleton-loader
+                  class="mx-auto"
+                  max-width="1200"
+                  height="50"
+                  type="list-item-two-line"
+                ></v-skeleton-loader>
+              </v-sheet>
+              <div class="main-table" v-else>
                 <v-data-table
                   :search="conferenceSearch"
                   :headers="conferenceHeader"
@@ -212,7 +398,7 @@ export default {
         text: "姓名",
         align: "start",
         sortable: false,
-        value: "name1"
+        value: "name1",
       },
       { text: "h指数", value: "h_index", filterable: false, width: 120 },
       { text: "引用数", value: "citation", filterable: false, width: 120 },
@@ -297,7 +483,7 @@ export default {
           },
           {
             name: "Health & Medical Sciences",
-            id: 11
+            id: 11,
           },
           {
             name: "Humanities, Literature & Arts",
@@ -305,16 +491,16 @@ export default {
           },
           {
             name: "Life Sciences & Earth Sciences",
-            id: 13
+            id: 13,
           },
           {
             name: "Physics & Mathematics",
-            id: 14
+            id: 14,
           },
           {
             name: "Social Sciences",
-            id: 15
-          }
+            id: 15,
+          },
         ],
       },
     ];
@@ -340,7 +526,7 @@ export default {
       scholarpage: 1,
       tab: null,
       fieldOptions,
-      scholarDesserts: ref(),
+      scholarDesserts: [],
       scholarHeader,
       pushRank: ref(0),
     };
@@ -353,14 +539,14 @@ export default {
     radioGroup(newVal) {
       this.getOrgRank();
     },
-    conChoice(newVal){
+    conChoice(newVal) {
       this.getConfRank();
-    }
+    },
   },
 
   methods: {
     numFilter(value) {
-      value = Number(value)
+      value = Number(value);
       var realVal = value.toFixed(2);
       return realVal;
     },
@@ -471,7 +657,7 @@ export default {
         method: "post",
         url: "/get_rank",
         data: qs.stringify({
-          type: this.conChoice
+          type: this.conChoice,
         }),
       })
         .then((res) => {
@@ -485,6 +671,7 @@ export default {
     },
     getScholarRank() {
       var select_items = "";
+      this.scholarDesserts = [];
       for (var i = 0; i < this.fieldSelection.length; i++) {
         if (i != 0) select_items += ",";
         select_items += this.fieldSelection[i].name;
@@ -511,10 +698,10 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.getScholarFields();
-      this.getScholarRank();
       this.getOrgRank();
       this.getConfRank();
+      this.getScholarFields();
+      this.getScholarRank();
     });
   },
 };
@@ -612,5 +799,14 @@ div::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 5px rgba(154, 154, 154, 0.5);
   border-radius: 0;
   background: rgba(255, 255, 255, 0.1);
+}
+.pa-3 {
+  margin-left: vw(0.5);
+  width: vw(1000);
+  height: vw(690);
+  // border: 1px solid #232f3d;
+}
+.mx-auto {
+  margin-top: vh(10);
 }
 </style>
