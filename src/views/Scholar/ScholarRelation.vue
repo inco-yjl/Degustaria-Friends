@@ -19,11 +19,7 @@
   },
   mounted() {
     this.scholarId = this.id
-<<<<<<< HEAD
     console.log("id"+ this.id)
-=======
-    console.log("this.scholarId", this.id)
->>>>>>> 440e7099145125f2b3586f5b911903772d81519c
     this.getRelationship();
   },
  
