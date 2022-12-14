@@ -62,7 +62,8 @@ export function searchRequest(p){
         let sendData={
             word:parmas.search_word[0],
             page:parmas.page,
-            size:parmas.size
+            size:parmas.size,
+            type:parmas.search_type[0]
         }
         tmp.append("word",parmas.search_word[0])
         tmp.append("page",parmas.page)
@@ -83,7 +84,8 @@ export function searchRequest(p){
         let sendData={
             word:parmas.search_word[0],
             page:parmas.page,
-            size:parmas.size
+            size:parmas.size,
+            type:parmas.search_type[0]
         }
         console.log('searchProject',sendData)
         return axios({
