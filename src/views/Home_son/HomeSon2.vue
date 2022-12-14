@@ -570,6 +570,7 @@ export default {
   color: #7f7f7f;
   line-height: 26px;
   padding: vw(5) 0;
+  font-family: SourceHanSerifCN;
 }
 .recommand_book_3 {
   color: #455a64;
