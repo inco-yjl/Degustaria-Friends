@@ -633,6 +633,7 @@ export default {
           console.log(res.data);
           this.addsuccess=1;
           this.dialog=false;
+          this.pagination_getlist(0);
         })
         .catch((err) => {
           //请求若出现路由找不到等其它异常，则在终端输出错误信息

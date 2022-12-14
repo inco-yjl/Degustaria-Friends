@@ -21,48 +21,42 @@
         <!-- </div> -->
         <div class="recommand_book_2" v-if="this.mode==MODE_PROJECT">
           <!--          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>-->
-          <div class="year_info">计划起始时间：{{text_process(beg_end)}}</div>
-          <div class="year_info">资金：{{text_process(paper.money)}}</div>
-          <div class="year_info">资助机构：{{text_process(paper.financial_institution)}}</div>
-          <div class="year_info">执行机构：{{text_process(paper.undertaking_institution)}}</div>
+          <div class="recommand_book">计划起始时间：{{text_process(beg_end)}}</div>
+          <div class="recommand_book">资金：{{text_process(paper.money)}}</div>
+          <div class="recommand_book">资助机构：{{text_process(paper.financial_institution)}}</div>
+          <div class="recommand_book">执行机构：{{text_process(paper.undertaking_institution)}}</div>
 
-          <div class="year_info">参与方：{{text_process(paper.participant)}}</div>
+          <div class="recommand_book">参与方：{{text_process(paper.participant)}}</div>
         </div>
 
-        <v-list-item-action-text v-if="this.mode==MODE_PAPER||this.mode==MODE_PROJECT">
-          <div class="keywords_info" >
-            <span style="font-weight: bold">摘要：</span>
+        <v-list-item-subtitle class="recommand_book" v-if="this.mode==MODE_PAPER||this.mode==MODE_PROJECT">
+            <span style="font-weight: bold" >摘要：</span>
             {{text_process(this.abstract)}}
-          </div>
-        </v-list-item-action-text>
+        </v-list-item-subtitle>
 
-        <div class="keywords_info" v-if="this.mode==MODE_PAPER">
-          <span >关键词：</span>
-          <span v-for="i in paper.keywords">{{text_process(text_process(i)+", ")}}</span>
-        </div>
-        <div class="keywords_info" v-if="this.mode==MODE_PATENT">
-          <span >关键词：</span>
-          <span >{{text_process(paper.keyword)}}</span>
-        </div>
-        <div class="quote_recommand_2" v-if="this.mode==MODE_PAPER">
-          <div>
-            <p class="font-weight-black">引用量：{{text_process(paper.n_citation)}}</p>
+        <v-list-item-subtitle class="recommand_book" v-if="this.mode==MODE_PAPER">
+           <span style="font-weight: bold" >关键词：</span>
+          <span class="keywords_info" v-for="i in paper.keywords" >{{text_process(text_process(i)+", ")}}</span>
+        </v-list-item-subtitle>
+        <!-- <v-list-item-subtitle class="recommand_book_2"  v-if="this.mode==MODE_PATENT">
+           <span style="font-weight: bold" >关键词：</span>
+          <span class="keywords_info">{{text_process(paper.keyword)}}</span>
+         </v-list-item-subtitle> -->
+           <v-list-item-subtitle style="display: flex" class="recommand_book" v-if="this.mode==MODE_PAPER">
+            <span style="font-weight: bold" >引用量：</span>
+             {{text_process(paper.n_citation)}}
+           </v-list-item-subtitle>
+        <div class="recommand_icon_1" @click="into_detail(item.url[0])">
+          <div @click="download()" style="display: flex;">
+            <v-icon color="#232f3d" class="recommand_icon_3" medium>
+              mdi-earth
+            </v-icon>
+            <a class="quote_recommand_1">原文链接</a>
           </div>
+          <v-icon color="#232f3d" class="recommand_icon_4" medium @click="open_dialog()">
+            mdi-comment-quote
+          </v-icon>
         </div>
-        <div class="quote_recommand_2" v-if="this.mode==MODE_PATENT">
-          <div>
-            <p class="font-weight-black">引用量：{{text_process(paper.citation)}}</p>
-          </div>
-        </div>
-        <div class="recommand_icon_fa_2" >
-          <img src="@/assets/quote.png"
-               v-if="this.mode===MODE_PAPER"
-               class="recommand_icon_1_2" @click="open_dialog()"/>
-          <img :src="saved?collected:uncollected" class="recommand_icon_2_2" @click="change_collect()"/>
-          <img :src="download_img" v-if="this.mode==MODE_PAPER||this.mode==MODE_PROJECT"
-               class="recommand_icon_2_2" @click="download()"/>
-        </div>
-
       </v-card>
     </div>
     <v-snackbar
@@ -356,15 +350,18 @@ export default {
 }
 
 .search_result_card {
-  margin: vw(10);
+  margin-left: vw(10);
+  margin-right: vw(10);
+  margin-bottom: vw(10);
+  margin-top: vw(20);
   padding: vh(10);
   width: vw(1000);
-
 }
 .headline_2_2 {
   margin-left: vw(20);
   font-size: vw(25);
-  font-family: "Source Han Sans CN Normal", sans-serif;
+  // font-family: "Source Han Sans CN Normal", sans-serif;
+  font-family: "optima", sans-serif;
 }
 .subtitle_recommand_1_2 {
   margin-left: vw(20);
@@ -438,10 +435,17 @@ export default {
 .title:hover{
   padding: 2%;
   border: solid;
-  border-radius: 5px;
+  border-radius: 10px;
   border-color:white ;
-  color: red;
+  color:#1A237E;
   background: rgba(33, 49, 42, 0.29);;
+  font-family: "SourceHanSerifCN", sans-serif;
+  transition: 0.5s;
+}
+.quote_recommand_fa {
+  width: vw(1050);
+  margin-bottom: vh(10);
+  margin-top: vh(20);
 }
 .quote_recommand {
   margin-left: vw(5);
@@ -466,5 +470,28 @@ export default {
   font-family: "SourceHanSerifCN", sans-serif;
   font-size: vw(17);
   margin-top: vh(42);
+}
+.recommand_icon_fa {
+  display: flex;
+  margin-left: vw(1130);
+}
+.recommand_icon_2 {
+  width: vw(36);
+  margin-left: vw(40);
+  margin-bottom: vh(32);
+}
+.recommand_icon_3 {
+  margin-top: vh(17);
+}
+.recommand_icon_4 {
+  margin-top: vh(22);
+  margin-left: vw(20);
+}
+
+.recommand_icon_1 {
+  display: flex;
+  margin-top: 0;
+  margin-bottom: vh(20);
+  margin-left: vw(800);
 }
 </style>
