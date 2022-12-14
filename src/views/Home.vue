@@ -1,5 +1,6 @@
 <template>
   <div class="home-page">
+    <div class="main-content">
     <div>
       <div class="home_left_zone">
         <div class="card_1">
@@ -65,7 +66,7 @@
             </v-list-item-icon>
             <div>
               <v-list-item-subtitle class="home_all_1"
-                >84,387,047</v-list-item-subtitle
+                >7,175,930</v-list-item-subtitle
               >
               <v-list-item-title class="home_all_2">科研人员</v-list-item-title>
             </div>
@@ -77,7 +78,7 @@
             </v-list-item-icon>
             <div>
               <v-list-item-subtitle class="home_all_1"
-                >329,431,326</v-list-item-subtitle
+                >16,160,124</v-list-item-subtitle
               >
               <v-list-item-title class="home_all_2">学术成果</v-list-item-title>
             </div>
@@ -101,7 +102,7 @@
             </v-list-item-icon>
             <div>
               <v-list-item-subtitle class="home_all_1"
-                >1,123,897</v-list-item-subtitle
+                >252,278</v-list-item-subtitle
               >
               <v-list-item-title class="home_all_2">科研机构</v-list-item-title>
             </div>
@@ -128,6 +129,12 @@
         </v-card>
       </div>
     </div>
+  </div>
+  <!--
+  <v-footer color="primary">
+    <div><a style="color:#FFF" href="https://beian.miit.gov.cn/" target="_blank">京ICP备2022034930号</a></div>
+  </v-footer>
+    -->
   </div>
 </template>
 
@@ -220,6 +227,15 @@ export default {
 .home-page {
   background-color: white;
   width: vw(1920);
+
+}
+.bottom-area {
+  position: absolute;
+  background-color: #232f3d;
+  height: 100px;
+  margin-top: 200px;
+}
+.main-content {
   display: flex;
 }
 .main_container_2 {

@@ -149,7 +149,7 @@ export default {
     var widthScale = document.documentElement.clientWidth / 1920;
     var heightScale = document.documentElement.clientHeight / 1080;
     var currentScaleRatio = widthScale < heightScale ? widthScale : heightScale;
-    const paperNum = 9827075;
+    const paperNum = 15827144;
     const patentNum = 331919;
     const orgNum = 252278;
     const projectNum = 1061;
