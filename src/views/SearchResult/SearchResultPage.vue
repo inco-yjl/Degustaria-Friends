@@ -59,7 +59,7 @@
             </v-row>
             <v-row v-if="no_paper&&showPapers">
               <div class="not_found">
-                <v-card shaped=true>
+                <v-card :shaped=true>
                   <v-card-title>
                     对不起！暂无数据
                   </v-card-title>
@@ -144,6 +144,7 @@ export default {
       this.status=false
       return searchRequest(this.$store.getters.get_search_param).
       then((res)=>{
+        console.log(res);
         let data=res.data
         if(data.papers===undefined){
           console.log("不是搜索论文")

@@ -116,7 +116,16 @@
         <v-col cols="8">
           <v-card elevation="0" flat>
             <v-card-title class="scholar_article_head"
+              v-if="toggleThree == 0"
               >论文共{{ recommandPaper.length }}篇</v-card-title
+            >
+            <v-card-title class="scholar_article_head"
+              v-if="toggleThree == 1"
+              >专利共{{ recommandPatent_num }}个</v-card-title
+            >
+            <v-card-title class="scholar_article_head"
+              v-if="toggleThree == 2"
+              >项目共{{ recommandProject_num }}个</v-card-title
             >
             <v-card-subtitle>
               <v-row dense>
@@ -213,22 +222,38 @@
                   :key="item.id"
                 >
                   <v-list-item-title class="headline_2">{{
-                    item.article_name
+                    item.title
                   }}</v-list-item-title>
                   <v-list-item-subtitle class="subtitle_recommand_1">{{
                     item.author
                   }}</v-list-item-subtitle>
-                  <div class="recommand_book">{{ item.book }}</div>
-                  <div class="quote_recommand">
-                    <div>
-                      <p class="font-weight-black">
-                        引用量：{{ item.quote_num }}
-                      </p>
-                    </div>
+                  <v-list-item-subtitle class="subtitle_recommand_1_1">{{
+                    item.apply_datetime
+                  }}</v-list-item-subtitle>
+                  <div class="recommand_book">Keyword：</div>
+                  <div class="recommand_book_2" v-if="item.keyword !== 'null'">
+                    {{ item.keyword }}
                   </div>
-                  <div class="recommand_icon_fa">
-                    <img src="@/assets/quote.png" class="recommand_icon_1" />
-                    <img src="@/assets/art_sc.png" class="recommand_icon_2" />
+                  <div class="recommand_book_3" v-if="item.keyword === 'null'">
+                    -
+                  </div>
+                  <div style="display: flex">
+                    <div class="quote_recommand_fa">
+                      <p class="quote_recommand_0">引用量：</p>
+                      <p class="quote_recommand">{{ item.citation }}</p>
+                    </div>
+                    <div
+                      class="recommand_icon_1"
+                      @click="into_detail(item.url[0])"
+                    >
+                      <v-icon color="#232f3d" class="recommand_icon_3" medium >
+                        mdi-earth
+                      </v-icon>
+                      <a class="quote_recommand_1" :href="item.pdf">原文链接</a>
+                    </div>
+                    <v-icon color="#232f3d" medium class="recommand_icon_2">
+                      mdi-star
+                    </v-icon>
                   </div>
                 </v-card>
                 <v-snackbar
@@ -236,7 +261,54 @@
                   :timeout="2000"
                   color="blue accent-2"
                 >
-                  尚无专利
+                  暂无内容
+                  <template v-slot:action="{ attrs }">
+                    <v-btn
+                      color="white"
+                      text
+                      v-bind="attrs"
+                      @click="snackbar = false"
+                    >
+                      Close
+                    </v-btn>
+                  </template>
+                </v-snackbar>
+              </div>
+              <div v-else-if="toggleThree == 2">
+                <v-card
+                  class="home_focus_card_2_2"
+                  v-for="item in recommandProject"
+                  :key="item.id"
+                >
+                  <v-list-item-title class="headline_2">{{
+                    item.title
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle class="subtitle_recommand_1">Director：{{
+                    item.director
+                  }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="subtitle_recommand_1_1">{{
+                    item.begin
+                  }}——{{item.end}}</v-list-item-subtitle>
+                  <div class="recommand_book">Participants：</div>
+                  <div class="recommand_book_2" v-if="item.keyword !== 'null'">
+                    {{ item.participant }}
+                  </div>
+                  <div class="recommand_book_3" v-if="item.keyword === 'null'">
+                    -
+                  </div>
+                  <v-list-item-subtitle class="subtitle_recommand_1">Financial institution：{{
+                    item.financial_institution
+                  }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="subtitle_recommand_5">Undertaking institution：{{
+                    item.undertaking_institution
+                  }}</v-list-item-subtitle>
+                </v-card>
+                <v-snackbar
+                  v-model="showSnackBar"
+                  :timeout="2000"
+                  color="blue accent-2"
+                >
+                  暂无内容
                   <template v-slot:action="{ attrs }">
                     <v-btn
                       color="white"
@@ -251,11 +323,11 @@
               </div>
               <div class="max-width">
                 <v-pagination
-                  v-model="page"
-                  class="my-4"
+                  v-model="npage"
                   :length="PaginationLength"
                   :total-visible="7"
-                  @click="this.$vuetify.goTo('#PaperList')"
+                  @input="pagination_getlist(toggleThree)"
+                  class="pagr_index_123"
                 ></v-pagination>
               </div>
             </v-card-text>
@@ -303,47 +375,14 @@ export default {
       MainField: [
         {
           index: 1,
-          title: "人工智能",
-        },
-        {
-          index: 2,
-          title: "图像处理",
-        },
-        {
-          index: 3,
-          title: "模式识别",
-        },
-        {
-          index: 4,
-          title: "土豆种植",
-        },
-        {
-          index: 5,
-          title: "吃饭睡觉",
-        },
-        {
-          index: 6,
-          title: "啦啦啦啦",
-        },
+          title: "-",
+        }
       ],
       recommandPaper: [],
-      recommandPatent: [
-        {
-          article_name:
-            "Curvature-Adaptive Meta-Learning for Fast Adaptation to Manifold Data",
-          author: "Zhi Gao,Yuwei Wu,Mehrtash T Harandi,Yunde Jia",
-          book: "IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) （2022）",
-          quote_num: 0,
-          url: "",
-        },
-        {
-          article_name: "Variational Deep Image Restoration",
-          author: "Jae Woong Soh, Nam Ik Cho",
-          book: "Computer Science、CCF A",
-          quote_num: 0,
-          url: "",
-        },
-      ],
+      recommandPatent: [],
+      recommandPatent_num: 0,
+      recommandProject: [],
+      recommandProject_num: 0,
       toggleOne: 1,
       toggleTwo: 0,
       toggleThree: 0,
@@ -357,10 +396,22 @@ export default {
       x: null,
       y: "top",
       is_focus: 0,
-      username: ""
+      username: "",
+      npage: 1
     };
   },
   methods: {
+    pagination_getlist(cnt) {
+      if(cnt == 0) {
+        this.loadScholarPapers();
+      }
+      else if(cnt == 1) {
+        this.loadScholarPatent();
+      }
+      else {
+        this.loadScholarProject();
+      }
+    },
     loadScholarInfo() {
       this.$axios({
         method: "post",
@@ -371,19 +422,21 @@ export default {
       })
         .then((response) => {
           console.log("field", response.data);
-          this.MainField = [];
           this.Name = response.data.name1;
-          this.Faculty = response.data.org;
+          this.Faculty = response.data.org == "null"? "-":response.data.org;
           this.Email = response.data.e_mail;
           this.charId = response.data.char_id;
           this.citation = response.data.citation;
           this.h_index = response.data.h_index;
           let iarr = response.data.interests.split(",");
-          for (let i = 1; i <= 6; i++)
+          if(iarr[0] != "null") {
+            this.MainField = [];
+            for (let i = 1; i <= 6; i++)
             this.MainField.push({
               index: i,
               title: iarr[i - 1],
             });
+          }
           if (this.Email == null) this.showEmail = false;
           this.loadScholarPapers();
         })
@@ -452,7 +505,7 @@ export default {
         .then((res) => (this.intro = res.data.intro))
         .catch((e) => console.log(e));
     },
-    loadScholarPapers(npage = 0) {
+    loadScholarPapers() {
       this.recommandPaper = [];
       console.log(this.charId);
       // let order_type_tmp = this.toggleOne;
@@ -465,7 +518,7 @@ export default {
           search_word: [this.charId],
           search_type: ["3"],
           search_logic: [],
-          page: npage,
+          page: this.npage,
           size: 6,
           order_type: this.toggleOne-'0',
           order: this.toggleTwo-'0',
@@ -474,67 +527,78 @@ export default {
           "Content-Type": "application/json",
         },
       })
-        .then((response) => {
-          this.PaginationLength = response.data.n_page;
-          let papers = response.data.papers;
-          let len = Math.min(papers.length, 6);
-          for (let i = 0; i < len; i++) {
-            this.recommandPaper.push({
-              index: i,
-              pdf: papers[i].pdf,
-              abstract: papers[i].abstract,
-              title: papers[i].title,
-              author_name: this.to_string(papers[i].author_name),
-              year: papers[i].year,
-              n_citation: papers[i].n_citation,
-              venue: papers[i].venue,
-            });
-          }
-          console.log(response.data.papers);
-        })
-        .catch((error) => {
-          this.showSnackBar = true;
-          console.log(error);
-        });
+      .then((response) => {
+        this.PaginationLength = response.data.n_page;
+        let papers = response.data.papers;
+        let len = Math.min(papers.length, 6);
+        for (let i = 0; i < len; i++) {
+          this.recommandPaper.push({
+            index: i,
+            pdf: papers[i].pdf,
+            abstract: papers[i].abstract,
+            title: papers[i].title,
+            author_name: this.to_string(papers[i].author_name),
+            year: papers[i].year,
+            n_citation: papers[i].n_citation,
+            venue: papers[i].venue,
+          });
+        }
+        console.log(response.data.papers);
+      })
+      .catch((error) => {
+        this.showSnackBar = true;
+        console.log(error);
+      });
       console.log(this.recommandPaper);
     },
-    loadScholarPatent(npage = 1) {
+    loadScholarPatent() {
       this.recommandPatent = [];
-      let sort = this.toggleOne === 1 ? "year" : "citation";
-      this.$axios({
-        method: "post",
-        url: "/get_p_number_of_scholar",
-        data: qs.stringify({
-          scholar_id: this.scholarId,
-        }),
-      }).then((response) => {
-        this.PaginationLength = Math.ceil(
-          (this.toggleOne === 1
-            ? response.data.patent_number
-            : response.data.patent_number_10) / 6
-        );
-      });
+      let sort = this.toggleOne == 1 ? "year" : "citation";
+      console.log(this.toggleOne, sort);
       this.$axios({
         method: "post",
         url: "/get_patents_by_scholar",
         data: qs.stringify({
           scholar_id: this.scholarId,
-          page: npage,
+          page: this.npage,
           size: 6,
           order: sort,
-          year: 0,
+          up: this.toggleTwo - '0',
         }),
       })
       .then((res) => {
         console.log("patent", res.data);
-        for (let x = 0; x < 6; x++)
-          this.recommandPatent.push({
-            article_name: res.data[x].title,
-            author: res.data[x].author,
-            book: res.data[x].source,
-            quote_num: res.data[x].citation,
-            url: res.data[x].url,
-          });
+        this.PaginationLength = res.data.n_page;
+        let len = res.data.res.length;
+        this.recommandPatent_num = res.data.total;
+        this.recommandPatent = res.data.res;
+      })
+      .catch((error) => {
+        this.showSnackBar = true;
+        console.log(error);
+      });
+    },
+    loadScholarProject() {
+      this.recommandProject = [];
+      let sort = this.toggleOne == 1 ? "year" : "citation";
+      console.log(this.toggleOne, sort);
+      this.$axios({
+        method: "post",
+        url: "/get_projects_by_scholar",
+        data: qs.stringify({
+          scholar_id: this.scholarId,
+          page: this.npage,
+          size: 6,
+          order: sort,
+          up: this.toggleTwo - '0',
+        }),
+      })
+      .then((res) => {
+        console.log("project", res.data);
+        this.PaginationLength = res.data.n_page;
+        let len = res.data.res.length;
+        this.recommandProject_num = res.data.total;
+        this.recommandProject = res.data.res;
       })
       .catch((error) => {
         this.showSnackBar = true;
@@ -564,6 +628,7 @@ export default {
               loadScholarPatent(nval);
               break;
             case "2":
+              loadScholarProject(nval);
               break;
           }
       },
@@ -580,6 +645,7 @@ export default {
               this.loadScholarPatent();
               break;
             case "2":
+              this.loadScholarProject();
               break;
           }
       },
@@ -595,6 +661,7 @@ export default {
               this.loadScholarPatent();
               break;
             case "2":
+              this.loadScholarProject();
               break;
           }
       },
@@ -612,6 +679,7 @@ export default {
               this.loadScholarPatent();
               break;
             case "2":
+              this.loadScholarProject();
               break;
             default:
               console.log("nothing happened");
@@ -745,11 +813,18 @@ export default {
   font-family: "Source Han Sans CN Normal", sans-serif;
   margin-top: vh(10);
 }
+.subtitle_recommand_5 {
+  margin-left: vw(20);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+  margin-top: vh(1);
+  margin-bottom: vh(15);
+}
 .subtitle_recommand_1_1 {
   margin-left: vw(20);
   font-family: "Source Han Sans CN Normal", sans-serif;
   margin-top: vh(1);
   color: #656d77;
+  font-size: vw(14);
 }
 .recommand_book {
   color: #455A64;
@@ -758,11 +833,12 @@ export default {
   margin-right: vw(20);
   font-weight: bold;
   font-family: "optima", sans-serif;
+  font-size: vw(17);
 }
 .recommand_book_2 {
   color: #455A64;
   margin-left: vw(20);
-  margin-top: vh(5);
+  margin-top: vh(2);
   margin-right: vw(20);
   font-family: "optima", sans-serif;
   display: -webkit-box;
@@ -774,7 +850,7 @@ export default {
 .recommand_book_3 {
   color: #455A64;
   margin-left: vw(20);
-  margin-top: vh(5);
+  margin-top: vh(2);
   margin-right: vw(20);
   font-family: "SourceHanSerifCN", sans-serif;
   display: -webkit-box;
@@ -863,5 +939,8 @@ export default {
   width: vw(500);
   left: vw(560);
   z-index: 9999;
+}
+.pagr_index_123 {
+  margin-top: vh(20);
 }
 </style>

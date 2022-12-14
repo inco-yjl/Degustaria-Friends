@@ -48,6 +48,7 @@
           </div>
         </v-card>
       </div>
+      
     </div>
   </template>
       
@@ -112,6 +113,22 @@
       },
     },
   };
+
+  this.$axios({
+        method: "post",
+        url: "/get_p_number_of_scholar",
+        data: qs.stringify({
+          scholar_id: this.scholarId,
+        }),
+      }).then((response) => {
+        this.PaginationLength = Math.ceil(
+          (this.toggleOne === 1
+            ? response.data.patent_number
+            : response.data.patent_number_10) / 6
+        );
+      });
+
+      
   </script>
     
   <style scoped lang="scss">
