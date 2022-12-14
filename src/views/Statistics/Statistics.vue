@@ -19,16 +19,6 @@
           >
             <div class="router-content">排名</div>
           </div>
-          <div
-            :class="
-              this.$route.name === 'statisticsIllustration'
-                ? 'active-page-router'
-                : 'unactive-page-router'
-            "
-            @click="ToIllustration"
-          >
-            <div class="router-content">统计</div>
-          </div>
         </div>
       </v-app-bar>
     </v-row>
