@@ -2,23 +2,23 @@
   <div>
     <div>
       <v-card class="search_result_card">
-        <v-list-item-title class="headline_2_2">
+        <v-list-item-title class="headline_2">
           <span class="title" @click="gotoPaper" v-if="mode===MODE_PAPER">{{paper.title}}</span>
           <span v-if="mode!==MODE_PAPER">{{paper.title}}</span>
         </v-list-item-title>
-        <v-list-item-subtitle class="subtitle_recommand_1_2">
+        <v-list-item-subtitle class="recommand_book">
           {{text_process(this.authors)}}
         </v-list-item-subtitle>
-        <div class="recommand_book_1" v-if="this.mode==MODE_PAPER">
-          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>
-          <div class="year_info">出版时间：{{text_process(paper.year)}}</div>
-          <div class="year_info">来源:{{text_process(paper.venue)}}</div>
+        <div class="recommand_book" v-if="this.mode==MODE_PAPER">
+          <v-list-item-subtitle class="recommand_book">机构：{{text_process(paper.author_org[0])}}</v-list-item-subtitle>
+          <v-list-item-subtitle class="recommand_book">出版时间：{{text_process(paper.year)}}</v-list-item-subtitle>
+          <v-list-item-subtitle class="recommand_book">来源:{{text_process(paper.venue)}}</v-list-item-subtitle>
         </div>
-        <div class="recommand_book_1" v-if="this.mode==MODE_PATENT">
+        <div class="recommand_book_2" v-if="this.mode==MODE_PATENT">
 <!--          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>-->
-          <div class="year_info">申请时间：{{text_process(paper.apply_datetime.slice(0,10))}}</div>
+          <v-list-item-subtitle class="recommand_book">申请时间：{{text_process(paper.apply_datetime.slice(0,10))}}</v-list-item-subtitle>
         </div>
-        <div class="recommand_book_1" v-if="this.mode==MODE_PROJECT">
+        <div class="recommand_book_2" v-if="this.mode==MODE_PROJECT">
           <!--          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>-->
           <div class="year_info">计划起始时间：{{text_process(beg_end)}}</div>
           <div class="year_info">资金：{{text_process(paper.money)}}</div>
@@ -29,18 +29,18 @@
         </div>
 
         <v-list-item-action-text v-if="this.mode==MODE_PAPER||this.mode==MODE_PROJECT">
-          <div class="abstract_info" >
+          <div class="keywords_info" >
             <span style="font-weight: bold">摘要：</span>
             {{text_process(this.abstract)}}
           </div>
         </v-list-item-action-text>
 
         <div class="keywords_info" v-if="this.mode==MODE_PAPER">
-          <span style="font-weight: bold">关键词：</span>
+          <span >关键词：</span>
           <span v-for="i in paper.keywords">{{text_process(text_process(i)+", ")}}</span>
         </div>
         <div class="keywords_info" v-if="this.mode==MODE_PATENT">
-          <span style="font-weight: bold">关键词：</span>
+          <span >关键词：</span>
           <span >{{text_process(paper.keyword)}}</span>
         </div>
         <div class="quote_recommand_2" v-if="this.mode==MODE_PAPER">
@@ -355,19 +355,19 @@ export default {
   color: #555555;
   margin-left: vw(20);
   margin-top: vh(10);
-  font-family: "Source Han Sans CN Normal", sans-serif;
+    font-family: "optima", sans-serif;
 }
 .keywords_info{
   color: #282626;
   margin-left: vw(20);
   margin-top: vh(10);
-  font-family: "Source Han Sans CN Normal", sans-serif;
+    font-family: "optima", sans-serif;
 }
 .quote_recommand_2 {
   margin-left: vw(20);
   margin-top: vh(15);
   display: flex;
-  font-family: "Source Han Sans CN Normal", sans-serif;
+    font-family: "optima", sans-serif;
 }
 .recommand_icon_fa_2 {
   display: flex;
@@ -390,11 +390,31 @@ export default {
 .recommand_icon_2_2:hover{
   background: rgba(33, 49, 42, 0.29);
 }
+.recommand_book {
+  color: #455a64;
+  margin-left: vw(20);
+  margin-top: vh(15);
+  margin-right: vw(20);
+  font-weight: bold;
+  font-family: "optima", sans-serif;
+}
+.recommand_book_2 {
+  color: #455a64;
+  margin-left: vw(20);
+  margin-top: vh(5);
+  margin-right: vw(20);
+  font-family: "optima", sans-serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
 .year_info{
   color: #282626;
   margin-left: vw(20);
   margin-top: vh(10);
-  font-family: "Source Han Sans CN Normal", sans-serif;
+   font-family: "optima", sans-serif;
 }
 .title:hover{
   padding: 2%;
@@ -403,5 +423,29 @@ export default {
   border-color:white ;
   color: red;
   background: rgba(33, 49, 42, 0.29);;
+}
+.quote_recommand {
+  margin-left: vw(5);
+  margin-top: vh(17);
+  display: flex;
+  font-family: "optima", sans-serif;
+  font-weight: bolder;
+  font-size: vw(19);
+}
+.quote_recommand_0 {
+  margin-left: vw(20);
+  margin-top: vh(15);
+  display: flex;
+  font-family: "SourceHanSerifCN", sans-serif;
+  font-weight: bolder;
+  font-size: vw(19);
+  float: left;
+}
+.quote_recommand_1 {
+  margin-left: vw(5);
+  display: flex;
+  font-family: "SourceHanSerifCN", sans-serif;
+  font-size: vw(17);
+  margin-top: vh(42);
 }
 </style>

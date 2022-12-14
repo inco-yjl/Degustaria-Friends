@@ -306,7 +306,7 @@ export default {
             /* res 是 response 的缩写 */
             console.log('搜索成功');
             console.log(res.data);
-            this.grouplist=res.data;
+            this.grouplist=res.data.list;
             // var i=0;
             // for(i=0;i<res.data.length;i++){
             //     this.grouplist.push(res.data[i]);
