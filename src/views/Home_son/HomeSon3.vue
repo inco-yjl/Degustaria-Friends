@@ -277,7 +277,7 @@ export default {
           this.snackbar = false;
         }, 1000);
       } else {
-        document.location.href = url_tmp;
+        window.open(url_tmp);
       }
     },
   },

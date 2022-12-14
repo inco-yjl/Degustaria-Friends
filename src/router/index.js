@@ -138,7 +138,17 @@ const routes = [
       {
         path: '/paperDetail',
         name: 'paperDetail',
-        component: () => import(/* webpackChunkName: "about" */ '../views/PaperDetail.vue'),
+        component: () => import(/* webpackChunkName: "about" */ '../views/Achievement/PaperDetail.vue'),
+      },
+      {
+        path: '/projectDetail',
+        name: 'projectDetail',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Achievement/ProjectDetail.vue'),
+      },
+      {
+        path: '/patengDetail',
+        name: 'patengDetail',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Achievement/PatentDetail.vue'),
       },
       {
         path: '/institution/institutionHomepage',
