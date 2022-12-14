@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/appeals'
   },
   {
     path: '/login',
@@ -69,12 +69,12 @@ const routes = [
           {
             path: '/searchResult',
             name: 'searchResult',
-            component:()=>import("../views/SearchResult/SearchResultPage")
+            component: () => import('../views/SearchResult/SearchResultPage')
           },
           {
             path: '/searching',
             name: 'searching',
-            component:()=>import("../views/SearchResult/Searching")
+            component: () => import('../views/SearchResult/Searching')
           },
           {
             path: '/scholarShow',
@@ -99,21 +99,17 @@ const routes = [
             component: () => import(/* webpackChunkName: "about" */ '../views/Statistics/Rank.vue')
           }
         ]
-      },{
-        path:'/scholar',
-        name:'scholar',
+      }, {
+        path: '/scholar',
+        name: 'scholar',
         component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/Claim.vue'),
-        children: [
-        
-        ]
+        children: []
       },
       {
-        path:'/scholarold',
-        name:'scholarold',
+        path: '/scholarold',
+        name: 'scholarold',
         component: () => import(/* webpackChunkName: "about" */ '../views/Scholar/Claimold.vue'),
-        children: [
-        
-        ]
+        children: []
       },
       {
         path: '/scholarSearch',
@@ -158,6 +154,11 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/Institution/InstitutionHomepage.vue'),
       },
+      {
+        path: '/appeals',
+        name: 'appeals',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Appeals.vue'),
+      }
     ]
   },
 
