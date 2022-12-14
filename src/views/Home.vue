@@ -119,7 +119,7 @@
             <v-list-item-group v-model="item" color="primary">
               <v-list-item v-for="(item, i) in hot_field" :key="i">
                 <div class="home_hot_field">{{ i + 1 }}.</div>
-                <v-list-item-content>
+                <v-list-item-content class="home_hot_field_2">
                   <v-list-item-title v-text="item.name"></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -257,7 +257,7 @@ export default {
   font-size: 1.1rem;
   color: rgba(0, 0, 0, 0.8);
   text-justify: auto;
-  font-family: "Baskerville", sans-serif;
+  font-family: "Baskerville", SourceHanSerifCN;
   font-weight: 400;
   letter-spacing: 0.009375rem;
   line-height: 28px;
@@ -282,6 +282,7 @@ export default {
 }
 .home_all_1 {
   font-size: vw(20);
+  font-family: Futura;
 }
 .home_all_2 {
   font-size: vw(22);
@@ -295,7 +296,13 @@ export default {
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.078125rem;
-  font-family: "Source Han Sans CN Normal", sans-serif;
+  font-family: "optima", SourceHanSerifCN;
+}
+.home_hot_field_2 {
+  margin-right: 5px;
+  font-size: 0.875rem;
+  letter-spacing: 0.078125rem;
+  font-family: "Futura", SourceHanSerifCN;
 }
 .hot_field_title {
   font-weight: bold;

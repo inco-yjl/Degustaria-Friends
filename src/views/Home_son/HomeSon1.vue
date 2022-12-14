@@ -46,7 +46,7 @@
               <v-list-item-title class="headline_fa">{{
                 item.name1
               }}</v-list-item-title>
-              <div style="display: flex">
+              <div style=" display: flex; ">
                 <v-list-item-subtitle class="headline_focus_1"
                   >H-index：{{ item.h_index }}</v-list-item-subtitle
                 >
@@ -54,15 +54,17 @@
                   >引用数：{{ item.citation }}</v-list-item-subtitle
                 >
                 <v-list-item-subtitle
-                  class="headline_focus_1"
+                  class="headline_focus_4"
                   v-if="item.org != 'null'"
                   >机构：{{ item.org }}</v-list-item-subtitle
                 >
-                <v-list-item-subtitle
-                  class="headline_focus_1"
-                  v-if="item.org == 'null'"
-                  >机构：-</v-list-item-subtitle
-                >
+                <div class="shenlue_jigou">
+                  <v-list-item-subtitle
+                    class="headline_focus_4"
+                    v-if="item.org == 'null'"
+                    >机构：-</v-list-item-subtitle
+                  >
+                </div>
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -269,6 +271,17 @@ export default {
 .headline_focus_1 {
   margin-top: vh(5);
   font-family: "Baskerville", sans-serif;
+}
+.headline_focus_4 {
+  margin-top: vh(5);
+  font-family: "Baskerville", sans-serif;
+}
+.shenlue_jigou {
+  display: -webkit-box; /*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical; /*伸缩盒子的子元素排列：从上到下*/
 }
 .headline_focus_2 {
   margin-top: vh(5);
