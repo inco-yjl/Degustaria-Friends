@@ -1,5 +1,18 @@
 <template>
   <div>
+    <div class="alerts">
+      <transition name="fade">
+        <v-alert
+          dense
+          class="alert"
+          border="left"
+          elevation="2"
+          v-if="snackbar"
+          type="info"
+          >{{ text }}</v-alert
+        >
+      </transition>
+    </div>
     <div style="display: flex">
       <div class="focus_1">
         <v-btn depressed large @click="into_another_son(1)" v-if="user_name"
@@ -116,7 +129,7 @@
           v-for="item in recommand_content"
           :key="item.id"
         >
-          <v-list-item-title class="headline_2"  @click="toPaperDetail(item)">{{
+          <v-list-item-title class="headline_2" @click="toPaperDetail(item)">{{
             item.title
           }}</v-list-item-title>
           <div class="author_rcm">
@@ -207,16 +220,6 @@
           </v-row>
         </v-container>
       </div>
-      <v-snackbar
-        v-model="snackbar"
-        :top="y === 'top'"
-        :vertical="mode === 'vertical'"
-      >
-        {{ text }}
-        <template v-slot:action="{ attrs }">
-          <v-btn text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
-        </template>
-      </v-snackbar>
     </div>
   </div>
 </template>
@@ -251,7 +254,7 @@ export default {
       input_keyword: "",
       add_tmp_str: "",
       del_tmp_str: "",
-      loaded: ref(0)
+      loaded: ref(0),
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -262,11 +265,11 @@ export default {
   methods: {
     toPaperDetail(item) {
       this.$router.push({
-        name: 'paperDetail',
+        name: "paperDetail",
         query: {
-          id: item.id
-        }
-      })
+          id: item.id,
+        },
+      });
     },
     updateUser() {
       this.user_img = window.localStorage.getItem("user_headshot");
@@ -290,8 +293,8 @@ export default {
               if (i != 0) this.arr2.push("1");
             }
             console.log("this.keyword", this.keyword);
-            if(!this.keyword){
-              this.keyword = '';
+            if (!this.keyword) {
+              this.keyword = "";
             }
             this.home_get_user_list_2();
             window.localStorage.setItem("user_keyword", this.keyword);
@@ -472,7 +475,9 @@ export default {
       console.log(url_tmp);
       if (url_tmp == null) {
         this.snackbar = true;
-        this.setData({ snackbar: true });
+        setTimeout(() => {
+          this.snackbar = false;
+        }, 1000);
       } else {
         window.open(url_tmp);
       }

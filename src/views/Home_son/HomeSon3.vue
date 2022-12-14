@@ -58,7 +58,7 @@
           v-for="item in recommand_content"
           :key="item.id"
         >
-          <v-list-item-title class="headline_2">{{
+          <v-list-item-title class="headline_2" @click="toPaperDetail(item)">{{
             item.title
           }}</v-list-item-title>
           <div class="author_rcm">
@@ -316,6 +316,7 @@ export default {
   margin-left: vw(20);
   font-size: vw(25);
   font-family: "Source Han Sans CN Normal", sans-serif;
+  cursor: pointer;
 }
 .subtitle_recommand_1 {
   margin-left: vw(20);
