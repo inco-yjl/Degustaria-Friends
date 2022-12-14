@@ -116,7 +116,7 @@
           v-for="item in recommand_content"
           :key="item.id"
         >
-          <v-list-item-title class="headline_2">{{
+          <v-list-item-title class="headline_2"  @click="toPaperDetail(item)">{{
             item.title
           }}</v-list-item-title>
           <div class="author_rcm">
@@ -139,6 +139,7 @@
           <div class="recommand_book_2" v-if="item.abstract !== 'null'">
             {{ item.abstract }}
           </div>
+          <div v-else class="no_abstract">暂无摘要信息</div>
           <div style="display: flex">
             <div class="quote_recommand_fa">
               <p class="quote_recommand_0">引用量：</p>
@@ -259,6 +260,14 @@ export default {
     });
   },
   methods: {
+    toPaperDetail(item) {
+      this.$router.push({
+        name: 'paperDetail',
+        query: {
+          id: item.id
+        }
+      })
+    },
     updateUser() {
       this.user_img = window.localStorage.getItem("user_headshot");
       this.user_name = window.localStorage.getItem("user_name");
@@ -512,6 +521,7 @@ export default {
   margin-left: vw(20);
   font-size: vw(25);
   font-family: "Source Han Sans CN Normal", sans-serif;
+  cursor: pointer;
 }
 .subtitle_recommand_1 {
   margin-left: vw(20);
@@ -548,6 +558,13 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
+}
+.no_abstract {
+  margin-left: vw(20);
+  font-size: 14px;
+  color: #7f7f7f;
+  line-height: 26px;
+  padding: vw(5) 0;
 }
 .recommand_book_3 {
   color: #455a64;
