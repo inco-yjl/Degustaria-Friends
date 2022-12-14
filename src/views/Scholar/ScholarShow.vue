@@ -23,6 +23,13 @@
         type="success"
         >{{ text3 }}</v-alert
       >
+      <v-alert 
+        dense 
+        shaped 
+        text 
+        type="success" 
+        dismissible 
+        v-if="addsuccess==1">添加成功</v-alert>
       <v-row no-gutters>
         <v-col id="pcard" cols="8">
           <div class="pcard ma-2 pa-1">
@@ -41,6 +48,167 @@
                       <p class="text-left name">{{ Name }}</p>
                     </div>
                   </v-col>
+                   <v-col cols="1">
+                       <v-row
+                         align="center"
+                          justify="space-around"
+                       >
+                         <div class="text-center">
+                          <!-- 添加文章弹窗 -->
+                             <v-dialog
+      v-model="dialog"
+      width="1000px"
+      height="800px"
+      style="padding:20px;margin:auto;background-color:white"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+        <v-icon left> mdi-pencil </v-icon>
+            添加论文
+        </v-btn>
+      </template>
+      <v-card>
+           <v-card class="mb-12" color="blue-grey lighten-5" >
+              <span class="card2tit" style="display: block">
+                <h3 style="display: inline-block">添加您撰写的文章</h3>
+                <span class="cntstyle"
+                  >已选篇数：{{ selected_articlesid.length }}</span
+                >
+              </span>
+              <v-text-field
+                v-model="searchmsg"
+                label="请输入"
+                style="display: inline-block; width: 80%"
+              >
+              </v-text-field>
+              <v-btn
+                style="display: inline-block; position: absolute; right: 30px"
+                rounded
+                class="ma-2"
+                color="primary"
+                dark
+                @click="search"
+                >搜索<v-icon dark right>mdi-magnify</v-icon></v-btn
+              >
+              <div class="tabs">
+                <v-card>
+                  <v-tabs v-model="tab" centered fixed-tabs icons-and-text>
+                    <v-tabs-slider></v-tabs-slider>
+
+                    <v-tab href="#tab-1" class="primary--text">
+                      文章
+                      <v-icon>mdi-file-document-multiple</v-icon>
+                    </v-tab>
+                    <!-- 
+                    <v-tab href="#tab-2" class="primary--text">
+                      文章
+                      <v-icon>mdi-file-document</v-icon>
+                    </v-tab> -->
+                  </v-tabs>
+
+                  <v-tabs-items v-model="tab">
+                    <v-tab-item v-for="i in 1" :key="i" :value="'tab-' + i">
+                      <!-- <v-card flat>
+          <v-card-text>{{ text }}</v-card-text>
+        </v-card> -->
+                      <v-card class="mx-auto" max-width="850px">
+                        <v-list two-line class="liststyle">
+                          <v-list-item-group
+                            v-model="selected"
+                            active-class="blue-grey lighten-4 blue-grey--text text--darken-4"
+                            multiple
+                            style="width: 800px"
+                            v-if="grouplist.length != 0"
+                          >
+                            <template v-for="(item, index) in grouplist">
+                              <v-list-item :key="item.id" style="width: 800px">
+                                <template v-slot:default="{ active }">
+                                  <v-list-item-content style="width: 800px">
+                                    <v-list-item-title
+                                      ><h3>
+                                        {{ item.title }}
+                                      </h3></v-list-item-title
+                                    >
+
+                                    <v-list-item-subtitle class="text--primary" v-if="item.keywords.length!=0"
+                                      ><h4 style="display: inline">关键词：</h4>
+                                      {{
+                                        item.keywords.toString()
+                                      }}</v-list-item-subtitle
+                                    >
+
+                                    <v-list-item-subtitle v-if="item.abstract!='null'"
+                                      ><h4 style="display: inline">摘要：</h4>
+                                      {{ item.abstract }}</v-list-item-subtitle
+                                    >
+                                  </v-list-item-content>
+
+                                  <v-list-item-action>
+                                    <v-icon
+                                      @click="addart(item.id, active)"
+                                      v-if="active == false"
+                                      color="blue-grey lighten-1"
+                                    >
+                                      mdi-star-plus-outline
+                                    </v-icon>
+                                    <v-icon
+                                      v-else
+                                      color="blue-grey darken-4"
+                                      @click="delart(item.id, active)"
+                                    >
+                                      mdi-star-plus
+                                    </v-icon>
+                                  </v-list-item-action>
+                                </template>
+                              </v-list-item>
+
+                              <v-divider
+                                v-if="index < grouplist.length - 1"
+                                :key="index"
+                              ></v-divider>
+                            </template>
+                          </v-list-item-group>
+                          <h4 style="text-align: center" v-else>
+                            您还没有搜索任何文章哦~
+                          </h4>
+                        </v-list>
+                      </v-card>
+
+                      <!-- 页脚 -->
+                      <div class="text-center">
+                        <v-pagination
+                          v-model="ppage"
+                          :length="ppagenum"
+                          @next="nextpage"
+                          @previous="prepage"
+                          @input="getpage"
+                        ></v-pagination>
+                      </div>
+                      <!-- button panel -->
+                      <v-row justify="space-around">
+                        <v-btn
+                          style="margin: 50px"
+                          color="primary"
+                          @click="add_paper_for_scholar"
+                          >添加</v-btn
+                        >
+                      </v-row>
+                    </v-tab-item>
+                  </v-tabs-items>
+                </v-card>
+
+              </div>
+            </v-card>
+      </v-card>
+                             </v-dialog>
+                          </div>
+                        </v-row>                   
+                   </v-col>
                   <v-col cols="1" v-if="!isMyPage && scholarId != userId">
                     <v-btn
                       class="scholar_icon_top"
@@ -290,7 +458,11 @@ export default {
       h_index: "",
       Email: "tjyfxiao@126.com",
       PaginationLength: 15,
+      selected:[],
+      selected_articlesid:[],
       page: 1,
+      ppage:1,  //添加文章中的页脚
+      ppagenum:5,
       size: 10,
       scholarId: 0,
       charId: "",
@@ -300,6 +472,7 @@ export default {
       userId: window.localStorage.getItem("user_id"),
       showEmail: true,
       isMyPage: false,
+      searchmsg:'',
       MainField: [
         {
           index: 1,
@@ -326,6 +499,7 @@ export default {
           title: "啦啦啦啦",
         },
       ],
+      grouplist:[],
       recommandPaper: [],
       recommandPatent: [
         {
@@ -347,6 +521,7 @@ export default {
       toggleOne: 1,
       toggleTwo: 0,
       toggleThree: 0,
+      pagenum:5,
       showSnackBar: false,
       color: "",
       mode: "",
@@ -357,10 +532,115 @@ export default {
       x: null,
       y: "top",
       is_focus: 0,
-      username: ""
+      username: "",
+      dialog:false,
+      addsuccess:-1,
+      
     };
   },
   methods: {
+    add_paper_for_scholar(){
+         var str = this.selected_articlesid.toString();
+          const formData = new FormData();
+          this.scholarId=window.localStorage.getItem('scholar_id');
+          console.log('scholarid'+this.scholarId);
+          formData.append('scholar_id',this.scholarId);
+          formData.append('paper_id',str);
+          this.$axios({
+          method: "post",
+          url: "/add_paper_for_scholar",
+          data: formData,
+          })
+        .then((res) => {
+          console.log(res.data);
+          this.addsuccess=1;
+          this.dialog=false;
+        })
+        .catch((err) => {
+          //请求若出现路由找不到等其它异常，则在终端输出错误信息
+          console.log(err);
+          this.addsuccess=0;
+        });
+    },
+        addart(el1, el2) {
+      if (!this.selected_articlesid.includes(el1)) {
+        this.active = true;
+        console.log("selected" + this.selected);
+        this.selected_articlesid.push(el1);
+        console.log("list:" + this.selected_articlesid);
+      }
+    },
+    delart(el1, el2) {
+      if (this.selected_articlesid.includes(el1)) {
+        this.active = false;
+        const index = this.selected_articlesid.indexOf(el1);
+        if (index != -1) this.selected_articlesid.splice(index, 1);
+        console.log("list:" + this.selected_articlesid);
+      }
+    },
+    nextpage() {
+      this.search();
+      this.selected.splice(0, this.selected.length);
+    },
+    prepage() {
+      this.search();
+    },
+    getpage() {
+      // this.selected.splice(0,this.selected.length);
+      this.search();
+    },
+    search() {
+      // window.alert('searchmsg'+this.searchmsg);
+      var arr1 = new Array();
+      arr1.push(this.searchmsg);
+      var arr2 = new Array();
+      arr2.push("1");
+      var arr3 = new Array();
+      var data = {
+        search_word: arr1,
+        search_type: arr2,
+        search_logic: arr3,
+        page: this.ppage,
+        size: 5,
+        order_type: 0,
+        order: 0,
+      };
+      console.log(JSON.stringify(data));
+      console.log(window.localStorage.getItem("user_name"));
+      this.$axios({
+        url: "/search",
+        method: "post",
+        data: JSON.stringify(data),
+        header: {
+          "Content-Type": "application/json", //如果写成contentType会报错,如果不写这条也报错
+          //Content type 'application/x-www-form-urlencoded;charset=UTF-8'...
+        },
+      })
+        .then((res) => {
+          /* res 是 response 的缩写 */
+          console.log("搜索成功");
+          console.log(res.data);
+          if (res.data.n_page > 30) {
+            this.alert = true;
+            console.log(1);
+            setTimeout(() => {
+              this.alert = false;
+            }, 1000);
+            this.ppagenum = 30;
+          } else this.ppagenum = res.data.n_page;
+          this.grouplist = res.data.papers;
+        })
+        .catch((err) => {
+          /* 请求若出现路由找不到等其它异常，则在终端输出错误信息 */
+          console.log(err);
+        });
+      this.selected.splice(0, this.selected.length);
+      var i = 0;
+      for (i = 0; i < 5; i++) {
+        if (this.selected_articlesid.includes(this.grouplist[i].id))
+          this.selected.push(i);
+      }
+    },
     loadScholarInfo() {
       this.$axios({
         method: "post",
@@ -863,5 +1143,14 @@ export default {
   width: vw(500);
   left: vw(560);
   z-index: 9999;
+}
+.mb-12 {
+  padding: 20px;
+  width: 100%;
+}
+.cntstyle {
+  display: inline-block;
+  position: absolute;
+  right: 30px;
 }
 </style>
