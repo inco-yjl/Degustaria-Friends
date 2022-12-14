@@ -4,7 +4,7 @@
       <v-card class="search_result_card">
         <v-list-item-title class="headline_2_2">
           <span class="title" @click="gotoPaper" v-if="mode===MODE_PAPER">{{paper.title}}</span>
-          <span v-if="mode!==MODE_PAPER">{{paper.title}}</span>
+          <span class="title" v-if="mode===MODE_PROJECT" @click="gotoProject">{{paper.title}}</span>
         </v-list-item-title>
         <v-list-item-subtitle class="subtitle_recommand_1_2">
           {{text_process(this.authors)}}
@@ -248,6 +248,15 @@ export default {
     }
   },
   methods: {
+    gotoProject() {
+      let id=this.paper.id
+      this.$router.push({
+        name:'projectDetail',
+        query:{
+          id:id
+        }
+      })
+    },
     gotoPaper(){
       let id=this.paper.id
       this.$router.push({

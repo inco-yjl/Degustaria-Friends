@@ -144,6 +144,7 @@ export default {
       this.status=false
       return searchRequest(this.$store.getters.get_search_param).
       then((res)=>{
+        console.log(res);
         let data=res.data
         if(data.papers===undefined){
           console.log("不是搜索论文")
