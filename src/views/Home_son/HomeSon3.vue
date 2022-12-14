@@ -1,5 +1,28 @@
 <template>
   <div>
+    <div class="alerts">
+      <transition name="fade">
+        <v-alert
+          dense
+          class="alert"
+          dismissible
+          border="left"
+          elevation="2"
+          v-if="snackbar2"
+          type="error"
+          >{{ text2 }}</v-alert
+        >
+        <v-alert
+          dense
+          class="alert"
+          border="left"
+          elevation="2"
+          v-if="snackbar"
+          type="info"
+          >{{ text }}</v-alert
+        >
+      </transition>
+    </div>
     <div style="display: flex">
       <div class="focus_1">
         <v-btn depressed large v-if="user_name" @click="into_another_son(1)"
@@ -29,49 +52,94 @@
       </div>
     </div>
     <div>
-      <v-card
-        class="home_focus_card_2"
-        v-for="item in recommand_content"
-        :key="item.id"
-      >
-        <v-list-item-title class="headline_2">{{
-          item.title
-        }}</v-list-item-title>
-        <div class="author_rcm">
-          <div
-            v-for="item2 in item.author_name"
-            :key="item2.id"
-            style="float: left"
-          >
-            <v-list-item-subtitle class="subtitle_recommand_1">{{
-              item2
-            }}</v-list-item-subtitle>
+      <div v-if="loaded !== 0">
+        <v-card
+          class="home_focus_card_2"
+          v-for="item in recommand_content"
+          :key="item.id"
+        >
+          <v-list-item-title class="headline_2" @click="toPaperDetail(item)">{{
+            item.title
+          }}</v-list-item-title>
+          <div class="author_rcm">
+            <div
+              v-for="item2 in item.author_name"
+              :key="item2.id"
+              style="float: left"
+            >
+              <v-list-item-subtitle class="subtitle_recommand_1">{{
+                item2
+              }}</v-list-item-subtitle>
+            </div>
           </div>
-        </div>
-        <v-list-item-subtitle class="subtitle_recommand_1">{{
-          item.year
-        }}</v-list-item-subtitle>
-        <div class="recommand_book">Abstract：</div>
-        <div class="recommand_book_2" v-if="item.abstract != 'null'">
-          {{ item.abstract }}
-        </div>
-        <div class="recommand_book_3" v-if="item.abstract == 'null'">-</div>
-        <div style="display: flex">
-          <div class="quote_recommand_fa">
-            <p class="quote_recommand_0">引用量：</p>
-            <p class="quote_recommand">{{ item.n_citation }}</p>
+          <v-list-item-subtitle class="subtitle_recommand_1">{{
+            item.year
+          }}</v-list-item-subtitle>
+          <div class="recommand_book">Abstract：</div>
+          <div class="recommand_book_2" v-if="item.abstract != 'null'">
+            {{ item.abstract }}
           </div>
-          <div class="recommand_icon_1" @click="into_detail(item.url[0])">
-            <v-icon color="#232f3d" class="recommand_icon_3" medium>
-              mdi-earth
+          <div class="recommand_book_3" v-if="item.abstract == 'null'">-</div>
+          <div style="display: flex">
+            <div class="quote_recommand_fa">
+              <p class="quote_recommand_0">引用量：</p>
+              <p class="quote_recommand">{{ item.n_citation }}</p>
+            </div>
+            <div class="recommand_icon_1" @click="into_detail(item.url[0])">
+              <v-icon color="#232f3d" class="recommand_icon_3" medium>
+                mdi-earth
+              </v-icon>
+              <a class="quote_recommand_1">原文链接</a>
+            </div>
+            <v-icon
+              color="#232f3d"
+              medium
+              class="recommand_icon_2"
+              @click="unSubscribe(item)"
+            >
+              mdi-star-minus
             </v-icon>
-            <p class="quote_recommand_1">原文链接</p>
           </div>
-          <v-icon color="#232f3d" medium class="recommand_icon_2">
-            mdi-star-minus
-          </v-icon>
-        </div>
-      </v-card>
+        </v-card>
+      </div>
+      <v-sheet class="pa-3" v-else>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto"
+          max-width="1200"
+          height="75"
+          type="list-item-three-line"
+        ></v-skeleton-loader>
+      </v-sheet>
       <div class="page_index_2">
         <v-container>
           <v-row justify="center">
@@ -87,16 +155,6 @@
           </v-row>
         </v-container>
       </div>
-      <v-snackbar
-        v-model="snackbar"
-        :top="y === 'top'"
-        :vertical="mode === 'vertical'"
-      >
-        {{ text }}
-        <template v-slot:action="{ attrs }">
-          <v-btn text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
-        </template>
-      </v-snackbar>
     </div>
   </div>
 </template>
@@ -117,7 +175,9 @@ export default {
       user_rcm_total: 0,
       hover: false,
       snackbar: false,
+      snackbar2: false,
       text: "暂无数据",
+      text2: "已取消收藏",
       color: "",
       mode: "",
       timeout: 3000,
@@ -130,6 +190,7 @@ export default {
       input_keyword: "",
       add_tmp_str: "",
       del_tmp_str: "",
+      loaded: 0,
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -146,8 +207,7 @@ export default {
       this.user_email = window.localStorage.getItem("user_email");
       if (!this.user_name) {
         this.into_another_son(2);
-      }else 
-      this.home_get_user_list_3();
+      } else this.home_get_user_list_3();
     },
     into_another_son(choose_num) {
       console.log(choose_num);
@@ -165,7 +225,29 @@ export default {
         });
       }
     },
+    unSubscribe(item) {
+      this.$axios({
+        method: "post",
+        url: "/subscribe_paper",
+        data: {
+          user_id: this.user_id,
+          paper_id: item.id,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then((res) => {
+        if (res.data.status !== "成功收藏") {
+          this.snackbar2 = true;
+          setTimeout(() => {
+            this.snackbar2 = false;
+          }, 1000);
+          this.home_get_user_list_3();
+        }
+      });
+    },
     home_get_user_list_3() {
+      this.loaded = 0;
       if (this.user_name != "") {
         this.$axios({
           method: "post",
@@ -173,41 +255,17 @@ export default {
           data: qs.stringify({
             uid: this.user_id,
             page: this.page,
-            size: 5
+            size: 5,
           }),
         })
           .then((res) => {
             console.log("rcm_content", res.data);
+            this.loaded = 1;
             this.page_all = res.data.n_page;
             this.recommand_content = res.data.info;
           })
           .catch((err) => {
             console.log("err1", err.errno);
-          });
-      } else {
-        this.$axios({
-          method: "post",
-          url: "search",
-          data: {
-            search_word: this.keyword,
-            search_type: this.arr1,
-            search_logic: this.arr2,
-            page: this.page,
-            size: 5,
-            order_type: 2,
-            order: 0,
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => {
-            console.log("rcm_content2", res.data);
-            this.page_all = 100;
-            this.recommand_content = res.data.papers;
-          })
-          .catch((err) => {
-            console.log("err2", err.errno);
           });
       }
     },
@@ -215,7 +273,9 @@ export default {
       console.log(url_tmp);
       if (url_tmp == null) {
         this.snackbar = true;
-        this.setData({ snackbar: true });
+        setTimeout(() => {
+          this.snackbar = false;
+        }, 1000);
       } else {
         document.location.href = url_tmp;
       }
@@ -256,6 +316,7 @@ export default {
   margin-left: vw(20);
   font-size: vw(25);
   font-family: "Source Han Sans CN Normal", sans-serif;
+  cursor: pointer;
 }
 .subtitle_recommand_1 {
   margin-left: vw(20);
@@ -453,5 +514,35 @@ export default {
 .recommand_icon_2 {
   margin-top: vh(49);
   margin-left: vw(10);
+}
+.pa-3 {
+  margin-left: vw(100);
+  width: vw(1100);
+  height: vw(590);
+  // border: 1px solid #232f3d;
+}
+.mx-auto {
+  margin-top: vh(10);
+}
+.alerts {
+  position: absolute;
+  margin-left: vw(710);
+}
+.alert {
+  position: relative;
+  margin-top: vh(20);
+  width: vw(500);
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.1s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: opacity 0.1s;
 }
 </style>
