@@ -141,6 +141,7 @@
                       >按时间排序</v-btn
                     >
                     <v-btn value=2 depressed elevation="1" small
+                    v-if="toggleThree != 2"
                       >按引用量排序</v-btn
                     >
                   </v-btn-toggle>
@@ -203,11 +204,22 @@
                     <div
                       class="recommand_icon_1"
                       @click="into_detail(item.url[0])"
+                      v-if="item.pdf != 'null'"
                     >
                       <v-icon color="#232f3d" class="recommand_icon_3" medium v-if="item.pdf">
                         mdi-earth
                       </v-icon>
-                      <a class="quote_recommand_1" v-if="item.pdf" :href="item.pdf">原文链接</a>
+                      <a class="quote_recommand_1" :href="item.pdf">原文链接</a>
+                    </div>
+                    <div
+                      class="recommand_icon_1"
+                      v-else
+                      @click="alert_none()"
+                    >
+                      <v-icon color="#232f3d" class="recommand_icon_3" medium >
+                        mdi-earth
+                      </v-icon>
+                      <a class="quote_recommand_1">原文链接</a>
                     </div>
                     <v-icon color="#232f3d" medium class="recommand_icon_2">
                       mdi-star
@@ -245,11 +257,22 @@
                     <div
                       class="recommand_icon_1"
                       @click="into_detail(item.url[0])"
+                      v-if="item.pdf != 'null'"
                     >
                       <v-icon color="#232f3d" class="recommand_icon_3" medium >
                         mdi-earth
                       </v-icon>
                       <a class="quote_recommand_1" :href="item.pdf">原文链接</a>
+                    </div>
+                    <div
+                      class="recommand_icon_1"
+                      v-else
+                      @click="alert_none()"
+                    >
+                      <v-icon color="#232f3d" class="recommand_icon_3" medium >
+                        mdi-earth
+                      </v-icon>
+                      <a class="quote_recommand_1">原文链接</a>
                     </div>
                     <v-icon color="#232f3d" medium class="recommand_icon_2">
                       mdi-star
@@ -302,6 +325,22 @@
                   <v-list-item-subtitle class="subtitle_recommand_5">Undertaking institution：{{
                     item.undertaking_institution
                   }}</v-list-item-subtitle>
+                  <div style="display: flex">
+                    <div
+                      class="recommand_icon_1_5"
+                      @click="into_detail(item.url[0])"
+                      v-if="item.url != 'null'"
+                    >
+                      <a class="quote_recommand_1_5" :href="item.url">项目链接</a>
+                    </div>
+                    <div
+                      class="recommand_icon_1_5"
+                      v-else
+                      @click="alert_none()"
+                    >
+                      <a class="quote_recommand_1">项目链接</a>
+                    </div>
+                  </div>
                 </v-card>
                 <v-snackbar
                   v-model="showSnackBar"
@@ -401,6 +440,9 @@ export default {
     };
   },
   methods: {
+    alert_none() {
+      this.showSnackBar = true;
+    },
     pagination_getlist(cnt) {
       if(cnt == 0) {
         this.loadScholarPapers();
@@ -580,8 +622,6 @@ export default {
     },
     loadScholarProject() {
       this.recommandProject = [];
-      let sort = this.toggleOne == 1 ? "year" : "citation";
-      console.log(this.toggleOne, sort);
       this.$axios({
         method: "post",
         url: "/get_projects_by_scholar",
@@ -589,7 +629,7 @@ export default {
           scholar_id: this.scholarId,
           page: this.npage,
           size: 6,
-          order: sort,
+          order: "year",
           up: this.toggleTwo - '0',
         }),
       })
@@ -897,6 +937,11 @@ export default {
 .recommand_icon_1 {
   display: flex;
 }
+.recommand_icon_1_5 {
+  display: flex;
+  margin-left: vw(20);
+  margin-bottom: vh(15);
+}
 .recommand_icon_2 {
   width: vw(36);
   margin-top: vh(42);
@@ -904,6 +949,9 @@ export default {
   margin-bottom: vh(30);
 }
 .recommand_icon_3 {
+  margin-top: vh(14);
+}
+.recommand_icon_3_5 {
   margin-top: vh(14);
 }
 .scholar-relation {
