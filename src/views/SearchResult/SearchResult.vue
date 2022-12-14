@@ -434,14 +434,7 @@ export default {
   margin-top: vh(10);
    font-family: "optima", sans-serif;
 }
-.title:hover{
-  padding: 2%;
-  border: solid;
-  border-radius: 5px;
-  border-color:white ;
-  color: red;
-  background: rgba(33, 49, 42, 0.29);;
-}
+
 .quote_recommand_fa {
   width: vw(1050);
   margin-bottom: vh(10);
