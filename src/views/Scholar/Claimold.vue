@@ -79,8 +79,8 @@
                                 <template v-slot:default="{ active }">
                                   <v-list-item-content style="width: 700px " >
                                     <v-list-item-title ><h3 style="display:inline">{{grouplist[index].name1}}</h3></v-list-item-title>
-                                    <v-list-item-title  v-if="grouplist[index].name2"><h3 style="display:inline"> | grouplist[index].name2 </h3></v-list-item-title>
-                                    <v-list-item-title  v-if="grouplist[index].name3"><h3 style="display:inline"> | grouplist[index].name3 </h3></v-list-item-title>
+                                    <v-list-item-title  v-if="grouplist[index].name2"><h3 style="display:inline"> | {{grouplist[index].name2}} </h3></v-list-item-title>
+                                    <v-list-item-title  v-if="grouplist[index].name3"><h3 style="display:inline"> | {{grouplist[index].name3}} </h3></v-list-item-title>
                                      <v-list-item-subtitle
                                     ><h4 style="display:inline">{{listtxt.h_index}}:</h4>{{item.h_index}}</v-list-item-subtitle>   
                                 

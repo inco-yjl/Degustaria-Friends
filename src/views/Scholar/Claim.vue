@@ -393,7 +393,12 @@ export default {
       nextpage(){
         this.search();
         this.selected.splice(0,this.selected.length);
-        
+        var i=0;
+        for(i=0;i<5;i++){
+          if(this.selected_articlesid.includes(this.grouplist[i].id)){
+            this.selected.push(i);
+          }
+        }
       },
       prepage(){
         this.search();
