@@ -10,15 +10,15 @@
         <v-list-item-subtitle class="recommand_book">
           {{text_process(this.authors)}}
         </v-list-item-subtitle>
-        <div class="recommand_book" v-if="this.mode==MODE_PAPER">
-          <v-list-item-subtitle class="recommand_book">机构：{{text_process(paper.author_org[0])}}</v-list-item-subtitle>
-          <v-list-item-subtitle class="recommand_book">出版时间：{{text_process(paper.year)}}</v-list-item-subtitle>
-          <v-list-item-subtitle class="recommand_book">来源:{{text_process(paper.venue)}}</v-list-item-subtitle>
-        </div>
-        <div class="recommand_book_2" v-if="this.mode==MODE_PATENT">
+        <!-- <div class="recommand_book" v-if="this.mode==MODE_PAPER"> -->
+          <v-list-item-subtitle class="recommand_book"  v-if="this.mode==MODE_PAPER">机构：{{text_process(paper.author_org[0])}}</v-list-item-subtitle>
+          <v-list-item-subtitle class="recommand_book"  v-if="this.mode==MODE_PAPER">出版时间：{{text_process(paper.year)}}</v-list-item-subtitle>
+          <v-list-item-subtitle class="recommand_book"  v-if="this.mode==MODE_PAPER">来源:{{text_process(paper.venue)}}</v-list-item-subtitle>
+        <!-- </div> -->
+        <!-- <div class="recommand_book_2" v-if="this.mode==MODE_PATENT"> -->
 <!--          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>-->
-          <v-list-item-subtitle class="recommand_book">申请时间：{{text_process(paper.apply_datetime.slice(0,10))}}</v-list-item-subtitle>
-        </div>
+          <v-list-item-subtitle class="recommand_book"  v-if="this.mode==MODE_PATENT">申请时间：{{text_process(paper.apply_datetime.slice(0,10))}}</v-list-item-subtitle>
+        <!-- </div> -->
         <div class="recommand_book_2" v-if="this.mode==MODE_PROJECT">
           <!--          <div class="year_info">机构：{{text_process(paper.author_org[0])}}</div>-->
           <div class="year_info">计划起始时间：{{text_process(beg_end)}}</div>
