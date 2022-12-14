@@ -123,6 +123,10 @@
               v-if="toggleThree == 1"
               >专利共{{ recommandPatent_num }}个</v-card-title
             >
+            <v-card-title class="scholar_article_head"
+              v-if="toggleThree == 2"
+              >项目共{{ recommandProject_num }}个</v-card-title
+            >
             <v-card-subtitle>
               <v-row dense>
                 <v-col cols="12">
@@ -257,7 +261,54 @@
                   :timeout="2000"
                   color="blue accent-2"
                 >
-                  尚无专利
+                  暂无内容
+                  <template v-slot:action="{ attrs }">
+                    <v-btn
+                      color="white"
+                      text
+                      v-bind="attrs"
+                      @click="snackbar = false"
+                    >
+                      Close
+                    </v-btn>
+                  </template>
+                </v-snackbar>
+              </div>
+              <div v-else-if="toggleThree == 2">
+                <v-card
+                  class="home_focus_card_2_2"
+                  v-for="item in recommandProject"
+                  :key="item.id"
+                >
+                  <v-list-item-title class="headline_2">{{
+                    item.title
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle class="subtitle_recommand_1">Director：{{
+                    item.director
+                  }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="subtitle_recommand_1_1">{{
+                    item.begin
+                  }}——{{item.end}}</v-list-item-subtitle>
+                  <div class="recommand_book">Participants：</div>
+                  <div class="recommand_book_2" v-if="item.keyword !== 'null'">
+                    {{ item.participant }}
+                  </div>
+                  <div class="recommand_book_3" v-if="item.keyword === 'null'">
+                    -
+                  </div>
+                  <v-list-item-subtitle class="subtitle_recommand_1">Financial institution：{{
+                    item.financial_institution
+                  }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="subtitle_recommand_5">Undertaking institution：{{
+                    item.undertaking_institution
+                  }}</v-list-item-subtitle>
+                </v-card>
+                <v-snackbar
+                  v-model="showSnackBar"
+                  :timeout="2000"
+                  color="blue accent-2"
+                >
+                  暂无内容
                   <template v-slot:action="{ attrs }">
                     <v-btn
                       color="white"
@@ -330,6 +381,8 @@ export default {
       recommandPaper: [],
       recommandPatent: [],
       recommandPatent_num: 0,
+      recommandProject: [],
+      recommandProject_num: 0,
       toggleOne: 1,
       toggleTwo: 0,
       toggleThree: 0,
@@ -355,7 +408,9 @@ export default {
       else if(cnt == 1) {
         this.loadScholarPatent();
       }
-      else {}
+      else {
+        this.loadScholarProject();
+      }
     },
     loadScholarInfo() {
       this.$axios({
@@ -523,6 +578,33 @@ export default {
         console.log(error);
       });
     },
+    loadScholarProject() {
+      this.recommandProject = [];
+      let sort = this.toggleOne == 1 ? "year" : "citation";
+      console.log(this.toggleOne, sort);
+      this.$axios({
+        method: "post",
+        url: "/get_projects_by_scholar",
+        data: qs.stringify({
+          scholar_id: this.scholarId,
+          page: this.npage,
+          size: 6,
+          order: sort,
+          up: this.toggleTwo - '0',
+        }),
+      })
+      .then((res) => {
+        console.log("project", res.data);
+        this.PaginationLength = res.data.n_page;
+        let len = res.data.res.length;
+        this.recommandProject_num = res.data.total;
+        this.recommandProject = res.data.res;
+      })
+      .catch((error) => {
+        this.showSnackBar = true;
+        console.log(error);
+      });
+    },
     to_string(strs) {
       let retstr = "";
       let len = strs.length;
@@ -546,6 +628,7 @@ export default {
               loadScholarPatent(nval);
               break;
             case "2":
+              loadScholarProject(nval);
               break;
           }
       },
@@ -562,6 +645,7 @@ export default {
               this.loadScholarPatent();
               break;
             case "2":
+              this.loadScholarProject();
               break;
           }
       },
@@ -577,6 +661,7 @@ export default {
               this.loadScholarPatent();
               break;
             case "2":
+              this.loadScholarProject();
               break;
           }
       },
@@ -594,6 +679,7 @@ export default {
               this.loadScholarPatent();
               break;
             case "2":
+              this.loadScholarProject();
               break;
             default:
               console.log("nothing happened");
@@ -726,6 +812,12 @@ export default {
   margin-left: vw(20);
   font-family: "Source Han Sans CN Normal", sans-serif;
   margin-top: vh(10);
+}
+.subtitle_recommand_5 {
+  margin-left: vw(20);
+  font-family: "Source Han Sans CN Normal", sans-serif;
+  margin-top: vh(1);
+  margin-bottom: vh(15);
 }
 .subtitle_recommand_1_1 {
   margin-left: vw(20);
