@@ -185,7 +185,6 @@ export default {
             res.data.status === "用户不存在"
           ) {
             window.localStorage.setItem("scholar_id", "");
-            console.log(this.hasLogin)
             this.scholar_id = null;
           } else {
             window.localStorage.setItem("scholar_id", res.data.id);

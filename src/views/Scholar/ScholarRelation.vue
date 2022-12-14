@@ -19,9 +19,8 @@
   },
   mounted() {
     this.scholarId = this.id
-    console.log(this.scholarId, this.id)
+    console.log("id"+ this.id)
     this.getRelationship();
-    this.initChart();
   },
  
   methods: {
@@ -35,17 +34,28 @@
       })
       .then(
         res => {
-          console.log(res.data)
-          for (let r in res.data) {
+          this.rdata = [];
+          this.relation = [];
+          console.log(res.data);
+          for(var i=0;i<res.data.length;i++){
+            var r=res.data[i];
             this.rdata.push({
               name: r.target,
-              category: Math.floor(Math.random() * 9)
+              category: r.times,
+              value: r.times
             });
             this.relation.push({
-              source: this.scholarId,
+              source: "",
               target: r.target,
             })
           }
+          this.rdata.push({
+              name: "",
+              category: res.data.length,
+              value: 'Scholar'
+            });
+            console.log(this.rdata)
+            this.initChart();
         }
       )
       .catch(
@@ -69,31 +79,12 @@
             layout: "force",
             symbolSize: 100,
             symbolSize: (value, params) => {
-              switch (params.data.category) {
-                case 0:
-                  return 21;
-                case 1:
-                  return 15;
-                case 2:
-                  return 17;
-                case 3:
-                  return 19;
-                case 4:
-                  return 24;
-                case 5:
-                  return 25;
-                case 6:
-                  return 26;
-                case 7:
-                  return 20;
-                case 8:
-                  return 18;
-              }
+              return params.data.category+14
             },
             roam: true,
             label: {
               show: true, 
-              position: "right",
+              position: "right"
             },
             focusNodeAdjacency: true, 
             edgeSymbolSize: [4, 10],
@@ -108,61 +99,11 @@
             itemStyle: {
               color: params => {
                 let colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc']
-                return colorList[params.data.category]
+                return colorList[Math.floor(Math.random() * 9)]
               }
             },
-            data: [
-              {
-                name: "xyf",
-                category: 1,
-              },
-              {
-                name: "yjl",
-                category: 2,
-              },
-              {
-                name: "zxc",
-                category: 3,
-              },
-              {
-                name: "pyy",
-                category: 5,
-              },
-              {
-                name: "yxy",
-                category: 7,
-              },
-              {
-                name: "zjr",
-                category: 8,
-              }
-            ],
-            links: [
-              {
-                source: "xyf",
-                target: "zxc",
-              },
-              {
-                source: "yjl",
-                target: "pyy",
-              },
-              {
-                source: "yjl",
-                target: "yxy",
-              },
-              {
-                source: "yjl",
-                target: "zjr",
-              },
-              {
-                source: "xyf",
-                target: "pyy",
-              },
-              {
-                source: "zjr",
-                target: "xyf",
-              }
-            ],
+            data:  this.rdata,
+            links: this.relation,
             lineStyle: {
               opacity: 0.9,
               width: 2,

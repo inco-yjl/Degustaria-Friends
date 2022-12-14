@@ -59,7 +59,7 @@
             </v-row>
             <v-row v-if="no_paper&&showPapers">
               <div class="not_found">
-                <v-card shaped=true>
+                <v-card :shaped=true>
                   <v-card-title>
                     对不起！暂无数据
                   </v-card-title>

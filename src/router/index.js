@@ -146,8 +146,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Achievement/ProjectDetail.vue'),
       },
       {
-        path: '/patengDetail',
-        name: 'patengDetail',
+        path: '/patentDetail',
+        name: 'patentDetail',
         component: () => import(/* webpackChunkName: "about" */ '../views/Achievement/PatentDetail.vue'),
       },
       {
