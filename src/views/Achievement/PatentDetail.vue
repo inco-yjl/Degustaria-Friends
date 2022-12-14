@@ -31,9 +31,11 @@
           </v-row>
         </v-container>
         <v-row class="paper-button-row">
+          <!--
           <v-col cols="2">
             <button class="paper-button" @click="report_error">报错</button>
           </v-col>
+          -->
           <v-col cols="2">
             <button class="paper-button" @click="share_paper">分享</button>
           </v-col>

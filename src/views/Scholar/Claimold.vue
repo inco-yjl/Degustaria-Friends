@@ -78,8 +78,8 @@
                                 <template v-slot:default="{ active }">
                                   <v-list-item-content style="width: 700px " >
                                     <v-list-item-title ><h3 style="display:inline">{{grouplist[index].name1}}</h3></v-list-item-title>
-                                    <v-list-item-title  v-if="grouplist[index].name2"><h3 style="display:inline"> | grouplist[index].name2 </h3></v-list-item-title>
-                                    <v-list-item-title  v-if="grouplist[index].name3"><h3 style="display:inline"> | grouplist[index].name3 </h3></v-list-item-title>
+                                    <v-list-item-title  v-if="grouplist[index].name2"><h3 style="display:inline"> | {{grouplist[index].name2}} </h3></v-list-item-title>
+                                    <v-list-item-title  v-if="grouplist[index].name3"><h3 style="display:inline"> | {{grouplist[index].name3}} </h3></v-list-item-title>
                                      <v-list-item-subtitle
                                     ><h4 style="display:inline">{{listtxt.h_index}}:</h4>{{item.h_index}}</v-list-item-subtitle>   
                                 
@@ -306,7 +306,7 @@ export default {
             /* res 是 response 的缩写 */
             console.log('搜索成功');
             console.log(res.data);
-            this.grouplist=res.data;
+            this.grouplist=res.data.list;
             // var i=0;
             // for(i=0;i<res.data.length;i++){
             //     this.grouplist.push(res.data[i]);

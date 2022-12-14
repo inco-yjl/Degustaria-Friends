@@ -745,4 +745,26 @@ export default {
 .mx-auto {
   margin-top: vh(10);
 }
+.alerts {
+  position: fixed;
+  z-index: 100000;
+  top: 20px;
+  margin-left: vw(710);
+}
+.alert {
+  position: fixed;
+  width: vw(500);
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.1s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: opacity 0.1s;
+}
 </style>

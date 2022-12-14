@@ -35,11 +35,12 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
   data() {
     return {
       singleInput: ref(),
-      inputalert: false
+      inputalert: false,
     };
   },
   methods: {
