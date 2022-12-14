@@ -54,7 +54,9 @@
           </div>
         </div>
         <div class="recommand_icon_fa_2" >
-          <img src="@/assets/quote.png" class="recommand_icon_1_2" @click="open_dialog()"/>
+          <img src="@/assets/quote.png"
+               v-if="this.mode===MODE_PAPER"
+               class="recommand_icon_1_2" @click="open_dialog()"/>
           <img :src="saved?collected:uncollected" class="recommand_icon_2_2" @click="change_collect()"/>
           <img :src="download_img" v-if="this.mode==MODE_PAPER||this.mode==MODE_PROJECT"
                class="recommand_icon_2_2" @click="download()"/>
