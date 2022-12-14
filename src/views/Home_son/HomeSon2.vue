@@ -584,7 +584,7 @@ export default {
   -webkit-box-orient: vertical;
 }
 .quote_recommand_fa {
-  width: vw(1010);
+  width: vw(1050);
   margin-bottom: vh(10);
   margin-top: vh(20);
 }
