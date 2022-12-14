@@ -1,7 +1,6 @@
 <template>
   <div class="layout" >
-    <v-container>
-      <v-row  no-gutters>
+      <v-row class="col_fa">
 <!--        侧边栏-->
         <v-col v-if="is_search_paper">
           <div class="aside" >
@@ -33,7 +32,8 @@
           <div class="searchResult">
             <v-row v-if="is_search_paper">
               <v-tabs>
-                <v-tab v-for="(item,index) in this.order_type" :key="index" @click="order_change(index)">
+                <v-tab v-for="(item,index) in this.order_type" :key="index" 
+                @click="order_change(index)">
                   {{item.name}}
                   <v-icon v-if="active_order===index&&index!==0">{{ item.order==0?des_svg:asc_svg }}</v-icon>
                 </v-tab>
@@ -49,7 +49,6 @@
             </v-row>
             <v-row v-if="!showPapers">
               <v-sheet
-                  color="grey lighten-4"
               >
                 <v-skeleton-loader
                     class="loading"
@@ -87,8 +86,6 @@
 
         </v-col>
       </v-row>
-
-    </v-container>
   </div>
 </template>
 
@@ -236,28 +233,31 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.col_fa {
+  display: flex;
+  width: 100%;
+  padding-left: vw(220);
+  padding-right: vw(180);
+  padding-top: vh(60);
+}
 .layout{
-  margin: vh(30);
-  padding: 20px;
-  margin-top: vh(10);
+  padding: vw(30);
+  margin-top: vh(30);
 }
 .aside-flitter{
   width: vw(400);
   margin-bottom: vh(10);
 }
 .searchResult{
-  width: vw(1000);
-  left: vw(00);
-  padding-top: vh(15);
+  padding-top: vh(3);
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  margin: auto;
   border: 0;
 
 }
 .aside{
-  margin-top: vh(20);
+  margin-top: vh(30);
   width: vw(400);
 }
 .pagination{
@@ -271,13 +271,14 @@ export default {
   top: vh(40);
 }
 .loading{
-  width: vw(700)
-
+  width: vw(1020);
+  padding-top: vh(3);
+  margin-top: vh(20);
 }
 .not_found{
   margin: vw(10);
   padding: vh(10);
-  width: vw(800);
+  width: vw(1000);
   height: vh(800);
 }
 
