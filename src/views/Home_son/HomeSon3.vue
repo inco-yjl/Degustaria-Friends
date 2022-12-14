@@ -75,11 +75,13 @@
           <v-list-item-subtitle class="subtitle_recommand_1">{{
             item.year
           }}</v-list-item-subtitle>
-          <div class="recommand_book">Abstract：</div>
-          <div class="recommand_book_2" v-if="item.abstract != 'null'">
+          <div class="recommand_book" v-if="item.abstract !== 'null'">
+            Abstract：
+          </div>
+          <div class="recommand_book_2" v-if="item.abstract !== 'null'">
             {{ item.abstract }}
           </div>
-          <div class="recommand_book_3" v-if="item.abstract == 'null'">-</div>
+          <div v-else class="no_abstract">暂无摘要信息</div>
           <div style="display: flex">
             <div class="quote_recommand_fa">
               <p class="quote_recommand_0">引用量：</p>
@@ -277,7 +279,7 @@ export default {
           this.snackbar = false;
         }, 1000);
       } else {
-        document.location.href = url_tmp;
+        window.open(url_tmp);
       }
     },
   },
@@ -353,6 +355,14 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
+}
+.no_abstract {
+  margin-left: vw(20);
+  font-size: 14px;
+  color: #7f7f7f;
+  line-height: 26px;
+  padding: vw(5) 0;
+  font-family: SourceHanSerifCN;
 }
 .recommand_book_3 {
   color: #455a64;

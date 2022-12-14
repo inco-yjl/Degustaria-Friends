@@ -1,5 +1,6 @@
 <template>
   <div class="home-page">
+    <div class="main-content">
     <div>
       <div class="home_left_zone">
         <div class="card_1">
@@ -65,7 +66,7 @@
             </v-list-item-icon>
             <div>
               <v-list-item-subtitle class="home_all_1"
-                >84,387,047</v-list-item-subtitle
+                >7,175,930</v-list-item-subtitle
               >
               <v-list-item-title class="home_all_2">科研人员</v-list-item-title>
             </div>
@@ -77,7 +78,7 @@
             </v-list-item-icon>
             <div>
               <v-list-item-subtitle class="home_all_1"
-                >329,431,326</v-list-item-subtitle
+                >16,160,124</v-list-item-subtitle
               >
               <v-list-item-title class="home_all_2">学术成果</v-list-item-title>
             </div>
@@ -101,7 +102,7 @@
             </v-list-item-icon>
             <div>
               <v-list-item-subtitle class="home_all_1"
-                >1,123,897</v-list-item-subtitle
+                >252,278</v-list-item-subtitle
               >
               <v-list-item-title class="home_all_2">科研机构</v-list-item-title>
             </div>
@@ -119,7 +120,7 @@
             <v-list-item-group v-model="item" color="primary">
               <v-list-item v-for="(item, i) in hot_field" :key="i">
                 <div class="home_hot_field">{{ i + 1 }}.</div>
-                <v-list-item-content>
+                <v-list-item-content class="home_hot_field_2">
                   <v-list-item-title v-text="item.name"></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -128,6 +129,12 @@
         </v-card>
       </div>
     </div>
+  </div>
+  <!--
+  <v-footer color="primary">
+    <div><a style="color:#FFF" href="https://beian.miit.gov.cn/" target="_blank">京ICP备2022034930号</a></div>
+  </v-footer>
+    -->
   </div>
 </template>
 
@@ -220,6 +227,15 @@ export default {
 .home-page {
   background-color: white;
   width: vw(1920);
+
+}
+.bottom-area {
+  position: absolute;
+  background-color: #232f3d;
+  height: 100px;
+  margin-top: 200px;
+}
+.main-content {
   display: flex;
 }
 .main_container_2 {
@@ -257,7 +273,7 @@ export default {
   font-size: 1.1rem;
   color: rgba(0, 0, 0, 0.8);
   text-justify: auto;
-  font-family: "Baskerville", sans-serif;
+  font-family: "Baskerville", SourceHanSerifCN;
   font-weight: 400;
   letter-spacing: 0.009375rem;
   line-height: 28px;
@@ -282,6 +298,7 @@ export default {
 }
 .home_all_1 {
   font-size: vw(20);
+  font-family: Futura;
 }
 .home_all_2 {
   font-size: vw(22);
@@ -295,7 +312,13 @@ export default {
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.078125rem;
-  font-family: "Source Han Sans CN Normal", sans-serif;
+  font-family: "optima", SourceHanSerifCN;
+}
+.home_hot_field_2 {
+  margin-right: 5px;
+  font-size: 0.875rem;
+  letter-spacing: 0.078125rem;
+  font-family: "Futura", SourceHanSerifCN;
 }
 .hot_field_title {
   font-weight: bold;
