@@ -19,7 +19,7 @@
   },
   mounted() {
     this.scholarId = this.id
-    console.log(this.scholarId, this.id)
+    console.log("this.scholarId", this.id)
     this.getRelationship();
     this.initChart();
   },
@@ -35,7 +35,7 @@
       })
       .then(
         res => {
-          console.log(res.data)
+          console.log("relation", res.data)
           for (let r in res.data) {
             this.rdata.push({
               name: r.target,
