@@ -412,6 +412,9 @@ export default {
         });
     },
     add_subscribe_keyword() {
+      if (!this.keyword) {
+        this.keyword = [];
+      }
       this.keyword.push(this.input_keyword);
       console.log("this.input_keyword", this.input_keyword);
       console.log("this.keyword", this.keyword);

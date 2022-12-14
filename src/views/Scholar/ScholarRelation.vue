@@ -21,8 +21,12 @@
     this.scholarId = this.id
     console.log("id"+ this.id)
     this.getRelationship();
+    window.onresize = () => {
+      return (() => {
+        this.initChart();
+      })();
+    };
   },
- 
   methods: {
     getRelationship() {
       this.$axios({
@@ -63,6 +67,11 @@
       )
     },
     initChart() {
+      if (document.getElementById('chart') === null) {
+        console.log("null");
+        return;
+      }
+      echarts.dispose(document.getElementById('chart'));
       let myChart = echarts.init(document.getElementById('chart'))
       myChart.resize();
       myChart.setOption(this.setOption());
