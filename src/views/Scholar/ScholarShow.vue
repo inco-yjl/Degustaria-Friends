@@ -41,7 +41,7 @@
                       <p class="text-left name">{{ Name }}</p>
                     </div>
                   </v-col>
-                  <v-col cols="1" v-if="!isMyPage && scholarId != userId">
+                  <v-col cols="1" v-if="!isMyPage && scholarId != thisscholarId">
                     <v-btn
                       class="scholar_icon_top"
                       fab
@@ -369,6 +369,7 @@ export default {
       unlog: false,
       scholarName: "Azadeh Amin",
       intro: "",
+      thisscholarId: window.localStorage.getItem("scholar_id"),
       userId: window.localStorage.getItem("user_id"),
       showEmail: true,
       isMyPage: false,

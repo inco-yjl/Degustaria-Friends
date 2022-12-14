@@ -1,10 +1,34 @@
 <template>
   <v-container class="paper-detail-page">
+    <div class="alerts">
+      <transition name="fade">
+        <v-alert
+          dense
+          class="alert"
+          dismissible
+          border="left"
+          elevation="2"
+          v-if="snackbar2"
+          type="info"
+          >{{ text2 }}</v-alert
+        >
+        <v-alert
+          dense
+          class="alert"
+          dismissible
+          border="left"
+          elevation="2"
+          v-if="snackbar"
+          type="success"
+          >{{ text }}</v-alert
+        >
+      </transition>
+    </div>
     <v-row>
       <v-col cols="2" class="toc"> </v-col>
       <v-col cols="10">
         <p class="text-left font-weight-bold paper-title">{{ paper.title }}</p>
-        <p class="text-left paper-data" v-if="paper.venue!='null'">
+        <p class="text-left paper-data" v-if="paper.venue != 'null'">
           {{ "来自 " + paper.venue + "  |  引用量：" + paper.n_citation }}
         </p>
         <v-container class="paper-info">
@@ -42,50 +66,89 @@
           </v-row>
         </v-container>
         <v-row class="paper-button-row">
-          <v-col cols="2">
-            <!-- <button class="paper-button" @click="subscribe_paper">
-              {{ this.subscribed === true ? "已收藏" : "收藏" }}
-            </button> -->
-            <v-btn  depressed large color="blue-grey lighten-4" @click="subscribe_paper">  {{ this.subscribed === true ? "已收藏" : "收藏" }}</v-btn>
+          <v-col cols="1">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="rgb(255, 186, 57)"
+              @click="subscribe_paper"
+            >
+              <v-icon dark v-if="this.subscribed === true">mdi-star</v-icon>
+              <v-icon light v-else>mdi-star-outline</v-icon>
+            </v-btn>
           </v-col>
-          <v-col cols="2">
-            <!-- <button class="paper-button" @click="generate_reference">
-              引用
-            </button> -->
-            <v-btn  depressed large color="blue-grey lighten-4" @click="generate_reference">引用</v-btn>
+          <v-col cols="1">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="indigo"
+              @click="generate_reference"
+            >
+              <v-icon>mdi-format-quote-close</v-icon>
+            </v-btn>
           </v-col>
-          <v-col cols="2">
-            <!-- <button class="paper-button" @click="report_error">报错</button> -->
-             <v-btn  depressed large color="blue-grey lighten-4" @click="report_error">报错</v-btn>
-            
+          <v-col cols="1">
+            <v-dialog v-model="dialog" width="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  color="red"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon>mdi-alert</v-icon>
+                </v-btn>
+              </template>
+              <v-card>
+              <v-card-title class="headline">申诉文献</v-card-title>
+
+              <v-card-text>标题：<v-text-field  v-model="appealTitle"></v-text-field></v-card-text>
+                <v-card-text>申诉内容：<v-text-field v-model="appealContent"
+              ></v-text-field></v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialog = false"
+                  >Disagree</v-btn
+                >
+                <v-btn color="green darken-1" text @click="report_error()"
+                  >Agree</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+            </v-dialog>
           </v-col>
-          <v-col cols="2">
-            <!-- <button class="paper-button" @click="share_paper">分享</button> -->
-            <v-btn  depressed large color="blue-grey lighten-4" @click="share_paper">分享</v-btn>
+          <v-col cols="1">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="success"
+              @click="share_paper"
+            >
+              <v-icon>mdi-share</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col cols="1">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="blue-grey"
+              @click="redirect_html"
+            >
+              <v-icon>mdi-link-variant</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
-        <div class="download-area" >
-           <v-row justify="space-around" style="verticle-align:center">
-                  <v-btn  color="blue-grey darken-3"  class="add_keyword_class"  style="cursor: pointer;display:inline-block;margin-left:50px;margin-top:8px;color:white"   @click="redirect_html">
-                      HTML阅读
-                  </v-btn>
-                   <v-btn  color="blue-grey darken-3"  class="add_keyword_class"  style="cursor: pointer;display:inline-block;margin-left:50px;margin-top:8px;color:white"   @click="redirect_pdf">
-                      PDF下载
-                  </v-btn>
-           </v-row>
-            <!-- <span
-              class="download-button"
-              style="background-color: #ff9c59; cursor: pointer"
-              @click="redirect_html"
-              >HTML阅读</span
-            >
-            <span
-              class="download-button"
-              style="background-color: #28b611; cursor: pointer"
-              @click="redirect_pdf"
-              >PDF下载</span
-            > -->
-        </div>
         <v-row class="divide-bar">
           <v-col cols="5" class="divide">
             <v-divider></v-divider>
@@ -96,62 +159,70 @@
           </v-col>
         </v-row>
 
-        <div class="recommendations" style="width:800px">
-        <v-card class="keywords_tab">
-          <v-tabs v-model="tab" fixed-tabs  background-color="#7b828b" 
-          center-active
-          dark
-          class="key_tab_item">
-            <v-tab>相似文献</v-tab>
-            <v-tab>相关学术成果</v-tab>
-          </v-tabs>
-        </v-card>
+        <div class="recommendations">
+          <v-card class="keywords_tab">
+            <v-tabs
+              v-model="tab"
+              fixed-tabs
+              background-color="#7b828b"
+              center-active
+              dark
+              class="key_tab_item"
+            >
+              <v-tab>相似文献</v-tab>
+              <v-tab>相关学术成果</v-tab>
+            </v-tabs>
+          </v-card>
           <v-tabs-items v-model="tab">
             <v-tab-item>
-              <div style="width:800px">
-                 <v-card
-          class="home_focus_card_2"
-          v-for="paper in similar_papers"
+              <div style="width: 800px">
+                <v-card
+                  class="home_focus_card_2"
+                  v-for="paper in similar_papers"
                   :key="paper.id"
-        >
-          <v-list-item-title class="headline_2"   @click="redirect_paper(paper.id)">{{
-            paper.title
-          }}</v-list-item-title>
-          <v-list-item-subtitle class="subtitle_recommand_1">{{
-             paper.year
-          }}</v-list-item-subtitle>
-                    <div class="author_rcm">
-            <div
-              v-for="item2 in paper.author_name"
-              :key="item2.id"
-              style="float: left"
-            >
-              <v-list-item-subtitle class="subtitle_recommand_1">{{
-                item2
-              }}</v-list-item-subtitle>
-            </div>
-          </div>
-          <div class="recommand_book" v-if="paper.abstract != 'null'">
-            Abstract：
-          </div>
-          <div class="recommand_book_2" v-if="paper.abstract != 'null'">
-            {{paper.abstract
-                    }}
-          </div>
-          <div v-else class="no_abstract">暂无摘要信息</div>
-          <div style="display: flex">
-            <div class="quote_recommand_fa">
-              <p class="quote_recommand_0">引用量：</p>
-              <p class="quote_recommand">{{ paper.n_citation}}</p>
-            </div>
-            <div class="recommand_icon_1" @click="into_detail(paper.url[0])">
-              <v-icon color="#232f3d" class="recommand_icon_3" medium>
-                mdi-earth
-              </v-icon>
-              <a class="quote_recommand_1">原文链接</a>
-            </div>
-          </div>
-        </v-card>
+                >
+                  <v-list-item-title
+                    class="headline_2"
+                    @click="redirect_paper(paper.id)"
+                    >{{ paper.title }}</v-list-item-title
+                  >
+                  <v-list-item-subtitle class="subtitle_recommand_1">{{
+                    paper.year
+                  }}</v-list-item-subtitle>
+                  <div class="author_rcm">
+                    <div
+                      v-for="item2 in paper.author_name"
+                      :key="item2.id"
+                      style="float: left"
+                    >
+                      <v-list-item-subtitle class="subtitle_recommand_1">{{
+                        item2
+                      }}</v-list-item-subtitle>
+                    </div>
+                  </div>
+                  <div class="recommand_book" v-if="paper.abstract != 'null'">
+                    Abstract：
+                  </div>
+                  <div class="recommand_book_2" v-if="paper.abstract != 'null'">
+                    {{ paper.abstract }}
+                  </div>
+                  <div v-else class="no_abstract">暂无摘要信息</div>
+                  <div style="display: flex">
+                    <div class="quote_recommand_fa">
+                      <p class="quote_recommand_0">引用量：</p>
+                      <p class="quote_recommand">{{ paper.n_citation }}</p>
+                    </div>
+                    <div
+                      class="recommand_icon_1"
+                      @click="into_detail(paper.url[0])"
+                    >
+                      <v-icon color="#232f3d" class="recommand_icon_3" medium>
+                        mdi-earth
+                      </v-icon>
+                      <a class="quote_recommand_1">原文链接</a>
+                    </div>
+                  </div>
+                </v-card>
                 <!-- <div
                   class="recommendation-tab-item"
                   v-for="paper in similar_papers"
@@ -194,49 +265,53 @@
               </div>
             </v-tab-item>
             <v-tab-item>
-                <v-card
-          class="home_focus_card_2"
-         v-for="paper in related_papers"
-                  :key="paper.id"
-        >
-          <v-list-item-title class="headline_2"   @click="redirect_paper(paper.id)">{{
-            paper.title
-          }}</v-list-item-title>
-          <v-list-item-subtitle class="subtitle_recommand_1">{{
-             paper.year
-          }}</v-list-item-subtitle>
-                    <div class="author_rcm">
-            <div
-              v-for="item2 in paper.author_name"
-              :key="item2.id"
-              style="float: left"
-            >
-              <v-list-item-subtitle class="subtitle_recommand_1">{{
-                item2
-              }}</v-list-item-subtitle>
-            </div>
-          </div>
-          <div class="recommand_book" v-if="paper.abstract != 'null'">
-            Abstract：
-          </div>
-          <div class="recommand_book_2" v-if="paper.abstract != 'null'">
-            {{paper.abstract
-                    }}
-          </div>
-          <div v-else class="no_abstract">暂无摘要信息</div>
-          <div style="display: flex">
-            <div class="quote_recommand_fa">
-              <p class="quote_recommand_0">引用量：</p>
-              <p class="quote_recommand">{{ paper.n_citation}}</p>
-            </div>
-            <div class="recommand_icon_1" @click="into_detail(paper.url[0])">
-              <v-icon color="#232f3d" class="recommand_icon_3" medium>
-                mdi-earth
-              </v-icon>
-              <a class="quote_recommand_1">原文链接</a>
-            </div>
-          </div>
-        </v-card>
+              <v-card
+                class="home_focus_card_2"
+                v-for="paper in related_papers"
+                :key="paper.id"
+              >
+                <v-list-item-title
+                  class="headline_2"
+                  @click="redirect_paper(paper.id)"
+                  >{{ paper.title }}</v-list-item-title
+                >
+                <v-list-item-subtitle class="subtitle_recommand_1">{{
+                  paper.year
+                }}</v-list-item-subtitle>
+                <div class="author_rcm">
+                  <div
+                    v-for="item2 in paper.author_name"
+                    :key="item2.id"
+                    style="float: left"
+                  >
+                    <v-list-item-subtitle class="subtitle_recommand_1">{{
+                      item2
+                    }}</v-list-item-subtitle>
+                  </div>
+                </div>
+                <div class="recommand_book" v-if="paper.abstract != 'null'">
+                  Abstract：
+                </div>
+                <div class="recommand_book_2" v-if="paper.abstract != 'null'">
+                  {{ paper.abstract }}
+                </div>
+                <div v-else class="no_abstract">暂无摘要信息</div>
+                <div style="display: flex">
+                  <div class="quote_recommand_fa">
+                    <p class="quote_recommand_0">引用量：</p>
+                    <p class="quote_recommand">{{ paper.n_citation }}</p>
+                  </div>
+                  <div
+                    class="recommand_icon_1"
+                    @click="into_detail(paper.url[0])"
+                  >
+                    <v-icon color="#232f3d" class="recommand_icon_3" medium>
+                      mdi-earth
+                    </v-icon>
+                    <a class="quote_recommand_1">原文链接</a>
+                  </div>
+                </div>
+              </v-card>
               <!-- <div class="recommendation-tab">
                 <div
                   class="recommendation-tab-item"
@@ -281,6 +356,7 @@
             </v-tab-item>
           </v-tabs-items>
         </div>
+        <div class="bottom"></div>
       </v-col>
     </v-row>
   </v-container>
@@ -299,6 +375,11 @@ export default {
       related_papers: ref(null),
       subscribed: ref(false),
       snackbar: false,
+      snackbar2: false,
+      text2: "",
+      text: "",
+      appealTitle: "",
+      appealContent: ""
     };
   },
   methods: {
@@ -313,30 +394,65 @@ export default {
         this.paper.year +
         ".";
       navigator.clipboard.writeText(reference);
-      window.alert("引用信息已复制到剪贴板");
+      this.text = "引用信息已复制到剪贴板";
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, 1000);
     },
     report_error() {
-      window.alert("感谢您的反馈，我们会尽快处理");
+      this.dialog = false;
+      this.$axios({
+        method: "post",
+        url: "/appeal_paper",
+        data: {
+          title: this.appealTitle,
+          content: this.appealContent,
+          paper_url: window.location.href
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then((res) => {
+        this.text = "感谢您的反馈，我们会尽快处理";
+        this.snackbar = true;
+        setTimeout(() => {
+          this.snackbar = false;
+        }, 1000);
+      });
     },
     share_paper() {
       let currentUrl = window.location.href;
       navigator.clipboard.writeText(currentUrl);
-      window.alert("分享链接已复制到剪贴板");
+      this.text = "链接已复制到剪贴板";
+      this.snackbar = true;
+      setTimeout(() => {
+        this.snackbar = false;
+      }, 1000);
     },
     redirect_paper(id) {
       console.log(id);
       this.get_paper_info(id);
     },
     redirect_html() {
-      if (this.paper.url === null) {
-        window.alert("暂时无法提供HTML阅读");
+      console.log(this.paper);
+      if (!this.paper.url.length > 0) {
+        this.text2 = "暂时无法链接到原文";
+        this.snackbar2 = true;
+        setTimeout(() => {
+          this.snackbar2 = false;
+        }, 1000);
       } else {
         window.open(this.paper.url);
       }
     },
     redirect_pdf() {
-      if (this.paper.url === null) {
-        window.alert("暂时无法提供PDF下载");
+      if (this.paper.pdf === "null") {
+        this.text2 = "暂时无法提供PDF下载";
+        this.snackbar2 = true;
+        setTimeout(() => {
+          this.snackbar2 = false;
+        }, 1000);
       } else {
         window.open(this.paper.url); // TODO: 下载pdf的接口（get_paper_file_by_id）好像不能用，只好用跳转paper.url替代
       }
@@ -359,10 +475,18 @@ export default {
       }).then((res) => {
         if (res.data.status === "成功收藏") {
           this.subscribed = true;
-          window.alert("已成功收藏");
+          this.text = "成功收藏";
+          this.snackbar = true;
+          setTimeout(() => {
+            this.snackbar = false;
+          }, 1000);
         } else {
           this.subscribed = false;
-          window.alert("已取消收藏");
+          this.text = "已取消收藏";
+          this.snackbar = true;
+          setTimeout(() => {
+            this.snackbar = false;
+          }, 1000);
         }
       });
     },
@@ -400,10 +524,11 @@ export default {
     },
     into_detail(url_tmp) {
       console.log(url_tmp);
+      this.text2 = "暂无数据";
       if (url_tmp == null) {
-        this.snackbar = true;
+        this.snackbar2 = true;
         setTimeout(() => {
-          this.snackbar = false;
+          this.snackbar2 = false;
         }, 1000);
       } else {
         window.open(url_tmp);
@@ -439,7 +564,7 @@ export default {
               .fill()
               .map((v) => "2"),
             page: 0,
-            size: 3,
+            size: 10,
             search_logic: Array(this.paper.title.split(" ").length - 1)
               .fill()
               .map((v) => "1"),
@@ -467,7 +592,7 @@ export default {
               .fill()
               .map((v) => "2"),
             page: 0,
-            size: 3,
+            size: 10,
             search_logic: Array(this.paper.keywords.length - 1)
               .fill()
               .map((v) => "1"),
@@ -498,7 +623,7 @@ export default {
               .fill()
               .map((v) => "2"),
             page: 0,
-            size: 3,
+            size: 10,
             search_logic: Array(this.paper.title.split(" ").length - 1)
               .fill()
               .map((v) => "1"),
@@ -526,7 +651,7 @@ export default {
               .fill()
               .map((v) => "1"),
             page: 0,
-            size: 3,
+            size: 10,
             search_logic: Array(this.paper.author_name.length - 1)
               .fill()
               .map((v) => "1"),
@@ -560,7 +685,7 @@ export default {
   background-color: white;
   width: vw(1920);
   margin: 0;
-  margin-top:20px;
+  margin-top: 20px;
 }
 
 .toc {
@@ -579,9 +704,9 @@ export default {
 }
 
 .paper-title {
-  margin-top: vh(90);
+  margin-top: vh(100);
   padding-left: vw(180);
-  font-family: "宋体 Bold", "宋体 常规", "宋体", sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: 700;
   font-size: 28px;
   font-style: normal;
@@ -664,9 +789,11 @@ export default {
 .divide-bar {
   width: 100%;
   margin: 0;
+  margin-left: vw(90);
+  margin-top: vh(50);
   font-size: 20px;
   font-weight: 700;
- font-family: "Source Han Sans CN Normal", sans-serif;
+  font-family: "Source Han Sans CN Normal", sans-serif;
   text-align: center;
 }
 
@@ -675,8 +802,13 @@ export default {
 }
 
 .recommendations {
-  margin-left: vw(100);
+  width: vw(900);
+  margin-left: vw(180);
   margin-right: vw(100);
+}
+.bottom {
+  margin-top: vh(20);
+  height: vh(50);
 }
 
 .similar-paper-title {
@@ -695,6 +827,12 @@ export default {
   margin-bottom: 0;
   color: #7f7f7f;
   line-height: vh(35);
+
+  display: -webkit-box; /*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 3; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical; /*伸缩盒子的子元素排列：从上到下*/
 }
 
 .similar-paper-author-and-source {
@@ -714,8 +852,9 @@ export default {
 }
 .home_focus_card_2 {
   margin-left: 20px;
-  margin-top: vh(40);
-  width:95%;
+  margin-top: vh(20);
+  margin-bottom: vh(20);
+  width: 95%;
   padding-top: 10px;
   padding-bottom: 0.5px;
   padding-right: vw(20);
@@ -814,6 +953,7 @@ export default {
 .quote_recommand_1 {
   margin-left: vw(5);
   display: flex;
+  width: vw(100);
   font-family: "SourceHanSerifCN", sans-serif;
   font-size: vw(17);
   margin-top: vh(42);
@@ -824,7 +964,7 @@ export default {
 }
 .recommand_icon_1 {
   display: flex;
-  width: 100px;;
+  width: 100px;
 }
 .recommand_icon_2 {
   width: vw(36);
@@ -837,7 +977,6 @@ export default {
 .add_keyword_class {
   color: white;
   margin-left: vw(30);
-  margin-top: vh(25);
 }
 .add_keyword_class_2 {
   color: white;
@@ -887,5 +1026,28 @@ export default {
   margin-left: vw(10);
   margin-top: vh(70);
   font-family: "Source Han Sans CN Normal", sans-serif;
+}
+.alerts {
+  position: fixed;
+  z-index: 100000;
+  top: 10px;
+  margin-left: vw(710);
+}
+.alert {
+  position: relative;
+  margin-top: vh(20);
+  width: vw(500);
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.1s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: opacity 0.1s;
 }
 </style>
