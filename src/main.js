@@ -15,8 +15,6 @@ Vue.config.productionTip = false;
 Vue.prototype.$qs=qs;
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts
-
-
 new Vue({
   router,
   store,
